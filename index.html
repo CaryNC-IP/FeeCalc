@@ -799,10 +799,23 @@
           </div>
         </div>
 
-        <div class="section">
+        <div class="section" id="tradesSection" style="display:none;">
           <div class="section-title">Individual Trades (Plumbing, Mechanical, Electrical)</div>
           <div class="note">Select each trade separately. Each trade is a single fee of $125.</div>
-          <div class="trades-grid" id="tradesGrid"></div>
+          <div class="trades-grid">
+            <div class="trade-check">
+              <input type="checkbox" id="trade-plumbing" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="trade-plumbing">Plumbing (+$125)</label>
+            </div>
+            <div class="trade-check">
+              <input type="checkbox" id="trade-mechanical" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="trade-mechanical">Mechanical (+$125)</label>
+            </div>
+            <div class="trade-check">
+              <input type="checkbox" id="trade-electrical" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="trade-electrical">Electrical (+$125)</label>
+            </div>
+          </div>
         </div>
 
         <div class="summary">
@@ -1441,27 +1454,25 @@
         breakdown.push({ label: `Unit Add-ons (${units} units @ $100 each)`, amount: unitsFee.toFixed(2) });
       }
 
-      // Check for rate-based permits to show trades grid
+      // Check for rate-based permits to show trades section
       const hasRateBasedPermits = Object.keys(buildingPermits).some(key => {
         const checkbox = document.getElementById(`building-${key}`);
         return checkbox && checkbox.checked && !buildingPermits[key].flat;
       });
       
+      // Show/hide trades section based on whether rate-based permits are selected
+      document.getElementById('tradesSection').style.display = hasRateBasedPermits ? 'block' : 'none';
+
       if (hasRateBasedPermits) {
-        updateTradesGrid();
-        // Add trades fees - PME trades are now individual selections
-        document.querySelectorAll('.trade-check input:checked').forEach(cb => {
-          const tradeId = cb.id.replace('trade-', '');
-          const trade = FEE_SCHEDULE.trades.find(t => t.id === tradeId);
-          if (trade) {
-            total += trade.fee;
-            breakdown.push({ label: `Additional Trade: ${trade.name}`, amount: trade.fee.toFixed(2) });
+        // Add trades fees - collect checked trade checkboxes
+        ['plumbing', 'mechanical', 'electrical'].forEach(tradeId => {
+          const checkbox = document.getElementById(`trade-${tradeId}`);
+          if (checkbox && checkbox.checked) {
+            const tradeName = checkbox.nextElementSibling.textContent.replace(' (+$125)', '');
+            total += 125;
+            breakdown.push({ label: `Additional Trade: ${tradeName}`, amount: '125.00' });
           }
         });
-        document.getElementById('tradesGrid').style.display = 'block';
-      } else {
-        document.getElementById('tradesGrid').innerHTML = '';
-        document.getElementById('tradesGrid').style.display = 'none';
       }
 
       // Update breakdown display
