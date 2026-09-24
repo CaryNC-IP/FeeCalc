@@ -275,6 +275,55 @@
       flex: 1;
     }
 
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .admin-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-check input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .admin-check label {
+      margin: 0;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .misc-fee-container {
+      border-top: 1px solid #e0e0e0;
+      padding-top: 15px;
+    }
+
+    #miscFeeFields input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    #adminBreakdown {
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    #adminBreakdown .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      color: #666;
+    }
+
     .summary {
       background: #f9f9f7;
       padding: 20px 16px;
@@ -536,11 +585,11 @@
           <div class="input-row">
             <div>
               <label>Square Footage</label>
-              <input type="number" id="sqft" placeholder="0" step="1" onchange="calculateBuildingFee(); updatePrintArea()" oninput="calculateBuildingFee(); updatePrintArea()">
+              <input type="number" id="sqft" placeholder="0" step="1" min="0" onchange="preventNegative('sqft'); calculateBuildingFee(); updatePrintArea()" oninput="calculateBuildingFee(); updatePrintArea()">
             </div>
             <div>
               <label>Number of Units (Apartments)</label>
-              <input type="number" id="units" placeholder="0" step="1" onchange="calculateBuildingFee(); updatePrintArea()" oninput="calculateBuildingFee(); updatePrintArea()">
+              <input type="number" id="units" placeholder="0" value="1" step="1" min="0" onchange="preventNegative('units'); calculateBuildingFee(); updatePrintArea()" oninput="calculateBuildingFee(); updatePrintArea()">
             </div>
           </div>
         </div>
@@ -591,7 +640,7 @@
 
         <div class="section" id="fireQtySection" style="display:none;">
           <label>Square Footage</label>
-          <input type="number" id="fireQty" placeholder="0" step="1" onchange="calculateFireFee(); updatePrintArea()" oninput="calculateFireFee(); updatePrintArea()">
+          <input type="number" id="fireQty" placeholder="0" step="1" min="0" onchange="preventNegative('fireQty'); calculateFireFee(); updatePrintArea()" oninput="calculateFireFee(); updatePrintArea()">
         </div>
 
         <div class="summary">
@@ -621,7 +670,7 @@
 
         <div class="section" id="hoursSection" style="display:none;">
           <label>Number of Hours</label>
-          <input type="number" id="hours" placeholder="1" step="0.5" min="0.25" onchange="calculateInspectionFee(); updatePrintArea()" oninput="calculateInspectionFee(); updatePrintArea()">
+          <input type="number" id="hours" placeholder="1" step="0.5" min="0.25" onchange="preventNegative('hours'); calculateInspectionFee(); updatePrintArea()" oninput="calculateInspectionFee(); updatePrintArea()">
         </div>
 
         <div class="summary">
@@ -637,23 +686,67 @@
     <div id="admin" class="tab-content">
       <div class="content-card">
         <div class="section">
-          <div class="section-title">Administrative Service</div>
-          <select id="adminType" onchange="calculateAdminFee(); updatePrintArea()">
-            <option value="">Select a service...</option>
-            <option value="change-contractor">Change of Contractor</option>
-            <option value="homeowner-recovery">Homeowners Recovery Fund</option>
-            <option value="temp-coo">Temporary Certificate of Occupancy</option>
-            <option value="project-mod">Project Modification Fee (per trade)</option>
-            <option value="refund-processing">Refund Processing Fee</option>
-            <option value="re-stamp-plans">Re-stamp Plans</option>
-            <option value="double-permit">Double Permit Fee (Work without Permit)</option>
-            <option value="expedited-permit">Expedited Permit Processing</option>
-          </select>
+          <div class="section-title">Administrative Services</div>
+          <div id="adminCheckboxes" class="checkbox-grid">
+            <div class="admin-check">
+              <input type="checkbox" id="admin-change-contractor" onchange="calculateAdminFee(); updatePrintArea()">
+              <label for="admin-change-contractor">Change of Contractor (+$100)</label>
+            </div>
+            <div class="admin-check">
+              <input type="checkbox" id="admin-homeowner-recovery" onchange="calculateAdminFee(); updatePrintArea()">
+              <label for="admin-homeowner-recovery">Homeowners Recovery Fund (+$10)</label>
+            </div>
+            <div class="admin-check">
+              <input type="checkbox" id="admin-temp-coo" onchange="calculateAdminFee(); updatePrintArea()">
+              <label for="admin-temp-coo">Temporary Certificate of Occupancy (+$250)</label>
+            </div>
+            <div class="admin-check">
+              <input type="checkbox" id="admin-project-mod" onchange="calculateAdminFee(); updatePrintArea()">
+              <label for="admin-project-mod">Project Modification Fee (per trade) (+$100)</label>
+            </div>
+            <div class="admin-check">
+              <input type="checkbox" id="admin-refund-processing" onchange="calculateAdminFee(); updatePrintArea()">
+              <label for="admin-refund-processing">Refund Processing Fee (+$125)</label>
+            </div>
+            <div class="admin-check">
+              <input type="checkbox" id="admin-re-stamp-plans" onchange="calculateAdminFee(); updatePrintArea()">
+              <label for="admin-re-stamp-plans">Re-stamp Plans (+$100)</label>
+            </div>
+            <div class="admin-check">
+              <input type="checkbox" id="admin-double-permit" onchange="calculateAdminFee(); updatePrintArea()">
+              <label for="admin-double-permit">Double Permit Fee (Work without Permit) (+varies)</label>
+            </div>
+            <div class="admin-check">
+              <input type="checkbox" id="admin-expedited-permit" onchange="calculateAdminFee(); updatePrintArea()">
+              <label for="admin-expedited-permit">Expedited Permit Processing (+$500)</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Miscellaneous / Other Fees</div>
+          <div class="misc-fee-container">
+            <div class="admin-check">
+              <input type="checkbox" id="admin-misc-enable" onchange="toggleMiscFee(); calculateAdminFee(); updatePrintArea()">
+              <label for="admin-misc-enable">Add Miscellaneous Fee</label>
+            </div>
+          </div>
+          <div id="miscFeeFields" style="display:none; margin-top:15px; padding:15px; background:rgba(12, 68, 124, 0.08); border-radius:4px; border-left:3px solid #0c447c;">
+            <div style="margin-bottom:12px;">
+              <label for="miscDescription" style="display:block; margin-bottom:6px; font-weight:500;">Fee Description</label>
+              <input type="text" id="miscDescription" placeholder="e.g., ETJ Inspection - Commercial" onchange="calculateAdminFee(); updatePrintArea()" style="width:100%; box-sizing:border-box;">
+            </div>
+            <div>
+              <label for="miscAmount" style="display:block; margin-bottom:6px; font-weight:500;">Fee Amount ($)</label>
+              <input type="number" id="miscAmount" placeholder="0.00" step="0.01" min="0" onchange="preventNegative('miscAmount'); calculateAdminFee(); updatePrintArea()" oninput="calculateAdminFee(); updatePrintArea()" style="width:100%; box-sizing:border-box;">
+            </div>
+          </div>
         </div>
 
         <div class="summary">
+          <div id="adminBreakdown"></div>
           <div class="summary-row total">
-            <span>Total Fee</span>
+            <span>Total Administrative Fees</span>
             <span>$<span id="adminTotal">0.00</span></span>
           </div>
         </div>
@@ -856,9 +949,30 @@
         FEE_SCHEDULE.trades.forEach(trade => {
           const div = document.createElement('div');
           div.className = 'trade-check';
-          div.innerHTML = `<input type="checkbox" id="trade-${trade.id}" onchange="calculateBuildingFee(); updatePrintArea()"><label for="trade-${trade.id}">${trade.name} (+$${trade.fee})</label>`;
+          
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.id = `trade-${trade.id}`;
+          checkbox.addEventListener('change', () => {
+            calculateBuildingFee();
+            updatePrintArea();
+          });
+          
+          const label = document.createElement('label');
+          label.htmlFor = `trade-${trade.id}`;
+          label.textContent = `${trade.name} (+$${trade.fee})`;
+          
+          div.appendChild(checkbox);
+          div.appendChild(label);
           grid.appendChild(div);
         });
+      }
+    }
+
+    function preventNegative(elementId) {
+      const element = document.getElementById(elementId);
+      if (element.value < 0) {
+        element.value = 0;
       }
     }
 
@@ -953,16 +1067,68 @@
       document.getElementById('inspectionTotal').textContent = total.toFixed(2);
     }
 
+    function toggleMiscFee() {
+      const checkbox = document.getElementById('admin-misc-enable');
+      const fields = document.getElementById('miscFeeFields');
+      fields.style.display = checkbox.checked ? 'block' : 'none';
+      if (!checkbox.checked) {
+        document.getElementById('miscDescription').value = '';
+        document.getElementById('miscAmount').value = '';
+      }
+    }
+
     function calculateAdminFee() {
-      const type = document.getElementById('adminType').value;
-      if (!type) {
-        document.getElementById('adminTotal').textContent = '0.00';
-        return;
+      const adminFees = {
+        'change-contractor': 100,
+        'homeowner-recovery': 10,
+        'temp-coo': 250,
+        'project-mod': 100,
+        'refund-processing': 125,
+        're-stamp-plans': 100,
+        'double-permit': 'varies',
+        'expedited-permit': 500,
+      };
+
+      let total = 0;
+      let breakdown = [];
+
+      // Check each standard admin fee checkbox
+      Object.keys(adminFees).forEach(key => {
+        const checkbox = document.getElementById(`admin-${key}`);
+        if (checkbox && checkbox.checked) {
+          const fee = adminFees[key];
+          const feeLabel = checkbox.nextElementSibling.textContent.replace(' (+$', ' (').replace('(+varies)', '(varies)');
+          
+          if (typeof fee === 'number') {
+            total += fee;
+            breakdown.push({ label: feeLabel.replace(' (+$', ' - $').replace(')', ''), amount: fee.toFixed(2) });
+          } else {
+            breakdown.push({ label: feeLabel, amount: '–' });
+          }
+        }
+      });
+
+      // Add miscellaneous fee if enabled
+      const miscCheckbox = document.getElementById('admin-misc-enable');
+      if (miscCheckbox && miscCheckbox.checked) {
+        const miscDesc = document.getElementById('miscDescription').value || 'Miscellaneous Fee';
+        const miscAmount = parseFloat(document.getElementById('miscAmount').value) || 0;
+        total += miscAmount;
+        breakdown.push({ label: miscDesc, amount: miscAmount.toFixed(2) });
       }
 
-      const fee = FEE_SCHEDULE.admin[type];
-      const total = typeof fee === 'function' ? fee(100) : (fee || 0);
-      document.getElementById('adminTotal').textContent = typeof total === 'number' ? total.toFixed(2) : total;
+      // Update breakdown display
+      const breakdownDiv = document.getElementById('adminBreakdown');
+      if (breakdown.length > 0) {
+        breakdownDiv.innerHTML = breakdown.map(item => 
+          `<div class="breakdown-item"><span>${item.label}</span><span>$${item.amount}</span></div>`
+        ).join('');
+      } else {
+        breakdownDiv.innerHTML = '';
+      }
+
+      // Update total
+      document.getElementById('adminTotal').textContent = total.toFixed(2);
     }
 
     function calculateOperFireFee() {
@@ -1026,13 +1192,19 @@
           <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL FEE</div><div class="print-value">$${total}</div></div>
         `;
       } else if (currentTab === 'admin') {
-        const type = document.getElementById('adminType').value;
         const total = document.getElementById('adminTotal').textContent;
+        const breakdownDiv = document.getElementById('adminBreakdown');
+        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
+          const label = item.querySelector('span:nth-child(1)').textContent;
+          const amount = item.querySelector('span:nth-child(2)').textContent;
+          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
+        }).join('\n          <div class="print-divider"></div>\n          ');
         printContent = `
           <div class="print-section">
-            <div class="print-label">Administrative Service</div>
-            <div class="print-value">${type || 'Not selected'}</div>
+            <div class="print-label">Administrative Fees</div>
           </div>
+          <div class="print-divider"></div>
+          ${breakdownItems}
           <div class="print-divider"></div>
           <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL FEE</div><div class="print-value">$${total}</div></div>
         `;
