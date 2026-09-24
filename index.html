@@ -799,21 +799,21 @@
           </div>
         </div>
 
-        <div class="section" id="tradesSection" style="display:none;">
+        <div class="section" id="tradesSection">
           <div class="section-title">Individual Trades (Plumbing, Mechanical, Electrical)</div>
-          <div class="note">Select each trade separately. Each trade is a single fee of $125.</div>
+          <div class="note">Select each trade separately. Rates vary by permit type.</div>
           <div class="trades-grid">
             <div class="trade-check">
               <input type="checkbox" id="trade-plumbing" onchange="calculateBuildingFee(); updatePrintArea()">
-              <label for="trade-plumbing">Plumbing (+$125)</label>
+              <label for="trade-plumbing">Plumbing ($0.11/SF, $125 min)</label>
             </div>
             <div class="trade-check">
               <input type="checkbox" id="trade-mechanical" onchange="calculateBuildingFee(); updatePrintArea()">
-              <label for="trade-mechanical">Mechanical (+$125)</label>
+              <label for="trade-mechanical">Mechanical ($0.11/SF, $125 min)</label>
             </div>
             <div class="trade-check">
               <input type="checkbox" id="trade-electrical" onchange="calculateBuildingFee(); updatePrintArea()">
-              <label for="trade-electrical">Electrical (+$125)</label>
+              <label for="trade-electrical">Electrical ($0.11/SF, $125 min)</label>
             </div>
           </div>
         </div>
@@ -1414,6 +1414,8 @@
       let breakdown = [];
       let needsSqft = false;
       let hasCommercialNew = false;
+      let hasCommercialRateBased = false;
+      let hasResidentialRateBased = false;
       const sqft = parseFloat(document.getElementById('sqft').value) || 0;
       const units = parseFloat(document.getElementById('units').value) || 0;
 
@@ -1433,6 +1435,13 @@
             const permitFee = Math.max(sqft * permit.rate, permit.minimum);
             total += permitFee;
             breakdown.push({ label: `${permit.name} (${sqft} SF @ $${permit.rate}/SF, min $${permit.minimum})`, amount: permitFee.toFixed(2) });
+            
+            // Track if commercial or residential rate-based permits are selected
+            if (permit.category === 'commercial') {
+              hasCommercialRateBased = true;
+            } else if (permit.category === 'residential') {
+              hasResidentialRateBased = true;
+            }
           }
 
           if (key === 'commercial-new') {
@@ -1460,17 +1469,25 @@
         return checkbox && checkbox.checked && !buildingPermits[key].flat;
       });
       
-      // Show/hide trades section based on whether rate-based permits are selected
-      document.getElementById('tradesSection').style.display = hasRateBasedPermits ? 'block' : 'none';
+      // Trades section is always visible for user selection
+      // document.getElementById('tradesSection').style.display = hasRateBasedPermits ? 'block' : 'none';
 
       if (hasRateBasedPermits) {
+        // Determine trade rate based on which permits are selected
+        // Commercial trades: $0.11/SF minimum $125
+        // Residential trades: $0.15/SF minimum $125
+        // If both selected, use commercial rate
+        const tradeRate = hasCommercialRateBased ? 0.11 : 0.15;
+        const tradeMinimum = 125;
+
         // Add trades fees - collect checked trade checkboxes
         ['plumbing', 'mechanical', 'electrical'].forEach(tradeId => {
           const checkbox = document.getElementById(`trade-${tradeId}`);
           if (checkbox && checkbox.checked) {
-            const tradeName = checkbox.nextElementSibling.textContent.replace(' (+$125)', '');
-            total += 125;
-            breakdown.push({ label: `Additional Trade: ${tradeName}`, amount: '125.00' });
+            const tradeName = checkbox.nextElementSibling.textContent.replace(' ($0.11/SF, $125 min)', '');
+            const tradeFee = Math.max(sqft * tradeRate, tradeMinimum);
+            total += tradeFee;
+            breakdown.push({ label: `Additional Trade: ${tradeName} (${sqft} SF @ $${tradeRate}/SF, min $${tradeMinimum})`, amount: tradeFee.toFixed(2) });
           }
         });
       }
