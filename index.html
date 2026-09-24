@@ -695,10 +695,472 @@
 
     .print-area {
       display: none;
+      margin-top: 2rem;
+      padding: 2rem;
+      background: #fff;
+      border: 1px solid #ccc;
     }
 
     .hidden-input {
       display: none;
+    }
+
+    .print-controls-section {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .print-controls-section {
+        background: #2a2a2a;
+        border-color: #444;
+      }
+    }
+
+    .print-controls-header {
+      margin-bottom: 1rem;
+    }
+
+    .print-controls-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0c447c;
+      margin: 0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .print-controls-header h3 {
+        color: #85b7eb;
+      }
+    }
+
+    .print-controls-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .control-group label:not(.checkbox-label) {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      cursor: pointer;
+      accent-color: #0c447c;
+    }
+
+    #permitNotes {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #permitNotes {
+        background: #1a1a1a;
+        border-color: #444;
+        color: #e8e8e6;
+      }
+    }
+
+    .button-group {
+      flex-direction: row;
+      gap: 0.75rem;
+    }
+
+    .button-group button {
+      flex: 1;
+    }
+
+    /* Total Fees Section - New Styling */
+    .total-fees-section {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .total-fees-section {
+        background: #2a2a2a;
+        border-color: #444;
+      }
+    }
+
+    .total-fees-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #0c447c;
+    }
+
+    .total-fees-header h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #0c447c;
+      margin: 0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .total-fees-header h3 {
+        color: #85b7eb;
+      }
+    }
+
+    .total-fees-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .fees-itemization {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 1rem;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .fees-itemization {
+        background: #1a1a1a;
+        border-color: #444;
+        color: #e8e8e6;
+      }
+    }
+
+    .itemization-empty {
+      color: #999;
+      font-style: italic;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .itemization-empty {
+        color: #777;
+      }
+    }
+
+    .itemization-category {
+      margin-bottom: 1rem;
+      page-break-inside: avoid;
+    }
+
+    .itemization-category-name {
+      font-weight: 600;
+      color: #0c447c;
+      font-size: 13px;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .itemization-category-name {
+        color: #85b7eb;
+        border-bottom-color: #444;
+      }
+    }
+
+    .itemization-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0.5rem;
+      border-radius: 3px;
+      font-size: 13px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .itemization-item {
+        background: rgba(255,255,255,0.02);
+      }
+    }
+
+    .itemization-item-label {
+      flex: 1;
+    }
+
+    .itemization-item-amount {
+      text-align: right;
+      font-weight: 500;
+      min-width: 80px;
+    }
+
+    .fees-grand-total {
+      background: #0c447c;
+      color: #fff;
+      padding: 1rem;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      page-break-inside: avoid;
+    }
+
+    .grand-total-label {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .grand-total-amount {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .fee-type-section {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 1rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .fee-type-section {
+        background: #1a1a1a;
+        border-color: #444;
+      }
+    }
+
+    .fee-type-fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .fee-type-fieldset legend {
+      padding: 0;
+      margin: 0 0 0.75rem 0;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .radio-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .radio-label input[type="radio"] {
+      cursor: pointer;
+      accent-color: #0c447c;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Print-specific styles */
+    @media print {
+      * {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
+
+      html, body {
+        background: #fff;
+        color: #000;
+      }
+
+      .header, .disclaimer, .container, .total-fees-section {
+        display: none !important;
+      }
+
+      .print-area {
+        display: block !important;
+        position: relative;
+        margin: 0;
+        padding: 0.5in;
+        background: #fff;
+        border: none;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .print-header {
+        border-bottom: 2px solid #0c447c;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        page-break-after: avoid;
+      }
+
+      .print-header-branding {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .print-header-logo {
+        font-size: 24px;
+        font-weight: 700;
+        color: #0c447c;
+      }
+
+      .print-header-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #0c447c;
+      }
+
+      .print-header-subtitle {
+        font-size: 12px;
+        color: #666;
+        margin-top: 0.25rem;
+      }
+
+      .print-header-date {
+        font-size: 11px;
+        color: #999;
+        margin-top: 0.5rem;
+      }
+
+      .print-status {
+        background: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 0.75rem;
+        margin: 1rem 0;
+        border-radius: 2px;
+        font-size: 12px;
+      }
+
+      .print-status.final {
+        background: #e8f5e9;
+        border-color: #4caf50;
+      }
+
+      .print-status.estimate {
+        background: #fff3e0;
+        border-color: #ff9800;
+      }
+
+      .print-section {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        page-break-inside: avoid;
+        font-size: 12px;
+      }
+
+      .print-label {
+        font-weight: 500;
+      }
+
+      .print-value {
+        text-align: right;
+        font-weight: 500;
+      }
+
+      .print-divider {
+        border: none;
+        height: 0;
+        margin: 0.75rem 0;
+        page-break-after: avoid;
+      }
+
+      .print-category-header {
+        font-weight: 700;
+        font-size: 13px;
+        color: #0c447c;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+
+      .print-total {
+        font-weight: 700;
+        font-size: 14px;
+        padding: 1rem 0;
+        border-top: 2px solid #0c447c;
+        border-bottom: 2px solid #0c447c;
+        margin-top: 1rem;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+
+      .print-grand-total {
+        font-weight: 700;
+        font-size: 16px;
+        padding: 1rem 0;
+        text-align: right;
+        margin-top: 1rem;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+
+      .print-notes {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-left: 3px solid #0c447c;
+        font-size: 11px;
+        page-break-inside: avoid;
+      }
+
+      .print-notes-title {
+        font-weight: 600;
+        color: #0c447c;
+        margin-bottom: 0.5rem;
+        font-size: 12px;
+      }
+
+      .print-disclaimer {
+        margin-top: 1.5rem;
+        padding: 0.75rem;
+        background: #f5f5f5;
+        border-left: 3px solid #999;
+        font-size: 10px;
+        color: #666;
+        page-break-inside: avoid;
+      }
     }
   </style>
 </head>
@@ -917,9 +1379,19 @@
           </div>
         </div>
 
-        <div class="section" id="hoursSection" style="display:none;">
-          <label for="hours">Number of Hours (for hourly services)</label>
-          <input type="number" id="hours" placeholder="1" step="0.5" min="0.25" value="1" onchange="preventNegative('hours'); calculateInspectionFee(); updatePrintArea()" oninput="calculateInspectionFee(); updatePrintArea()">
+        <div class="section" id="specialInspectionHoursSection" style="display:none;">
+          <label for="specialInspectionHours">Special Request Inspection - Number of Hours:</label>
+          <input type="number" id="specialInspectionHours" placeholder="1" step="0.5" min="0.25" value="1" onchange="preventNegative('specialInspectionHours'); calculateInspectionFee(); updatePrintArea()" oninput="calculateInspectionFee(); updatePrintArea()">
+        </div>
+
+        <div class="section" id="reInspectionQuantitySection" style="display:none;">
+          <label for="reInspectionQuantity">Re-Inspection - Quantity:</label>
+          <input type="number" id="reInspectionQuantity" placeholder="1" step="1" min="1" value="1" onchange="preventNegative('reInspectionQuantity'); calculateInspectionFee(); updatePrintArea()" oninput="calculateInspectionFee(); updatePrintArea()">
+        </div>
+
+        <div class="section" id="expressReviewHoursSection" style="display:none;">
+          <label for="expressReviewHours">Express Plan Review - Number of Hours:</label>
+          <input type="number" id="expressReviewHours" placeholder="1" step="0.25" min="0.25" value="1" onchange="preventNegative('expressReviewHours'); calculateInspectionFee(); updatePrintArea()" oninput="calculateInspectionFee(); updatePrintArea()">
         </div>
 
         <div class="summary">
@@ -959,6 +1431,10 @@
               <label for="admin-refund-processing">Refund Processing Fee (+$125)</label>
             </div>
             <div class="admin-check">
+              <input type="checkbox" id="admin-re-review" onchange="calculateAdminFee(); updatePrintArea()">
+              <label for="admin-re-review">Re-review (+$200)</label>
+            </div>
+            <div class="admin-check">
               <input type="checkbox" id="admin-re-stamp-plans" onchange="calculateAdminFee(); updatePrintArea()">
               <label for="admin-re-stamp-plans">Re-stamp Plans (+$100)</label>
             </div>
@@ -971,6 +1447,16 @@
               <label for="admin-expedited-permit">Expedited Permit Processing (+$500)</label>
             </div>
           </div>
+        </div>
+
+        <div class="section" id="reReviewQuantitySection" style="display:none;">
+          <label for="reReviewQuantity">Re-review - Quantity:</label>
+          <input type="number" id="reReviewQuantity" placeholder="1" step="1" min="1" value="1" onchange="preventNegative('reReviewQuantity'); calculateAdminFee(); updatePrintArea()" oninput="calculateAdminFee(); updatePrintArea()">
+        </div>
+
+        <div class="section" id="reStampPlansQuantitySection" style="display:none;">
+          <label for="reStampPlansQuantity">Re-stamp Plans - Quantity:</label>
+          <input type="number" id="reStampPlansQuantity" placeholder="1" step="1" min="1" value="1" onchange="preventNegative('reStampPlansQuantity'); calculateAdminFee(); updatePrintArea()" oninput="calculateAdminFee(); updatePrintArea()">
         </div>
 
         <div class="section">
@@ -1217,16 +1703,54 @@
     </div>
 
     <div class="button-group">
-      <button class="primary" onclick="printEstimate()">Print/Export as PDF</button>
-      <button onclick="resetForm()">Reset</button>
-    </div>
-
-    <div class="footer">
-      <p>This calculator is for estimation purposes only. All fees are subject to the current FY 2027 Fee Schedule as adopted by the Town of Cary.</p>
     </div>
   </div>
 
-  <!-- Hidden print area -->
+  <!-- Total Fees Section -->
+  <div class="total-fees-section">
+    <div class="total-fees-header">
+      <h3>Total Fees</h3>
+    </div>
+    
+    <div class="total-fees-content">
+      <div class="fees-itemization" id="feesItemization">
+        <div class="itemization-empty">No fees selected</div>
+      </div>
+
+      <div class="fees-grand-total">
+        <div class="grand-total-label">TOTAL</div>
+        <div class="grand-total-amount" id="grandTotalDisplay">$0.00</div>
+      </div>
+
+      <div class="fee-type-section">
+        <fieldset class="fee-type-fieldset">
+          <legend>Fee Type:</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="feeType" value="estimated" id="feeTypeEstimated" onchange="updateConsolidatedPrintArea()">
+              <span>Estimated Fees</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="feeType" value="final" id="feeTypeFinal" onchange="updateConsolidatedPrintArea()">
+              <span>Final Fees</span>
+            </label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="control-group">
+        <label for="permitNotes">Notes (Optional):</label>
+        <textarea id="permitNotes" placeholder="Add any notes or clarifications..." onchange="updateConsolidatedPrintArea()"></textarea>
+      </div>
+
+      <div class="control-group button-group">
+        <button class="primary" id="printButton" onclick="printEstimate()" disabled>Print/Export as PDF</button>
+        <button onclick="resetForm()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Consolidated Print Area -->
   <div class="print-area" id="printArea"></div>
 
   <script>
@@ -1573,8 +2097,10 @@
 
       let total = 0;
       let breakdown = [];
-      let needsHours = false;
-      const hours = parseFloat(document.getElementById('hours').value) || 0;
+      
+      const specialInspectionHours = parseFloat(document.getElementById('specialInspectionHours').value) || 1;
+      const reInspectionQuantity = parseInt(document.getElementById('reInspectionQuantity').value) || 1;
+      const expressReviewHours = parseFloat(document.getElementById('expressReviewHours').value) || 1;
 
       // Check each inspection service checkbox
       Object.keys(inspectionServices).forEach(key => {
@@ -1583,29 +2109,37 @@
           const service = inspectionServices[key];
           let serviceFee = 0;
 
-          if (service.fee) {
+          if (key === 're-inspection') {
+            // Re-Inspection with quantity
+            serviceFee = service.fee * reInspectionQuantity;
+            breakdown.push({ label: `${service.name} (qty: ${reInspectionQuantity} @ $${service.fee} each)`, amount: serviceFee.toFixed(2) });
+          } else if (service.fee) {
             // Flat fee
             serviceFee = service.fee;
             breakdown.push({ label: service.name, amount: serviceFee.toFixed(2) });
           } else if (service.hourly) {
-            // Hourly with minimum
-            needsHours = true;
-            serviceFee = Math.max(hours * service.baseRate, service.minimum);
-            breakdown.push({ label: `${service.name} (${hours} hrs @ $${service.baseRate}/hr, min $${service.minimum})`, amount: serviceFee.toFixed(2) });
+            // Special Request Inspection - hourly with minimum
+            serviceFee = Math.max(specialInspectionHours * service.baseRate, service.minimum);
+            breakdown.push({ label: `${service.name} (${specialInspectionHours} hrs @ $${service.baseRate}/hr, min $${service.minimum})`, amount: serviceFee.toFixed(2) });
           } else if (service.express) {
             // Express review: $1000 first hour + $500/quarter-hour after
-            needsHours = true;
-            const quarterHours = Math.max(0, Math.ceil((hours - 1) * 4));
+            const quarterHours = Math.max(0, Math.ceil((expressReviewHours - 1) * 4));
             serviceFee = service.firstHour + (quarterHours * service.quarterHourRate);
-            breakdown.push({ label: `${service.name} (${hours} hrs: $${service.firstHour} first hr + ${quarterHours} qtr-hrs @ $${service.quarterHourRate})`, amount: serviceFee.toFixed(2) });
+            breakdown.push({ label: `${service.name} (${expressReviewHours} hrs: $${service.firstHour} first hr + ${quarterHours} qtr-hrs @ $${service.quarterHourRate})`, amount: serviceFee.toFixed(2) });
           }
 
           total += serviceFee;
         }
       });
 
-      // Show/hide hours field if hourly services are selected
-      document.getElementById('hoursSection').style.display = needsHours ? 'block' : 'none';
+      // Show/hide hour and quantity fields based on what's selected
+      const hasSpecialInspection = document.getElementById('inspection-special-inspection').checked;
+      const hasReInspection = document.getElementById('inspection-re-inspection').checked;
+      const hasExpressReview = document.getElementById('inspection-express-review').checked;
+
+      document.getElementById('specialInspectionHoursSection').style.display = hasSpecialInspection ? 'block' : 'none';
+      document.getElementById('reInspectionQuantitySection').style.display = hasReInspection ? 'block' : 'none';
+      document.getElementById('expressReviewHoursSection').style.display = hasExpressReview ? 'block' : 'none';
 
       // Update breakdown display
       const breakdownDiv = document.getElementById('inspectionBreakdown');
@@ -1638,6 +2172,7 @@
         'temp-coo': 250,
         'project-mod': 100,
         'refund-processing': 125,
+        're-review': 200,
         're-stamp-plans': 100,
         'double-permit': 'varies',
         'expedited-permit': 500,
@@ -1645,6 +2180,9 @@
 
       let total = 0;
       let breakdown = [];
+      
+      const reReviewQuantity = parseInt(document.getElementById('reReviewQuantity').value) || 1;
+      const reStampPlansQuantity = parseInt(document.getElementById('reStampPlansQuantity').value) || 1;
 
       // Check each standard admin fee checkbox
       Object.keys(adminFees).forEach(key => {
@@ -1653,7 +2191,17 @@
           const fee = adminFees[key];
           const feeLabel = checkbox.nextElementSibling.textContent.replace(' (+$', ' (').replace('(+varies)', '(varies)');
           
-          if (typeof fee === 'number') {
+          if (key === 're-review' && typeof fee === 'number') {
+            // Re-review with quantity
+            const totalFee = fee * reReviewQuantity;
+            total += totalFee;
+            breakdown.push({ label: `Re-review (qty: ${reReviewQuantity} @ $${fee} each)`, amount: totalFee.toFixed(2) });
+          } else if (key === 're-stamp-plans' && typeof fee === 'number') {
+            // Re-stamp Plans with quantity
+            const totalFee = fee * reStampPlansQuantity;
+            total += totalFee;
+            breakdown.push({ label: `Re-stamp Plans (qty: ${reStampPlansQuantity} @ $${fee} each)`, amount: totalFee.toFixed(2) });
+          } else if (typeof fee === 'number') {
             total += fee;
             breakdown.push({ label: feeLabel.replace(' (+$', ' - $').replace(')', ''), amount: fee.toFixed(2) });
           } else {
@@ -1670,6 +2218,12 @@
         total += miscAmount;
         breakdown.push({ label: miscDesc, amount: miscAmount.toFixed(2) });
       }
+
+      // Show/hide re-review and re-stamp plans quantity fields
+      document.getElementById('reReviewQuantitySection').style.display = 
+        document.getElementById('admin-re-review').checked ? 'block' : 'none';
+      document.getElementById('reStampPlansQuantitySection').style.display = 
+        document.getElementById('admin-re-stamp-plans').checked ? 'block' : 'none';
 
       // Update breakdown display
       const breakdownDiv = document.getElementById('adminBreakdown');
@@ -1777,118 +2331,196 @@
       document.getElementById('operfireTotal').textContent = total.toFixed(2);
     }
 
-    function updatePrintArea() {
-      const currentTab = document.querySelector('.tab-content.active').id;
-      let printContent = '';
+    function updateConsolidatedPrintArea() {
+      // Gather all items from all breakdown sections
+      const categories = [
+        { id: 'building', label: 'Building Permits', totalId: 'buildingTotal' },
+        { id: 'fire', label: 'Fire Code Permits', totalId: 'fireTotal' },
+        { id: 'inspection', label: 'Inspection & Plan Review Services', totalId: 'inspectionTotal' },
+        { id: 'admin', label: 'Administrative Fees', totalId: 'adminTotal' },
+        { id: 'operfire', label: 'Operational Fire Permits', totalId: 'operfireTotal' }
+      ];
 
-      if (currentTab === 'building') {
-        const sqft = document.getElementById('sqft').value;
-        const units = document.getElementById('units').value;
-        const total = document.getElementById('buildingTotal').textContent;
-        const breakdownDiv = document.getElementById('buildingBreakdown');
-        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
-          const label = item.querySelector('span:nth-child(1)').textContent;
-          const amount = item.querySelector('span:nth-child(2)').textContent;
-          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
-        }).join('\n          <div class="print-divider"></div>\n          ');
+      let allItems = [];
+      let categoryTotals = [];
+      let grandTotal = 0;
 
-        printContent = `
-          <div class="print-section">
-            <div class="print-label">Building Permits</div>
+      // Collect all items from each category
+      for (const category of categories) {
+        const breakdownDiv = document.getElementById(`${category.id}Breakdown`);
+        const totalSpan = document.getElementById(category.totalId);
+        
+        if (breakdownDiv && totalSpan) {
+          const items = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
+            const label = item.querySelector('span:nth-child(1)').textContent;
+            const amount = item.querySelector('span:nth-child(2)').textContent;
+            return { category: category.label, label, amount };
+          });
+
+          if (items.length > 0) {
+            allItems.push({ category: category.label, items });
+            const total = parseFloat(totalSpan.textContent);
+            categoryTotals.push({ category: category.label, total });
+            grandTotal += total;
+          }
+        }
+      }
+
+      // Update the live itemization display
+      updateItemizationDisplay(allItems, grandTotal);
+
+      // Update print button state based on fee type selection
+      const feeTypeSelected = document.querySelector('input[name="feeType"]:checked');
+      const printButton = document.getElementById('printButton');
+      printButton.disabled = !feeTypeSelected;
+
+      // Build the print output (for when they actually print)
+      buildPrintContent(allItems, categoryTotals, grandTotal);
+    }
+
+    function updateItemizationDisplay(allItems, grandTotal) {
+      const itemizationDiv = document.getElementById('feesItemization');
+      
+      if (allItems.length === 0) {
+        itemizationDiv.innerHTML = '<div class="itemization-empty">No fees selected</div>';
+        document.getElementById('grandTotalDisplay').textContent = '$0.00';
+        return;
+      }
+
+      let html = '';
+      for (const section of allItems) {
+        html += `<div class="itemization-category">`;
+        html += `<div class="itemization-category-name">${section.category}</div>`;
+        
+        for (const item of section.items) {
+          html += `
+            <div class="itemization-item">
+              <div class="itemization-item-label">${item.label}</div>
+              <div class="itemization-item-amount">${item.amount}</div>
+            </div>
+          `;
+        }
+        html += `</div>`;
+      }
+
+      itemizationDiv.innerHTML = html;
+      document.getElementById('grandTotalDisplay').textContent = '$' + grandTotal.toFixed(2);
+    }
+
+    function buildPrintContent(allItems, categoryTotals, grandTotal) {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const feeType = document.querySelector('input[name="feeType"]:checked');
+      const isFinal = feeType ? feeType.value === 'final' : false;
+      const notes = document.getElementById('permitNotes').value;
+      const statusClass = isFinal ? 'final' : 'estimate';
+      const statusText = isFinal ? 'FINAL FEES' : 'ESTIMATE ONLY';
+
+      let printContent = `
+        <div class="print-header">
+          <div class="print-header-branding">
+            <div class="print-header-logo">TOWN OF CARY</div>
+            <div>
+              <div class="print-header-title">Inspections & Permits</div>
+              <div class="print-header-subtitle">Development Services Department</div>
+            </div>
           </div>
-          ${sqft ? `<div class="print-section"><div class="print-label">Square Footage</div><div class="print-value">${sqft} SF</div></div>` : ''}
-          ${units ? `<div class="print-section"><div class="print-label">Number of Units</div><div class="print-value">${units}</div></div>` : ''}
-          <div class="print-divider"></div>
-          ${breakdownItems}
-          <div class="print-divider"></div>
-          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL PERMIT FEE</div><div class="print-value">$${total}</div></div>
-        `;
-      } else if (currentTab === 'fire') {
-        const total = document.getElementById('fireTotal').textContent;
-        const breakdownDiv = document.getElementById('fireBreakdown');
-        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
-          const label = item.querySelector('span:nth-child(1)').textContent;
-          const amount = item.querySelector('span:nth-child(2)').textContent;
-          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
-        }).join('\n          <div class="print-divider"></div>\n          ');
-        printContent = `
-          <div class="print-section">
-            <div class="print-label">Fire Code Permits</div>
+          <div class="print-header-date">Fee Estimate Generated: ${dateStr}</div>
+        </div>
+
+        <div class="print-status ${statusClass}">
+          <strong>${statusText}</strong> — This fee summary is ${isFinal ? 'a final accounting' : 'an estimate only and subject to change'}. Contact Development Services at (919) 469-4000 for official fees.
+        </div>
+      `;
+
+      if (allItems.length === 0) {
+        printContent += '<div class="print-section"><div class="print-label">No fees selected</div></div>';
+      } else {
+        // Add each category and its items
+        for (const section of allItems) {
+          printContent += `<div class="print-category-header">${section.category}</div>`;
+          for (const item of section.items) {
+            printContent += `
+              <div class="print-section">
+                <div class="print-label">${item.label}</div>
+                <div class="print-value">${item.amount}</div>
+              </div>
+            `;
+          }
+          printContent += '<div class="print-divider"></div>';
+        }
+
+        // Add category subtotals
+        if (categoryTotals.length > 1) {
+          printContent += '<div style="margin-top: 1.5rem;">';
+          for (const cat of categoryTotals) {
+            printContent += `
+              <div class="print-section">
+                <div class="print-label">${cat.category} Subtotal</div>
+                <div class="print-value">$${cat.total.toFixed(2)}</div>
+              </div>
+            `;
+          }
+          printContent += '</div>';
+        }
+
+        // Add grand total
+        printContent += `
+          <div class="print-grand-total">
+            <div class="print-section">
+              <div class="print-label">GRAND TOTAL</div>
+              <div class="print-value">$${grandTotal.toFixed(2)}</div>
+            </div>
           </div>
-          <div class="print-divider"></div>
-          ${breakdownItems}
-          <div class="print-divider"></div>
-          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL PERMIT FEE</div><div class="print-value">$${total}</div></div>
-        `;
-      } else if (currentTab === 'inspection') {
-        const total = document.getElementById('inspectionTotal').textContent;
-        const breakdownDiv = document.getElementById('inspectionBreakdown');
-        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
-          const label = item.querySelector('span:nth-child(1)').textContent;
-          const amount = item.querySelector('span:nth-child(2)').textContent;
-          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
-        }).join('\n          <div class="print-divider"></div>\n          ');
-        printContent = `
-          <div class="print-section">
-            <div class="print-label">Inspection & Plan Review Services</div>
-          </div>
-          <div class="print-divider"></div>
-          ${breakdownItems}
-          <div class="print-divider"></div>
-          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL FEE</div><div class="print-value">$${total}</div></div>
-        `;
-      } else if (currentTab === 'admin') {
-        const total = document.getElementById('adminTotal').textContent;
-        const breakdownDiv = document.getElementById('adminBreakdown');
-        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
-          const label = item.querySelector('span:nth-child(1)').textContent;
-          const amount = item.querySelector('span:nth-child(2)').textContent;
-          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
-        }).join('\n          <div class="print-divider"></div>\n          ');
-        printContent = `
-          <div class="print-section">
-            <div class="print-label">Administrative Fees</div>
-          </div>
-          <div class="print-divider"></div>
-          ${breakdownItems}
-          <div class="print-divider"></div>
-          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL FEE</div><div class="print-value">$${total}</div></div>
-        `;
-      } else if (currentTab === 'operfire') {
-        const total = document.getElementById('operfireTotal').textContent;
-        const breakdownDiv = document.getElementById('operfireBreakdown');
-        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
-          const label = item.querySelector('span:nth-child(1)').textContent;
-          const amount = item.querySelector('span:nth-child(2)').textContent;
-          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
-        }).join('\n          <div class="print-divider"></div>\n          ');
-        printContent = `
-          <div class="print-section">
-            <div class="print-label">Operational Fire Permits</div>
-          </div>
-          <div class="print-divider"></div>
-          ${breakdownItems}
-          <div class="print-divider"></div>
-          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL PERMIT FEE</div><div class="print-value">$${total}</div></div>
         `;
       }
+
+      // Add notes if present
+      if (notes.trim()) {
+        printContent += `
+          <div class="print-notes">
+            <div class="print-notes-title">Notes from Permit Tech:</div>
+            <div>${notes.replace(/\n/g, '<br>')}</div>
+          </div>
+        `;
+      }
+
+      // Add disclaimer
+      printContent += `
+        <div class="print-disclaimer">
+          This informational tool was created in part with artificial intelligence and is provided for reference purposes only. It cannot be relied upon as a complete or accurate fee estimate. For an official fee estimate, contact Development Services at (919) 469-4000. This fee summary is based on the Town of Cary FY 2027 Recommended Fee Schedule approved by Town Council.
+        </div>
+      `;
 
       document.getElementById('printArea').innerHTML = printContent;
     }
 
+    function updatePrintArea() {
+      updateConsolidatedPrintArea();
+    }
+
     function printEstimate() {
+      const feeTypeSelected = document.querySelector('input[name="feeType"]:checked');
+      if (!feeTypeSelected) {
+        alert('Please select either "Estimated Fees" or "Final Fees" before printing.');
+        return;
+      }
       updatePrintArea();
       window.print();
     }
 
     function resetForm() {
-      document.querySelectorAll('input, select').forEach(el => {
+      document.querySelectorAll('input, select, textarea').forEach(el => {
         if (el.type === 'checkbox') {
           el.checked = false;
-        } else if (el.id === 'units') {
+        } else if (el.type === 'radio') {
+          el.checked = false;
+        } else if (el.id === 'units' || el.id === 'specialInspectionHours' || el.id === 'expressReviewHours' || el.id === 'reInspectionQuantity' || el.id === 'reReviewQuantity' || el.id === 'reStampPlansQuantity') {
           el.value = '1';
         } else if (el.type === 'number') {
           el.value = '0';
+        } else if (el.tagName === 'TEXTAREA') {
+          el.value = '';
         } else {
           el.value = '';
         }
@@ -1903,6 +2535,11 @@
 
     // Initialize
     calculateBuildingFee();
+    calculateFireFee();
+    calculateInspectionFee();
+    calculateAdminFee();
+    calculateOperFireFee();
+    updateConsolidatedPrintArea();
   </script>
 </body>
 </html>
