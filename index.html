@@ -788,7 +788,7 @@
         <div class="section">
           <div class="section-title">Project Details</div>
           <div class="input-row">
-            <div>
+            <div id="sqftSection">
               <label for="sqft">Square Footage</label>
               <input type="number" id="sqft" placeholder="0" step="1" min="0" onchange="preventNegative('sqft'); calculateBuildingFee(); updatePrintArea()" oninput="calculateBuildingFee(); updatePrintArea()">
             </div>
@@ -1429,7 +1429,7 @@
       });
 
       // Show/hide square footage field
-      document.getElementById('sqft').parentElement.style.display = needsSqft ? 'block' : 'none';
+      document.getElementById('sqftSection').style.display = needsSqft ? 'block' : 'none';
       
       // Show/hide units field (only for commercial-new)
       document.getElementById('unitsInputSection').style.display = hasCommercialNew ? 'block' : 'none';
