@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Town of Cary I&P Fee Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #2c2c2a;
+      background: #f5f5f5;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      html, body {
+        background: #1a1a1a;
+        color: #e8e8e6;
+      }
+    }
+
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .header {
+        background: #242424;
+        border-bottom-color: #444;
+      }
+    }
+
+    .header-title {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #0c447c;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .header-title {
+        color: #85b7eb;
+      }
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .header-subtitle {
+        color: #999;
+      }
+    }
+
+    .header-detail {
+      font-size: 12px;
+      color: #999;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .header-detail {
+        color: #777;
+      }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem 2rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 2rem;
+      background: #fff;
+      border-radius: 8px;
+      padding: 8px;
+      border: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .tabs {
+        background: #242424;
+        border-color: #444;
+      }
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #666;
+      border-radius: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .tab-btn {
+        color: #999;
+      }
+    }
+
+    .tab-btn:hover {
+      background: #f0f0f0;
+      color: #2c2c2a;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .tab-btn:hover {
+        background: #333;
+        color: #e8e8e6;
+      }
+    }
+
+    .tab-btn.active {
+      background: #0c447c;
+      color: #fff;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .content-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .content-card {
+        background: #242424;
+        border-color: #444;
+      }
+    }
+
+    .section {
+      margin-bottom: 1.5rem;
+    }
+
+    .section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .section-title {
+        color: #999;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #2c2c2a;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      label {
+        color: #e8e8e6;
+      }
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      font-family: inherit;
+      background: #fafafa;
+      color: #2c2c2a;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      input, select {
+        background: #1a1a1a;
+        border-color: #444;
+        color: #e8e8e6;
+      }
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #0c447c;
+      background: #fff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      input:focus, select:focus {
+        background: #333;
+      }
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-row > div {
+      width: 100%;
+    }
+
+    .trades-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .trades-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .trade-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trade-check input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .trade-check label {
+      margin: 0;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .summary {
+      background: #f9f9f7;
+      padding: 20px 16px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      margin-top: 2rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .summary {
+        background: #1a1a1a;
+        border-color: #444;
+      }
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+
+    .summary-row.total {
+      border-top: 1px solid #d0d0d0;
+      padding-top: 14px;
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .summary-row.total {
+        border-top-color: #444;
+      }
+    }
+
+    .summary-label {
+      color: #666;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .summary-label {
+        color: #999;
+      }
+    }
+
+    .summary-value {
+      font-weight: 500;
+      color: #2c2c2a;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .summary-value {
+        color: #e8e8e6;
+      }
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: 1px solid #d0d0d0;
+      background: #fff;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      color: #2c2c2a;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      button {
+        background: #333;
+        border-color: #555;
+        color: #e8e8e6;
+      }
+    }
+
+    button:hover {
+      background: #f0f0f0;
+      border-color: #999;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      button:hover {
+        background: #444;
+        border-color: #777;
+      }
+    }
+
+    button.primary {
+      background: #0c447c;
+      color: #fff;
+      border-color: #0c447c;
+    }
+
+    button.primary:hover {
+      background: #042c53;
+      border-color: #042c53;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      margin-top: 3rem;
+      padding: 2rem 1rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .footer {
+        color: #777;
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      html, body {
+        background: #fff;
+        color: #000;
+      }
+
+      .tabs, .button-group, .footer {
+        display: none;
+      }
+
+      .header {
+        border-bottom: 2px solid #000;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        page-break-after: avoid;
+      }
+
+      .header-title {
+        color: #000;
+        font-size: 24px;
+      }
+
+      .header-subtitle, .header-detail {
+        color: #333;
+      }
+
+      .container {
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .content-card {
+        background: #fff;
+        border: 1px solid #999;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        page-break-inside: avoid;
+      }
+
+      .summary {
+        background: #fff;
+        border: 1px solid #999;
+        padding: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      input, select, .tab-content, .section-title {
+        display: none;
+      }
+
+      .print-section {
+        display: block;
+        margin-bottom: 1rem;
+        page-break-inside: avoid;
+      }
+
+      .print-label {
+        font-weight: 600;
+        font-size: 12px;
+      }
+
+      .print-value {
+        font-size: 14px;
+        margin-bottom: 0.5rem;
+      }
+
+      .print-divider {
+        border-top: 1px solid #999;
+        margin: 1rem 0;
+      }
+    }
+
+    .note {
+      font-size: 12px;
+      color: #999;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .note {
+        color: #777;
+      }
+    }
+
+    .print-area {
+      display: none;
+    }
+
+    .hidden-input {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-title">Town of Cary Fee Calculator</div>
+    <div class="header-subtitle">Inspections &amp; Permits Department</div>
+    <div class="header-detail">FY 2027 Recommended Fee Schedule</div>
+  </div>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('building')">Building Permits</button>
+      <button class="tab-btn" onclick="switchTab('fire')">Fire Code</button>
+      <button class="tab-btn" onclick="switchTab('inspection')">Inspections &amp; Plan Review</button>
+      <button class="tab-btn" onclick="switchTab('admin')">Administrative</button>
+      <button class="tab-btn" onclick="switchTab('operfire')">Operational Fire Permits</button>
+    </div>
+
+    <!-- Building Permits Tab -->
+    <div id="building" class="tab-content active">
+      <div class="content-card">
+        <div class="section">
+          <div class="section-title">Permit Type</div>
+          <select id="buildingType" onchange="calculateBuildingFee(); updatePrintArea()">
+            <option value="">Select a permit type...</option>
+            <option value="commercial-new">Commercial: New Building or Addition</option>
+            <option value="commercial-alteration">Commercial: Alteration</option>
+            <option value="commercial-fire-alarm">Commercial: Fire Alarm System</option>
+            <option value="commercial-sprinkler">Commercial: Sprinkler System/Standpipe</option>
+            <option value="commercial-trades">Commercial: Trades (PME)</option>
+            <option value="commercial-equipment-changeout">Commercial: Equipment Change Out</option>
+            <option value="commercial-demolition">Commercial: Demolition of a Building</option>
+            <option value="residential-new">Residential: New or Relocated Dwelling</option>
+            <option value="residential-addition">Residential: Addition</option>
+            <option value="residential-alteration">Residential: Alteration</option>
+            <option value="residential-deck">Residential: Deck</option>
+            <option value="residential-trades">Residential: Trades (PME)</option>
+            <option value="residential-equipment-changeout">Residential: Equipment Change Out</option>
+            <option value="residential-demolition">Residential: Demolition of a Dwelling</option>
+          </select>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Project Details</div>
+          <div class="input-row">
+            <div>
+              <label>Square Footage</label>
+              <input type="number" id="sqft" placeholder="0" step="1" onchange="calculateBuildingFee(); updatePrintArea()" oninput="calculateBuildingFee(); updatePrintArea()">
+            </div>
+            <div>
+              <label>Number of Units (Apartments)</label>
+              <input type="number" id="units" placeholder="0" step="1" onchange="calculateBuildingFee(); updatePrintArea()" oninput="calculateBuildingFee(); updatePrintArea()">
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Additional Trades</div>
+          <div class="trades-grid" id="tradesGrid"></div>
+        </div>
+
+        <div class="summary">
+          <div class="summary-row">
+            <span class="summary-label">Base Permit Fee</span>
+            <span class="summary-value">$<span id="buildingBase">0.00</span></span>
+          </div>
+          <div class="summary-row" id="unitsRow" style="display:none;">
+            <span class="summary-label">Unit Add-on (Apartments)</span>
+            <span class="summary-value">$<span id="buildingUnits">0.00</span></span>
+          </div>
+          <div class="summary-row" id="tradesRow" style="display:none;">
+            <span class="summary-label">Trades Add-ons</span>
+            <span class="summary-value">$<span id="buildingTrades">0.00</span></span>
+          </div>
+          <div class="summary-row total">
+            <span>Total Permit Fee</span>
+            <span>$<span id="buildingTotal">0.00</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fire Code Tab -->
+    <div id="fire" class="tab-content">
+      <div class="content-card">
+        <div class="section">
+          <div class="section-title">Fire Code Permit Type</div>
+          <select id="fireType" onchange="calculateFireFee(); updatePrintArea()">
+            <option value="">Select a permit type...</option>
+            <option value="battery">Battery Systems (>50 gallons)</option>
+            <option value="compressed-gas">Compressed Gases</option>
+            <option value="fire-alarm">Fire Alarm System</option>
+            <option value="fire-pump">Fire Pumps and Related Equipment</option>
+            <option value="sprinkler">Fire Sprinkler System(s)</option>
+            <option value="hazmat">Hazardous Materials</option>
+            <option value="solar">Solar Photovoltaic Power Systems</option>
+            <option value="tent">Temporary Membrane Structures/Tents</option>
+          </select>
+        </div>
+
+        <div class="section" id="fireQtySection" style="display:none;">
+          <label>Square Footage</label>
+          <input type="number" id="fireQty" placeholder="0" step="1" onchange="calculateFireFee(); updatePrintArea()" oninput="calculateFireFee(); updatePrintArea()">
+        </div>
+
+        <div class="summary">
+          <div class="summary-row total">
+            <span>Total Permit Fee</span>
+            <span>$<span id="fireTotal">0.00</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inspections & Plan Review Tab -->
+    <div id="inspection" class="tab-content">
+      <div class="content-card">
+        <div class="section">
+          <div class="section-title">Service Type</div>
+          <select id="serviceType" onchange="calculateInspectionFee(); updatePrintArea()">
+            <option value="">Select a service...</option>
+            <option value="special-inspection">Special Request Inspection (per hour)</option>
+            <option value="abc-inspection">ABC Inspection</option>
+            <option value="re-inspection">Re-Inspection</option>
+            <option value="standard-review">Standard Plan Review</option>
+            <option value="utility-pretreatment">Utility Pretreatment Review</option>
+            <option value="express-review">Express Plan Review (per hour)</option>
+          </select>
+        </div>
+
+        <div class="section" id="hoursSection" style="display:none;">
+          <label>Number of Hours</label>
+          <input type="number" id="hours" placeholder="1" step="0.5" min="0.25" onchange="calculateInspectionFee(); updatePrintArea()" oninput="calculateInspectionFee(); updatePrintArea()">
+        </div>
+
+        <div class="summary">
+          <div class="summary-row total">
+            <span>Total Fee</span>
+            <span>$<span id="inspectionTotal">0.00</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Administrative Fees Tab -->
+    <div id="admin" class="tab-content">
+      <div class="content-card">
+        <div class="section">
+          <div class="section-title">Administrative Service</div>
+          <select id="adminType" onchange="calculateAdminFee(); updatePrintArea()">
+            <option value="">Select a service...</option>
+            <option value="change-contractor">Change of Contractor</option>
+            <option value="homeowner-recovery">Homeowners Recovery Fund</option>
+            <option value="temp-coo">Temporary Certificate of Occupancy</option>
+            <option value="project-mod">Project Modification Fee (per trade)</option>
+            <option value="refund-processing">Refund Processing Fee</option>
+            <option value="re-stamp-plans">Re-stamp Plans</option>
+            <option value="double-permit">Double Permit Fee (Work without Permit)</option>
+            <option value="expedited-permit">Expedited Permit Processing</option>
+          </select>
+        </div>
+
+        <div class="summary">
+          <div class="summary-row total">
+            <span>Total Fee</span>
+            <span>$<span id="adminTotal">0.00</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Operational Fire Permits Tab -->
+    <div id="operfire" class="tab-content">
+      <div class="content-card">
+        <div class="section">
+          <div class="section-title">Operational Fire Permit Type</div>
+          <select id="operfireType" onchange="calculateOperFireFee(); updatePrintArea()">
+            <option value="">Select a permit type...</option>
+            <option value="aerosol">Aerosol Products</option>
+            <option value="amusement">Amusement Buildings</option>
+            <option value="aviation">Aviation Facilities</option>
+            <option value="carbon-dioxide">Carbon Dioxide Systems</option>
+            <option value="carnivals">Carnivals and Fairs</option>
+            <option value="cellulose-nitrate">Cellulose Nitrate Film</option>
+            <option value="combustible-dust">Combustible Dust Producing Operations</option>
+            <option value="combustible-fibers">Combustible Fibers</option>
+            <option value="compressed-gas-ops">Compressed Gases</option>
+            <option value="covered-mall">Covered Mall Buildings</option>
+            <option value="cryogenic">Cryogenic Fluids</option>
+            <option value="cutting-welding">Cutting/Welding Operations</option>
+            <option value="dry-cleaning">Dry Cleaning Plants</option>
+            <option value="exhibits">Exhibits and Trade Shows</option>
+            <option value="explosives">Explosives</option>
+            <option value="floor-finishing">Floor Finishing</option>
+            <option value="fruit-ripening">Fruit/Crop Ripening</option>
+            <option value="fumigation">Fumigation and Thermal Insecticidal Fogging</option>
+            <option value="hazmat-ops">Hazardous Materials</option>
+            <option value="hpm">HPM Facilities</option>
+            <option value="high-piled">High-Piled Storage</option>
+            <option value="hot-work">Hot Work Operations</option>
+            <option value="industrial-ovens">Industrial Ovens</option>
+            <option value="lumber-yards">Lumber Yards/Woodworking Plants</option>
+            <option value="liquid-gas-vehicles">Liquid/Gas-Fueled Vehicles in Assembly Buildings</option>
+            <option value="lp-gas">LP Gas</option>
+            <option value="magnesium">Magnesium Operations</option>
+            <option value="misc-combustible">Miscellaneous Combustible Storage</option>
+            <option value="motor-fuel">Motor Fuel-Dispensing Facilities</option>
+            <option value="open-burning">Open Burning</option>
+            <option value="open-flames">Open Flames and Torches</option>
+            <option value="open-flames-candles">Open Flames and Candles</option>
+            <option value="organic-coatings">Organic Coatings</option>
+            <option value="places-assembly">Places of Assembly</option>
+            <option value="private-hydrants">Private Fire Hydrants</option>
+            <option value="pyrotechnic">Pyrotechnic Special Effects Material</option>
+            <option value="pyroxylin">Pyroxylin Plastics</option>
+            <option value="refrigeration">Refrigeration Equipment</option>
+            <option value="repair-garages">Repair Garages</option>
+            <option value="rooftop-heliports">Rooftop Heliports</option>
+            <option value="spraying-dipping">Spraying or Dipping</option>
+            <option value="scrap-tires">Storage of Scrap Tires and Tire By-Product</option>
+            <option value="tire-rebuilding">Tire Rebuilding Plants</option>
+            <option value="burn-permit">Burn Permit (Air Curtain Burn Only)</option>
+            <option value="explosives-blasting">Explosives Blasting Permit</option>
+            <option value="tank-installation">Tank Installation (per tank)</option>
+            <option value="tank-removal">Tank Removal (per tank)</option>
+          </select>
+        </div>
+
+        <div class="summary">
+          <div class="summary-row total">
+            <span>Total Permit Fee</span>
+            <span>$<span id="operfireTotal">0.00</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button class="primary" onclick="printEstimate()">Print/Export as PDF</button>
+      <button onclick="resetForm()">Reset</button>
+    </div>
+
+    <div class="footer">
+      <p>This calculator is for estimation purposes only. All fees are subject to the current FY 2027 Fee Schedule as adopted by the Town of Cary.</p>
+    </div>
+  </div>
+
+  <!-- Hidden print area -->
+  <div class="print-area" id="printArea"></div>
+
+  <script>
+    const FEE_SCHEDULE = {
+      building: {
+        'commercial-new': { rate: 0.30, minimum: 250, name: 'New Building or Addition' },
+        'commercial-alteration': { rate: 0.30, minimum: 250, name: 'Alteration' },
+        'commercial-fire-alarm': { rate: 0.11, minimum: 125, name: 'Fire Alarm System' },
+        'commercial-sprinkler': { rate: 0.11, minimum: 125, name: 'Sprinkler System/Standpipe' },
+        'commercial-trades': { rate: 0.11, minimum: 125, name: 'Trades' },
+        'commercial-equipment-changeout': { flat: 150, name: 'Equipment Change Out' },
+        'commercial-demolition': { flat: 150, name: 'Demolition of a Building' },
+        'residential-new': { rate: 0.30, minimum: 225, name: 'New or Relocated Dwelling' },
+        'residential-addition': { rate: 0.30, minimum: 225, name: 'Addition' },
+        'residential-alteration': { rate: 0.30, minimum: 125, name: 'Alteration' },
+        'residential-deck': { rate: 0.30, minimum: 125, name: 'Deck' },
+        'residential-trades': { rate: 0.15, minimum: 125, name: 'Trades' },
+        'residential-equipment-changeout': { flat: 125, name: 'Equipment Change Out' },
+        'residential-demolition': { flat: 200, name: 'Demolition of a Dwelling' },
+      },
+      trades: [
+        { id: 'plumbing', name: 'Plumbing', fee: 125 },
+        { id: 'mechanical', name: 'Mechanical', fee: 125 },
+        { id: 'electrical', name: 'Electrical', fee: 125 },
+      ],
+      fire: {
+        'battery': 100,
+        'compressed-gas': 100,
+        'fire-alarm': { rate: 0.11, minimum: 125 },
+        'fire-pump': 100,
+        'sprinkler': { rate: 0.11, minimum: 125 },
+        'hazmat': 204,
+        'solar': 100,
+        'tent': 100,
+      },
+      inspection: {
+        'special-inspection': 150,
+        'abc-inspection': 125,
+        're-inspection': 125,
+        'standard-review': 200,
+        'utility-pretreatment': 100,
+        'express-review': 1000,
+      },
+      admin: {
+        'change-contractor': 100,
+        'homeowner-recovery': 10,
+        'temp-coo': 250,
+        'project-mod': 100,
+        'refund-processing': 125,
+        're-stamp-plans': 100,
+        'double-permit': 'varies',
+        'expedited-permit': 500,
+      },
+      operfire: {
+        'aerosol': 100,
+        'amusement': 100,
+        'aviation': 100,
+        'carbon-dioxide': 100,
+        'carnivals': 100,
+        'cellulose-nitrate': 100,
+        'combustible-dust': 100,
+        'combustible-fibers': 100,
+        'compressed-gas-ops': 100,
+        'covered-mall': 100,
+        'cryogenic': 100,
+        'cutting-welding': 100,
+        'dry-cleaning': 100,
+        'exhibits': 100,
+        'explosives': 100,
+        'floor-finishing': 100,
+        'fruit-ripening': 100,
+        'fumigation': 100,
+        'hazmat-ops': 250,
+        'hpm': 100,
+        'high-piled': 100,
+        'hot-work': 100,
+        'industrial-ovens': 100,
+        'lumber-yards': 100,
+        'liquid-gas-vehicles': 100,
+        'lp-gas': 100,
+        'magnesium': 100,
+        'misc-combustible': 100,
+        'motor-fuel': 100,
+        'open-burning': 100,
+        'open-flames': 100,
+        'open-flames-candles': 100,
+        'organic-coatings': 100,
+        'places-assembly': 100,
+        'private-hydrants': 100,
+        'pyrotechnic': 204,
+        'pyroxylin': 100,
+        'refrigeration': 100,
+        'repair-garages': 100,
+        'rooftop-heliports': 100,
+        'spraying-dipping': 100,
+        'scrap-tires': 100,
+        'tire-rebuilding': 100,
+        'burn-permit': 100,
+        'explosives-blasting': 100,
+        'tank-installation': 180,
+        'tank-removal': 180,
+      }
+    };
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+      document.querySelector(`button[onclick="switchTab('${tab}')"]`).classList.add('active');
+    }
+
+    function updateTradesGrid() {
+      const type = document.getElementById('buildingType').value;
+      const grid = document.getElementById('tradesGrid');
+      grid.innerHTML = '';
+      if (!type.includes('trades')) {
+        FEE_SCHEDULE.trades.forEach(trade => {
+          const div = document.createElement('div');
+          div.className = 'trade-check';
+          div.innerHTML = `<input type="checkbox" id="trade-${trade.id}" onchange="calculateBuildingFee(); updatePrintArea()"><label for="trade-${trade.id}">${trade.name} (+$${trade.fee})</label>`;
+          grid.appendChild(div);
+        });
+      }
+    }
+
+    function calculateBuildingFee() {
+      const type = document.getElementById('buildingType').value;
+      if (!type) {
+        document.getElementById('buildingTotal').textContent = '0.00';
+        return;
+      }
+
+      const schedule = FEE_SCHEDULE.building[type];
+      
+      // Show/hide trades grid and input fields based on permit type
+      const isEquipmentChangeout = type.includes('equipment-changeout');
+      document.getElementById('tradesGrid').style.display = isEquipmentChangeout ? 'none' : 'block';
+      
+      let base = 0;
+      let unitFee = 0;
+      let tradesFee = 0;
+
+      if (schedule.flat) {
+        // Flat fee (e.g., Equipment Change Out)
+        base = schedule.flat;
+      } else {
+        // Rate-based fee
+        updateTradesGrid();
+        const sqft = parseFloat(document.getElementById('sqft').value) || 0;
+        const units = parseFloat(document.getElementById('units').value) || 0;
+        
+        base = Math.max(sqft * schedule.rate, schedule.minimum);
+        unitFee = type.includes('commercial-new') && units > 0 ? units * 100 : 0;
+
+        document.querySelectorAll('.trade-check input:checked').forEach(cb => {
+          const tradeId = cb.id.replace('trade-', '');
+          const trade = FEE_SCHEDULE.trades.find(t => t.id === tradeId);
+          if (trade) tradesFee += trade.fee;
+        });
+      }
+
+      document.getElementById('buildingBase').textContent = base.toFixed(2);
+      document.getElementById('unitsRow').style.display = unitFee > 0 ? 'flex' : 'none';
+      document.getElementById('buildingUnits').textContent = unitFee.toFixed(2);
+      document.getElementById('tradesRow').style.display = tradesFee > 0 ? 'flex' : 'none';
+      document.getElementById('buildingTrades').textContent = tradesFee.toFixed(2);
+      document.getElementById('buildingTotal').textContent = (base + unitFee + tradesFee).toFixed(2);
+    }
+
+    function calculateFireFee() {
+      const type = document.getElementById('fireType').value;
+      if (!type) {
+        document.getElementById('fireTotal').textContent = '0.00';
+        return;
+      }
+
+      const fee = FEE_SCHEDULE.fire[type];
+      const qty = parseFloat(document.getElementById('fireQty').value) || 0;
+
+      const qtySection = document.getElementById('fireQtySection');
+      qtySection.style.display = (type === 'fire-alarm' || type === 'sprinkler') ? 'block' : 'none';
+
+      let total = 0;
+      if (typeof fee === 'object' && fee.rate) {
+        total = Math.max(qty * fee.rate, fee.minimum);
+      } else {
+        total = fee;
+      }
+
+      document.getElementById('fireTotal').textContent = total.toFixed(2);
+    }
+
+    function calculateInspectionFee() {
+      const type = document.getElementById('serviceType').value;
+      if (!type) {
+        document.getElementById('inspectionTotal').textContent = '0.00';
+        return;
+      }
+
+      const hours = parseFloat(document.getElementById('hours').value) || 0;
+
+      const hoursSection = document.getElementById('hoursSection');
+      hoursSection.style.display = (type === 'special-inspection' || type === 'express-review') ? 'block' : 'none';
+
+      let total = 0;
+      if (type === 'special-inspection') {
+        total = Math.max(hours * 150, 300);
+      } else if (type === 'express-review') {
+        total = 1000 + Math.max((hours - 1) * 500, 0);
+      } else {
+        total = FEE_SCHEDULE.inspection[type] || 0;
+      }
+
+      document.getElementById('inspectionTotal').textContent = total.toFixed(2);
+    }
+
+    function calculateAdminFee() {
+      const type = document.getElementById('adminType').value;
+      if (!type) {
+        document.getElementById('adminTotal').textContent = '0.00';
+        return;
+      }
+
+      const fee = FEE_SCHEDULE.admin[type];
+      const total = typeof fee === 'function' ? fee(100) : (fee || 0);
+      document.getElementById('adminTotal').textContent = typeof total === 'number' ? total.toFixed(2) : total;
+    }
+
+    function calculateOperFireFee() {
+      const type = document.getElementById('operfireType').value;
+      if (!type) {
+        document.getElementById('operfireTotal').textContent = '0.00';
+        return;
+      }
+
+      const fee = FEE_SCHEDULE.operfire[type] || 0;
+      document.getElementById('operfireTotal').textContent = fee.toFixed(2);
+    }
+
+    function updatePrintArea() {
+      const currentTab = document.querySelector('.tab-content.active').id;
+      let printContent = '';
+
+      if (currentTab === 'building') {
+        const type = document.getElementById('buildingType').value;
+        const sqft = document.getElementById('sqft').value;
+        const units = document.getElementById('units').value;
+        const base = document.getElementById('buildingBase').textContent;
+        const unitsAmount = document.getElementById('buildingUnits').textContent;
+        const trades = document.getElementById('buildingTrades').textContent;
+        const total = document.getElementById('buildingTotal').textContent;
+
+        printContent = `
+          <div class="print-section">
+            <div class="print-label">Permit Type</div>
+            <div class="print-value">${type}</div>
+          </div>
+          ${sqft ? `<div class="print-section"><div class="print-label">Square Footage</div><div class="print-value">${sqft} SF</div></div>` : ''}
+          ${units ? `<div class="print-section"><div class="print-label">Units</div><div class="print-value">${units}</div></div>` : ''}
+          <div class="print-divider"></div>
+          <div class="print-section"><div class="print-label">Base Permit Fee</div><div class="print-value">$${base}</div></div>
+          ${parseFloat(unitsAmount) > 0 ? `<div class="print-section"><div class="print-label">Unit Add-on</div><div class="print-value">$${unitsAmount}</div></div>` : ''}
+          ${parseFloat(trades) > 0 ? `<div class="print-section"><div class="print-label">Trades Add-ons</div><div class="print-value">$${trades}</div></div>` : ''}
+          <div class="print-divider"></div>
+          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL PERMIT FEE</div><div class="print-value">$${total}</div></div>
+        `;
+      } else if (currentTab === 'fire') {
+        const type = document.getElementById('fireType').value;
+        const total = document.getElementById('fireTotal').textContent;
+        printContent = `
+          <div class="print-section">
+            <div class="print-label">Fire Code Permit Type</div>
+            <div class="print-value">${type || 'Not selected'}</div>
+          </div>
+          <div class="print-divider"></div>
+          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL PERMIT FEE</div><div class="print-value">$${total}</div></div>
+        `;
+      } else if (currentTab === 'inspection') {
+        const type = document.getElementById('serviceType').value;
+        const total = document.getElementById('inspectionTotal').textContent;
+        printContent = `
+          <div class="print-section">
+            <div class="print-label">Service Type</div>
+            <div class="print-value">${type || 'Not selected'}</div>
+          </div>
+          <div class="print-divider"></div>
+          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL FEE</div><div class="print-value">$${total}</div></div>
+        `;
+      } else if (currentTab === 'admin') {
+        const type = document.getElementById('adminType').value;
+        const total = document.getElementById('adminTotal').textContent;
+        printContent = `
+          <div class="print-section">
+            <div class="print-label">Administrative Service</div>
+            <div class="print-value">${type || 'Not selected'}</div>
+          </div>
+          <div class="print-divider"></div>
+          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL FEE</div><div class="print-value">$${total}</div></div>
+        `;
+      } else if (currentTab === 'operfire') {
+        const type = document.getElementById('operfireType').value;
+        const total = document.getElementById('operfireTotal').textContent;
+        printContent = `
+          <div class="print-section">
+            <div class="print-label">Operational Fire Permit Type</div>
+            <div class="print-value">${type || 'Not selected'}</div>
+          </div>
+          <div class="print-divider"></div>
+          <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL PERMIT FEE</div><div class="print-value">$${total}</div></div>
+        `;
+      }
+
+      document.getElementById('printArea').innerHTML = printContent;
+    }
+
+    function printEstimate() {
+      updatePrintArea();
+      window.print();
+    }
+
+    function resetForm() {
+      document.querySelectorAll('input, select').forEach(el => {
+        if (el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+      });
+      calculateBuildingFee();
+      calculateFireFee();
+      calculateInspectionFee();
+      calculateAdminFee();
+      calculateOperFireFee();
+      updatePrintArea();
+    }
+
+    // Initialize
+    calculateBuildingFee();
+  </script>
+</body>
+</html>
