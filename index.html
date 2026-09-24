@@ -29,8 +29,8 @@
     .header {
       background: #fff;
       border-bottom: 1px solid #e0e0e0;
-      padding: 2rem;
-      margin-bottom: 2rem;
+      padding: 1.25rem 2rem;
+      margin-bottom: 1.5rem;
       text-align: center;
     }
 
@@ -42,9 +42,9 @@
     }
 
     .header-title {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.35rem;
       color: #0c447c;
     }
 
@@ -71,10 +71,64 @@
       color: #999;
     }
 
+    .header-detail a {
+      color: #0c447c;
+      text-decoration: none;
+      border-bottom: 1px solid #0c447c;
+    }
+
+    .header-detail a:hover {
+      text-decoration: underline;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .header-detail a {
+        color: #85b7eb;
+        border-bottom-color: #85b7eb;
+      }
+    }
+
     @media (prefers-color-scheme: dark) {
       .header-detail {
         color: #777;
       }
+    }
+
+    .disclaimer {
+      background: #f5f5f5;
+      border-left: 3px solid #999;
+      padding: 0.75rem 1rem;
+      margin: 0 auto 1.5rem;
+      max-width: 900px;
+      border-radius: 3px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .disclaimer {
+        background: #2d2d2d;
+        border-left-color: #666;
+        color: #aaa;
+      }
+    }
+
+    .disclaimer-title {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 0.5rem;
+      font-size: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .disclaimer-title {
+        color: #bbb;
+      }
+    }
+
+    .disclaimer p {
+      margin: 0;
     }
 
     .container {
@@ -264,15 +318,21 @@
     }
 
     .trade-check input[type="checkbox"] {
-      width: auto;
+      width: 18px;
+      height: 18px;
       margin: 0;
       cursor: pointer;
+      flex-shrink: 0;
+      accent-color: #0c447c;
+      pointer-events: auto;
     }
 
     .trade-check label {
       margin: 0;
       cursor: pointer;
       flex: 1;
+      user-select: none;
+      pointer-events: auto;
     }
 
     .checkbox-grid {
@@ -288,15 +348,117 @@
     }
 
     .admin-check input[type="checkbox"] {
-      width: auto;
+      width: 18px;
+      height: 18px;
       margin: 0;
       cursor: pointer;
+      flex-shrink: 0;
+      accent-color: #0c447c;
+      pointer-events: auto;
     }
 
     .admin-check label {
       margin: 0;
       cursor: pointer;
       flex: 1;
+      user-select: none;
+      pointer-events: auto;
+    }
+
+    .operfire-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .operfire-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      flex-shrink: 0;
+      accent-color: #0c447c;
+      pointer-events: auto;
+    }
+
+    .operfire-check label {
+      margin: 0;
+      cursor: pointer;
+      flex: 1;
+      user-select: none;
+      pointer-events: auto;
+    }
+
+    .fire-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fire-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      flex-shrink: 0;
+      accent-color: #0c447c;
+      pointer-events: auto;
+    }
+
+    .fire-check label {
+      margin: 0;
+      cursor: pointer;
+      flex: 1;
+      user-select: none;
+      pointer-events: auto;
+    }
+
+    .building-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .building-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      flex-shrink: 0;
+      accent-color: #0c447c;
+      pointer-events: auto;
+    }
+
+    .building-check label {
+      margin: 0;
+      cursor: pointer;
+      flex: 1;
+      user-select: none;
+      pointer-events: auto;
+    }
+
+    .inspection-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .inspection-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      flex-shrink: 0;
+      accent-color: #0c447c;
+      pointer-events: auto;
+    }
+
+    .inspection-check label {
+      margin: 0;
+      cursor: pointer;
+      flex: 1;
+      user-select: none;
+      pointer-events: auto;
     }
 
     .misc-fee-container {
@@ -542,9 +704,13 @@
 </head>
 <body>
   <div class="header">
-    <div class="header-title">Town of Cary Fee Calculator</div>
-    <div class="header-subtitle">Inspections &amp; Permits Department</div>
-    <div class="header-detail">FY 2027 Recommended Fee Schedule</div>
+    <div class="header-title">The Unofficial Cary Permits, Inspections, and Development Fee Estimator Tool</div>
+    <div class="header-detail">Based on the <a href="https://www.carync.gov/services-publications/residential-permits-inspections/fees" target="_blank">Cary FY2027 Recommended Fee Schedule</a> approved by Town Council</div>
+  </div>
+
+  <div class="disclaimer">
+    <div class="disclaimer-title">Disclaimer – Not Intended for Official Use</div>
+    <p>This informational tool was created in part with artificial intelligence and is provided for reference purposes only. It cannot be relied upon as a complete or accurate fee estimate. For an official fee estimate, contact Development Services at (919) 469-4000.</p>
   </div>
 
   <div class="container">
@@ -560,35 +726,82 @@
     <div id="building" class="tab-content active">
       <div class="content-card">
         <div class="section">
-          <div class="section-title">Permit Type</div>
-          <select id="buildingType" onchange="calculateBuildingFee(); updatePrintArea()">
-            <option value="">Select a permit type...</option>
-            <option value="commercial-new">Commercial: New Building or Addition</option>
-            <option value="commercial-alteration">Commercial: Alteration</option>
-            <option value="commercial-fire-alarm">Commercial: Fire Alarm System</option>
-            <option value="commercial-sprinkler">Commercial: Sprinkler System/Standpipe</option>
-            <option value="commercial-trades">Commercial: Trades (PME)</option>
-            <option value="commercial-equipment-changeout">Commercial: Equipment Change Out</option>
-            <option value="commercial-demolition">Commercial: Demolition of a Building</option>
-            <option value="residential-new">Residential: New or Relocated Dwelling</option>
-            <option value="residential-addition">Residential: Addition</option>
-            <option value="residential-alteration">Residential: Alteration</option>
-            <option value="residential-deck">Residential: Deck</option>
-            <option value="residential-trades">Residential: Trades (PME)</option>
-            <option value="residential-equipment-changeout">Residential: Equipment Change Out</option>
-            <option value="residential-demolition">Residential: Demolition of a Dwelling</option>
-          </select>
+          <div class="section-title">Commercial Building Permits</div>
+          <div id="commercialCheckboxes" class="checkbox-grid">
+            <div class="building-check">
+              <input type="checkbox" id="building-commercial-new" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-commercial-new">New Building or Addition ($0.30/SF, $250 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-commercial-alteration" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-commercial-alteration">Alteration ($0.30/SF, $250 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-commercial-fire-alarm" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-commercial-fire-alarm">Fire Alarm System ($0.11/SF, $125 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-commercial-sprinkler" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-commercial-sprinkler">Sprinkler System/Standpipe ($0.11/SF, $125 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-commercial-trades" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-commercial-trades">Trades (PME) ($0.11/SF, $125 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-commercial-equipment-changeout" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-commercial-equipment-changeout">Equipment Change Out ($150)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-commercial-demolition" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-commercial-demolition">Demolition of a Building ($150)</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Residential Building Permits</div>
+          <div id="residentialCheckboxes" class="checkbox-grid">
+            <div class="building-check">
+              <input type="checkbox" id="building-residential-new" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-residential-new">New or Relocated Dwelling ($0.30/SF, $225 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-residential-addition" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-residential-addition">Addition ($0.30/SF, $225 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-residential-alteration" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-residential-alteration">Alteration ($0.30/SF, $125 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-residential-deck" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-residential-deck">Deck ($0.30/SF, $125 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-residential-trades" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-residential-trades">Trades (PME) ($0.15/SF, $125 min)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-residential-equipment-changeout" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-residential-equipment-changeout">Equipment Change Out ($125)</label>
+            </div>
+            <div class="building-check">
+              <input type="checkbox" id="building-residential-demolition" onchange="calculateBuildingFee(); updatePrintArea()">
+              <label for="building-residential-demolition">Demolition of a Dwelling ($200)</label>
+            </div>
+          </div>
         </div>
 
         <div class="section">
           <div class="section-title">Project Details</div>
           <div class="input-row">
             <div>
-              <label>Square Footage</label>
+              <label for="sqft">Square Footage</label>
               <input type="number" id="sqft" placeholder="0" step="1" min="0" onchange="preventNegative('sqft'); calculateBuildingFee(); updatePrintArea()" oninput="calculateBuildingFee(); updatePrintArea()">
             </div>
-            <div>
-              <label>Number of Units (Apartments)</label>
+            <div id="unitsInputSection" style="display:none;">
+              <label for="units">Number of Units (Apartments)</label>
               <input type="number" id="units" placeholder="0" value="1" step="1" min="0" onchange="preventNegative('units'); calculateBuildingFee(); updatePrintArea()" oninput="calculateBuildingFee(); updatePrintArea()">
             </div>
           </div>
@@ -600,20 +813,9 @@
         </div>
 
         <div class="summary">
-          <div class="summary-row">
-            <span class="summary-label">Base Permit Fee</span>
-            <span class="summary-value">$<span id="buildingBase">0.00</span></span>
-          </div>
-          <div class="summary-row" id="unitsRow" style="display:none;">
-            <span class="summary-label">Unit Add-on (Apartments)</span>
-            <span class="summary-value">$<span id="buildingUnits">0.00</span></span>
-          </div>
-          <div class="summary-row" id="tradesRow" style="display:none;">
-            <span class="summary-label">Trades Add-ons</span>
-            <span class="summary-value">$<span id="buildingTrades">0.00</span></span>
-          </div>
+          <div id="buildingBreakdown"></div>
           <div class="summary-row total">
-            <span>Total Permit Fee</span>
+            <span>Total Building Permits</span>
             <span>$<span id="buildingTotal">0.00</span></span>
           </div>
         </div>
@@ -624,28 +826,52 @@
     <div id="fire" class="tab-content">
       <div class="content-card">
         <div class="section">
-          <div class="section-title">Fire Code Permit Type</div>
-          <select id="fireType" onchange="calculateFireFee(); updatePrintArea()">
-            <option value="">Select a permit type...</option>
-            <option value="battery">Battery Systems (>50 gallons)</option>
-            <option value="compressed-gas">Compressed Gases</option>
-            <option value="fire-alarm">Fire Alarm System</option>
-            <option value="fire-pump">Fire Pumps and Related Equipment</option>
-            <option value="sprinkler">Fire Sprinkler System(s)</option>
-            <option value="hazmat">Hazardous Materials</option>
-            <option value="solar">Solar Photovoltaic Power Systems</option>
-            <option value="tent">Temporary Membrane Structures/Tents</option>
-          </select>
+          <div class="section-title">Fire Code Permits</div>
+          <div id="fireCheckboxes" class="checkbox-grid">
+            <div class="fire-check">
+              <input type="checkbox" id="fire-battery" onchange="calculateFireFee(); updatePrintArea()">
+              <label for="fire-battery">Battery Systems (>50 gallons) ($100)</label>
+            </div>
+            <div class="fire-check">
+              <input type="checkbox" id="fire-compressed-gas" onchange="calculateFireFee(); updatePrintArea()">
+              <label for="fire-compressed-gas">Compressed Gases ($100)</label>
+            </div>
+            <div class="fire-check">
+              <input type="checkbox" id="fire-fire-alarm" onchange="calculateFireFee(); updatePrintArea()">
+              <label for="fire-fire-alarm">Fire Alarm System ($0.11/SF, $125 min)</label>
+            </div>
+            <div class="fire-check">
+              <input type="checkbox" id="fire-fire-pump" onchange="calculateFireFee(); updatePrintArea()">
+              <label for="fire-fire-pump">Fire Pumps and Related Equipment ($100)</label>
+            </div>
+            <div class="fire-check">
+              <input type="checkbox" id="fire-sprinkler" onchange="calculateFireFee(); updatePrintArea()">
+              <label for="fire-sprinkler">Fire Sprinkler System(s) ($0.11/SF, $125 min)</label>
+            </div>
+            <div class="fire-check">
+              <input type="checkbox" id="fire-hazmat" onchange="calculateFireFee(); updatePrintArea()">
+              <label for="fire-hazmat">Hazardous Materials ($204)</label>
+            </div>
+            <div class="fire-check">
+              <input type="checkbox" id="fire-solar" onchange="calculateFireFee(); updatePrintArea()">
+              <label for="fire-solar">Solar Photovoltaic Power Systems ($100)</label>
+            </div>
+            <div class="fire-check">
+              <input type="checkbox" id="fire-tent" onchange="calculateFireFee(); updatePrintArea()">
+              <label for="fire-tent">Temporary Membrane Structures/Tents ($100)</label>
+            </div>
+          </div>
         </div>
 
         <div class="section" id="fireQtySection" style="display:none;">
-          <label>Square Footage</label>
+          <label for="fireQty">Square Footage (for rate-based permits)</label>
           <input type="number" id="fireQty" placeholder="0" step="1" min="0" onchange="preventNegative('fireQty'); calculateFireFee(); updatePrintArea()" oninput="calculateFireFee(); updatePrintArea()">
         </div>
 
         <div class="summary">
+          <div id="fireBreakdown"></div>
           <div class="summary-row total">
-            <span>Total Permit Fee</span>
+            <span>Total Fire Code Permits</span>
             <span>$<span id="fireTotal">0.00</span></span>
           </div>
         </div>
@@ -656,26 +882,44 @@
     <div id="inspection" class="tab-content">
       <div class="content-card">
         <div class="section">
-          <div class="section-title">Service Type</div>
-          <select id="serviceType" onchange="calculateInspectionFee(); updatePrintArea()">
-            <option value="">Select a service...</option>
-            <option value="special-inspection">Special Request Inspection (per hour)</option>
-            <option value="abc-inspection">ABC Inspection</option>
-            <option value="re-inspection">Re-Inspection</option>
-            <option value="standard-review">Standard Plan Review</option>
-            <option value="utility-pretreatment">Utility Pretreatment Review</option>
-            <option value="express-review">Express Plan Review (per hour)</option>
-          </select>
+          <div class="section-title">Inspection & Plan Review Services</div>
+          <div id="inspectionCheckboxes" class="checkbox-grid">
+            <div class="inspection-check">
+              <input type="checkbox" id="inspection-special-inspection" onchange="calculateInspectionFee(); updatePrintArea()">
+              <label for="inspection-special-inspection">Special Request Inspection ($150/hr, $300 min)</label>
+            </div>
+            <div class="inspection-check">
+              <input type="checkbox" id="inspection-abc-inspection" onchange="calculateInspectionFee(); updatePrintArea()">
+              <label for="inspection-abc-inspection">ABC Inspection ($125)</label>
+            </div>
+            <div class="inspection-check">
+              <input type="checkbox" id="inspection-re-inspection" onchange="calculateInspectionFee(); updatePrintArea()">
+              <label for="inspection-re-inspection">Re-Inspection ($125)</label>
+            </div>
+            <div class="inspection-check">
+              <input type="checkbox" id="inspection-standard-review" onchange="calculateInspectionFee(); updatePrintArea()">
+              <label for="inspection-standard-review">Standard Plan Review ($200)</label>
+            </div>
+            <div class="inspection-check">
+              <input type="checkbox" id="inspection-utility-pretreatment" onchange="calculateInspectionFee(); updatePrintArea()">
+              <label for="inspection-utility-pretreatment">Utility Pretreatment Review ($100)</label>
+            </div>
+            <div class="inspection-check">
+              <input type="checkbox" id="inspection-express-review" onchange="calculateInspectionFee(); updatePrintArea()">
+              <label for="inspection-express-review">Express Plan Review ($1,000 first hr + $500/quarter-hr)</label>
+            </div>
+          </div>
         </div>
 
         <div class="section" id="hoursSection" style="display:none;">
-          <label>Number of Hours</label>
-          <input type="number" id="hours" placeholder="1" step="0.5" min="0.25" onchange="preventNegative('hours'); calculateInspectionFee(); updatePrintArea()" oninput="calculateInspectionFee(); updatePrintArea()">
+          <label for="hours">Number of Hours (for hourly services)</label>
+          <input type="number" id="hours" placeholder="1" step="0.5" min="0.25" value="1" onchange="preventNegative('hours'); calculateInspectionFee(); updatePrintArea()" oninput="calculateInspectionFee(); updatePrintArea()">
         </div>
 
         <div class="summary">
+          <div id="inspectionBreakdown"></div>
           <div class="summary-row total">
-            <span>Total Fee</span>
+            <span>Total Inspection & Plan Review Fees</span>
             <span>$<span id="inspectionTotal">0.00</span></span>
           </div>
         </div>
@@ -757,62 +1001,209 @@
     <div id="operfire" class="tab-content">
       <div class="content-card">
         <div class="section">
-          <div class="section-title">Operational Fire Permit Type</div>
-          <select id="operfireType" onchange="calculateOperFireFee(); updatePrintArea()">
-            <option value="">Select a permit type...</option>
-            <option value="aerosol">Aerosol Products</option>
-            <option value="amusement">Amusement Buildings</option>
-            <option value="aviation">Aviation Facilities</option>
-            <option value="carbon-dioxide">Carbon Dioxide Systems</option>
-            <option value="carnivals">Carnivals and Fairs</option>
-            <option value="cellulose-nitrate">Cellulose Nitrate Film</option>
-            <option value="combustible-dust">Combustible Dust Producing Operations</option>
-            <option value="combustible-fibers">Combustible Fibers</option>
-            <option value="compressed-gas-ops">Compressed Gases</option>
-            <option value="covered-mall">Covered Mall Buildings</option>
-            <option value="cryogenic">Cryogenic Fluids</option>
-            <option value="cutting-welding">Cutting/Welding Operations</option>
-            <option value="dry-cleaning">Dry Cleaning Plants</option>
-            <option value="exhibits">Exhibits and Trade Shows</option>
-            <option value="explosives">Explosives</option>
-            <option value="floor-finishing">Floor Finishing</option>
-            <option value="fruit-ripening">Fruit/Crop Ripening</option>
-            <option value="fumigation">Fumigation and Thermal Insecticidal Fogging</option>
-            <option value="hazmat-ops">Hazardous Materials</option>
-            <option value="hpm">HPM Facilities</option>
-            <option value="high-piled">High-Piled Storage</option>
-            <option value="hot-work">Hot Work Operations</option>
-            <option value="industrial-ovens">Industrial Ovens</option>
-            <option value="lumber-yards">Lumber Yards/Woodworking Plants</option>
-            <option value="liquid-gas-vehicles">Liquid/Gas-Fueled Vehicles in Assembly Buildings</option>
-            <option value="lp-gas">LP Gas</option>
-            <option value="magnesium">Magnesium Operations</option>
-            <option value="misc-combustible">Miscellaneous Combustible Storage</option>
-            <option value="motor-fuel">Motor Fuel-Dispensing Facilities</option>
-            <option value="open-burning">Open Burning</option>
-            <option value="open-flames">Open Flames and Torches</option>
-            <option value="open-flames-candles">Open Flames and Candles</option>
-            <option value="organic-coatings">Organic Coatings</option>
-            <option value="places-assembly">Places of Assembly</option>
-            <option value="private-hydrants">Private Fire Hydrants</option>
-            <option value="pyrotechnic">Pyrotechnic Special Effects Material</option>
-            <option value="pyroxylin">Pyroxylin Plastics</option>
-            <option value="refrigeration">Refrigeration Equipment</option>
-            <option value="repair-garages">Repair Garages</option>
-            <option value="rooftop-heliports">Rooftop Heliports</option>
-            <option value="spraying-dipping">Spraying or Dipping</option>
-            <option value="scrap-tires">Storage of Scrap Tires and Tire By-Product</option>
-            <option value="tire-rebuilding">Tire Rebuilding Plants</option>
-            <option value="burn-permit">Burn Permit (Air Curtain Burn Only)</option>
-            <option value="explosives-blasting">Explosives Blasting Permit</option>
-            <option value="tank-installation">Tank Installation (per tank)</option>
-            <option value="tank-removal">Tank Removal (per tank)</option>
-          </select>
+          <div class="section-title">Operational Fire Permits</div>
+          <div id="operfireCheckboxes" class="checkbox-grid">
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-aerosol" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-aerosol">Aerosol Products ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-amusement" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-amusement">Amusement Buildings ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-aviation" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-aviation">Aviation Facilities ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-carbon-dioxide" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-carbon-dioxide">Carbon Dioxide Systems ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-carnivals" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-carnivals">Carnivals and Fairs ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-cellulose-nitrate" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-cellulose-nitrate">Cellulose Nitrate Film ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-combustible-dust" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-combustible-dust">Combustible Dust Operations ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-combustible-fibers" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-combustible-fibers">Combustible Fibers ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-compressed-gas-ops" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-compressed-gas-ops">Compressed Gases ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-covered-mall" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-covered-mall">Covered Mall Buildings ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-cryogenic" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-cryogenic">Cryogenic Fluids ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-cutting-welding" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-cutting-welding">Cutting/Welding Operations ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-dry-cleaning" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-dry-cleaning">Dry Cleaning Plants ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-exhibits" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-exhibits">Exhibits and Trade Shows ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-explosives" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-explosives">Explosives ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-floor-finishing" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-floor-finishing">Floor Finishing ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-fruit-ripening" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-fruit-ripening">Fruit/Crop Ripening ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-fumigation" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-fumigation">Fumigation &amp; Thermal Insecticidal Fogging ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-hazmat-ops" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-hazmat-ops">Hazardous Materials ($250)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-hpm" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-hpm">HPM Facilities ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-high-piled" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-high-piled">High-Piled Storage ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-hot-work" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-hot-work">Hot Work Operations ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-industrial-ovens" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-industrial-ovens">Industrial Ovens ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-lumber-yards" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-lumber-yards">Lumber Yards/Woodworking Plants ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-liquid-gas-vehicles" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-liquid-gas-vehicles">Liquid/Gas-Fueled Vehicles in Assembly ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-lp-gas" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-lp-gas">LP Gas ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-magnesium" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-magnesium">Magnesium Operations ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-misc-combustible" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-misc-combustible">Miscellaneous Combustible Storage ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-motor-fuel" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-motor-fuel">Motor Fuel-Dispensing Facilities ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-open-burning" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-open-burning">Open Burning ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-open-flames" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-open-flames">Open Flames and Torches ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-open-flames-candles" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-open-flames-candles">Open Flames and Candles ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-organic-coatings" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-organic-coatings">Organic Coatings ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-places-assembly" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-places-assembly">Places of Assembly ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-private-hydrants" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-private-hydrants">Private Fire Hydrants ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-pyrotechnic" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-pyrotechnic">Pyrotechnic Special Effects Material ($204)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-pyroxylin" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-pyroxylin">Pyroxylin Plastics ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-refrigeration" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-refrigeration">Refrigeration Equipment ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-repair-garages" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-repair-garages">Repair Garages ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-rooftop-heliports" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-rooftop-heliports">Rooftop Heliports ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-spraying-dipping" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-spraying-dipping">Spraying or Dipping ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-scrap-tires" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-scrap-tires">Storage of Scrap Tires &amp; Tire By-Product ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-tire-rebuilding" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-tire-rebuilding">Tire Rebuilding Plants ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-burn-permit" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-burn-permit">Burn Permit (Air Curtain Burn Only) ($100)</label>
+            </div>
+            <div class="operfire-check">
+              <input type="checkbox" id="operfire-explosives-blasting" onchange="calculateOperFireFee(); updatePrintArea()">
+              <label for="operfire-explosives-blasting">Explosives Blasting Permit ($100)</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Quantity-Based Permits</div>
+          <div class="input-row">
+            <div>
+              <label for="tankInstallQty">Tank Installation (per tank @ $180)</label>
+              <input type="number" id="tankInstallQty" placeholder="0" step="1" min="0" value="0" onchange="preventNegative('tankInstallQty'); calculateOperFireFee(); updatePrintArea()" oninput="calculateOperFireFee(); updatePrintArea()">
+            </div>
+            <div>
+              <label for="tankRemovalQty">Tank Removal (per tank @ $180)</label>
+              <input type="number" id="tankRemovalQty" placeholder="0" step="1" min="0" value="0" onchange="preventNegative('tankRemovalQty'); calculateOperFireFee(); updatePrintArea()" oninput="calculateOperFireFee(); updatePrintArea()">
+            </div>
+          </div>
         </div>
 
         <div class="summary">
+          <div id="operfireBreakdown"></div>
           <div class="summary-row total">
-            <span>Total Permit Fee</span>
+            <span>Total Operational Fire Permits</span>
             <span>$<span id="operfireTotal">0.00</span></span>
           </div>
         </div>
@@ -953,14 +1344,29 @@
           const checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
           checkbox.id = `trade-${trade.id}`;
-          checkbox.addEventListener('change', () => {
+          checkbox.style.cursor = 'pointer';
+          checkbox.style.pointerEvents = 'auto';
+          
+          const handleChange = () => {
             calculateBuildingFee();
             updatePrintArea();
+          };
+          
+          checkbox.addEventListener('change', handleChange);
+          checkbox.addEventListener('click', (e) => {
+            e.stopPropagation();
           });
           
           const label = document.createElement('label');
           label.htmlFor = `trade-${trade.id}`;
           label.textContent = `${trade.name} (+$${trade.fee})`;
+          label.style.cursor = 'pointer';
+          label.style.pointerEvents = 'auto';
+          
+          // Allow clicking label to toggle checkbox
+          label.addEventListener('click', (e) => {
+            checkbox.click();
+          });
           
           div.appendChild(checkbox);
           div.appendChild(label);
@@ -977,93 +1383,216 @@
     }
 
     function calculateBuildingFee() {
-      const type = document.getElementById('buildingType').value;
-      if (!type) {
-        document.getElementById('buildingTotal').textContent = '0.00';
-        return;
+      const buildingPermits = {
+        'commercial-new': { name: 'Commercial: New Building or Addition', rate: 0.30, minimum: 250, category: 'commercial' },
+        'commercial-alteration': { name: 'Commercial: Alteration', rate: 0.30, minimum: 250, category: 'commercial' },
+        'commercial-fire-alarm': { name: 'Commercial: Fire Alarm System', rate: 0.11, minimum: 125, category: 'commercial' },
+        'commercial-sprinkler': { name: 'Commercial: Sprinkler System/Standpipe', rate: 0.11, minimum: 125, category: 'commercial' },
+        'commercial-trades': { name: 'Commercial: Trades (PME)', rate: 0.11, minimum: 125, category: 'commercial' },
+        'commercial-equipment-changeout': { name: 'Commercial: Equipment Change Out', flat: 150, category: 'commercial' },
+        'commercial-demolition': { name: 'Commercial: Demolition of a Building', flat: 150, category: 'commercial' },
+        'residential-new': { name: 'Residential: New or Relocated Dwelling', rate: 0.30, minimum: 225, category: 'residential' },
+        'residential-addition': { name: 'Residential: Addition', rate: 0.30, minimum: 225, category: 'residential' },
+        'residential-alteration': { name: 'Residential: Alteration', rate: 0.30, minimum: 125, category: 'residential' },
+        'residential-deck': { name: 'Residential: Deck', rate: 0.30, minimum: 125, category: 'residential' },
+        'residential-trades': { name: 'Residential: Trades (PME)', rate: 0.15, minimum: 125, category: 'residential' },
+        'residential-equipment-changeout': { name: 'Residential: Equipment Change Out', flat: 125, category: 'residential' },
+        'residential-demolition': { name: 'Residential: Demolition of a Dwelling', flat: 200, category: 'residential' }
+      };
+
+      let total = 0;
+      let breakdown = [];
+      let needsSqft = false;
+      let hasCommercialNew = false;
+      const sqft = parseFloat(document.getElementById('sqft').value) || 0;
+      const units = parseFloat(document.getElementById('units').value) || 0;
+
+      // Check each building permit checkbox
+      Object.keys(buildingPermits).forEach(key => {
+        const checkbox = document.getElementById(`building-${key}`);
+        if (checkbox && checkbox.checked) {
+          const permit = buildingPermits[key];
+          
+          if (permit.flat) {
+            // Flat fee
+            total += permit.flat;
+            breakdown.push({ label: permit.name, amount: permit.flat.toFixed(2) });
+          } else {
+            // Rate-based fee
+            needsSqft = true;
+            const permitFee = Math.max(sqft * permit.rate, permit.minimum);
+            total += permitFee;
+            breakdown.push({ label: `${permit.name} (${sqft} SF @ $${permit.rate}/SF, min $${permit.minimum})`, amount: permitFee.toFixed(2) });
+          }
+
+          if (key === 'commercial-new') {
+            hasCommercialNew = true;
+          }
+        }
+      });
+
+      // Show/hide square footage field
+      document.getElementById('sqft').parentElement.style.display = needsSqft ? 'block' : 'none';
+      
+      // Show/hide units field (only for commercial-new)
+      document.getElementById('unitsInputSection').style.display = hasCommercialNew ? 'block' : 'none';
+      
+      // Add unit add-ons for commercial-new permits
+      if (hasCommercialNew && units > 0) {
+        const unitsFee = units * 100;
+        total += unitsFee;
+        breakdown.push({ label: `Unit Add-ons (${units} units @ $100 each)`, amount: unitsFee.toFixed(2) });
       }
 
-      const schedule = FEE_SCHEDULE.building[type];
+      // Check for trades to show trades grid
+      const hasRateBasedPermits = Object.keys(buildingPermits).some(key => {
+        const checkbox = document.getElementById(`building-${key}`);
+        return checkbox && checkbox.checked && !buildingPermits[key].flat;
+      });
       
-      // Show/hide trades grid and input fields based on permit type
-      const isEquipmentChangeout = type.includes('equipment-changeout');
-      document.getElementById('tradesGrid').style.display = isEquipmentChangeout ? 'none' : 'block';
-      
-      let base = 0;
-      let unitFee = 0;
-      let tradesFee = 0;
-
-      if (schedule.flat) {
-        // Flat fee (e.g., Equipment Change Out)
-        base = schedule.flat;
-      } else {
-        // Rate-based fee
+      if (hasRateBasedPermits) {
         updateTradesGrid();
-        const sqft = parseFloat(document.getElementById('sqft').value) || 0;
-        const units = parseFloat(document.getElementById('units').value) || 0;
-        
-        base = Math.max(sqft * schedule.rate, schedule.minimum);
-        unitFee = type.includes('commercial-new') && units > 0 ? units * 100 : 0;
-
+        // Add trades fees
         document.querySelectorAll('.trade-check input:checked').forEach(cb => {
           const tradeId = cb.id.replace('trade-', '');
           const trade = FEE_SCHEDULE.trades.find(t => t.id === tradeId);
-          if (trade) tradesFee += trade.fee;
+          if (trade) {
+            total += trade.fee;
+            breakdown.push({ label: `Additional Trade: ${trade.name}`, amount: trade.fee.toFixed(2) });
+          }
         });
+        document.getElementById('tradesGrid').style.display = 'block';
+      } else {
+        document.getElementById('tradesGrid').innerHTML = '';
+        document.getElementById('tradesGrid').style.display = 'none';
       }
 
-      document.getElementById('buildingBase').textContent = base.toFixed(2);
-      document.getElementById('unitsRow').style.display = unitFee > 0 ? 'flex' : 'none';
-      document.getElementById('buildingUnits').textContent = unitFee.toFixed(2);
-      document.getElementById('tradesRow').style.display = tradesFee > 0 ? 'flex' : 'none';
-      document.getElementById('buildingTrades').textContent = tradesFee.toFixed(2);
-      document.getElementById('buildingTotal').textContent = (base + unitFee + tradesFee).toFixed(2);
+      // Update breakdown display
+      const breakdownDiv = document.getElementById('buildingBreakdown');
+      if (breakdown.length > 0) {
+        breakdownDiv.innerHTML = breakdown.map(item => 
+          `<div class="breakdown-item"><span>${item.label}</span><span>$${item.amount}</span></div>`
+        ).join('');
+      } else {
+        breakdownDiv.innerHTML = '';
+      }
+
+      // Update total
+      document.getElementById('buildingTotal').textContent = total.toFixed(2);
     }
 
     function calculateFireFee() {
-      const type = document.getElementById('fireType').value;
-      if (!type) {
-        document.getElementById('fireTotal').textContent = '0.00';
-        return;
-      }
-
-      const fee = FEE_SCHEDULE.fire[type];
-      const qty = parseFloat(document.getElementById('fireQty').value) || 0;
-
-      const qtySection = document.getElementById('fireQtySection');
-      qtySection.style.display = (type === 'fire-alarm' || type === 'sprinkler') ? 'block' : 'none';
+      const firePermits = {
+        'battery': { name: 'Battery Systems (>50 gallons)', fee: 100 },
+        'compressed-gas': { name: 'Compressed Gases', fee: 100 },
+        'fire-alarm': { name: 'Fire Alarm System', rate: 0.11, minimum: 125 },
+        'fire-pump': { name: 'Fire Pumps and Related Equipment', fee: 100 },
+        'sprinkler': { name: 'Fire Sprinkler System(s)', rate: 0.11, minimum: 125 },
+        'hazmat': { name: 'Hazardous Materials', fee: 204 },
+        'solar': { name: 'Solar Photovoltaic Power Systems', fee: 100 },
+        'tent': { name: 'Temporary Membrane Structures/Tents', fee: 100 }
+      };
 
       let total = 0;
-      if (typeof fee === 'object' && fee.rate) {
-        total = Math.max(qty * fee.rate, fee.minimum);
+      let breakdown = [];
+      let needsQty = false;
+
+      const sqft = parseFloat(document.getElementById('fireQty').value) || 0;
+
+      // Check each fire permit checkbox
+      Object.keys(firePermits).forEach(key => {
+        const checkbox = document.getElementById(`fire-${key}`);
+        if (checkbox && checkbox.checked) {
+          const permit = firePermits[key];
+          
+          if (permit.rate) {
+            // Rate-based permit
+            needsQty = true;
+            const permitFee = Math.max(sqft * permit.rate, permit.minimum);
+            total += permitFee;
+            breakdown.push({ label: `${permit.name} (${sqft} SF @ $${permit.rate}/SF, min $${permit.minimum})`, amount: permitFee.toFixed(2) });
+          } else {
+            // Flat fee permit
+            total += permit.fee;
+            breakdown.push({ label: permit.name, amount: permit.fee.toFixed(2) });
+          }
+        }
+      });
+
+      // Show/hide sqft field if rate-based permits are selected
+      document.getElementById('fireQtySection').style.display = needsQty ? 'block' : 'none';
+
+      // Update breakdown display
+      const breakdownDiv = document.getElementById('fireBreakdown');
+      if (breakdown.length > 0) {
+        breakdownDiv.innerHTML = breakdown.map(item => 
+          `<div class="breakdown-item"><span>${item.label}</span><span>$${item.amount}</span></div>`
+        ).join('');
       } else {
-        total = fee;
+        breakdownDiv.innerHTML = '';
       }
 
+      // Update total
       document.getElementById('fireTotal').textContent = total.toFixed(2);
     }
 
     function calculateInspectionFee() {
-      const type = document.getElementById('serviceType').value;
-      if (!type) {
-        document.getElementById('inspectionTotal').textContent = '0.00';
-        return;
-      }
-
-      const hours = parseFloat(document.getElementById('hours').value) || 0;
-
-      const hoursSection = document.getElementById('hoursSection');
-      hoursSection.style.display = (type === 'special-inspection' || type === 'express-review') ? 'block' : 'none';
+      const inspectionServices = {
+        'special-inspection': { name: 'Special Request Inspection', hourly: true, baseRate: 150, minimum: 300 },
+        'abc-inspection': { name: 'ABC Inspection', fee: 125 },
+        're-inspection': { name: 'Re-Inspection', fee: 125 },
+        'standard-review': { name: 'Standard Plan Review', fee: 200 },
+        'utility-pretreatment': { name: 'Utility Pretreatment Review', fee: 100 },
+        'express-review': { name: 'Express Plan Review', express: true, firstHour: 1000, quarterHourRate: 500 }
+      };
 
       let total = 0;
-      if (type === 'special-inspection') {
-        total = Math.max(hours * 150, 300);
-      } else if (type === 'express-review') {
-        total = 1000 + Math.max((hours - 1) * 500, 0);
+      let breakdown = [];
+      let needsHours = false;
+      const hours = parseFloat(document.getElementById('hours').value) || 0;
+
+      // Check each inspection service checkbox
+      Object.keys(inspectionServices).forEach(key => {
+        const checkbox = document.getElementById(`inspection-${key}`);
+        if (checkbox && checkbox.checked) {
+          const service = inspectionServices[key];
+          let serviceFee = 0;
+
+          if (service.fee) {
+            // Flat fee
+            serviceFee = service.fee;
+            breakdown.push({ label: service.name, amount: serviceFee.toFixed(2) });
+          } else if (service.hourly) {
+            // Hourly with minimum
+            needsHours = true;
+            serviceFee = Math.max(hours * service.baseRate, service.minimum);
+            breakdown.push({ label: `${service.name} (${hours} hrs @ $${service.baseRate}/hr, min $${service.minimum})`, amount: serviceFee.toFixed(2) });
+          } else if (service.express) {
+            // Express review: $1000 first hour + $500/quarter-hour after
+            needsHours = true;
+            const quarterHours = Math.max(0, Math.ceil((hours - 1) * 4));
+            serviceFee = service.firstHour + (quarterHours * service.quarterHourRate);
+            breakdown.push({ label: `${service.name} (${hours} hrs: $${service.firstHour} first hr + ${quarterHours} qtr-hrs @ $${service.quarterHourRate})`, amount: serviceFee.toFixed(2) });
+          }
+
+          total += serviceFee;
+        }
+      });
+
+      // Show/hide hours field if hourly services are selected
+      document.getElementById('hoursSection').style.display = needsHours ? 'block' : 'none';
+
+      // Update breakdown display
+      const breakdownDiv = document.getElementById('inspectionBreakdown');
+      if (breakdown.length > 0) {
+        breakdownDiv.innerHTML = breakdown.map(item => 
+          `<div class="breakdown-item"><span>${item.label}</span><span>$${item.amount}</span></div>`
+        ).join('');
       } else {
-        total = FEE_SCHEDULE.inspection[type] || 0;
+        breakdownDiv.innerHTML = '';
       }
 
+      // Update total
       document.getElementById('inspectionTotal').textContent = total.toFixed(2);
     }
 
@@ -1132,14 +1661,95 @@
     }
 
     function calculateOperFireFee() {
-      const type = document.getElementById('operfireType').value;
-      if (!type) {
-        document.getElementById('operfireTotal').textContent = '0.00';
-        return;
+      const operfireList = {
+        'aerosol': { name: 'Aerosol Products', fee: 100 },
+        'amusement': { name: 'Amusement Buildings', fee: 100 },
+        'aviation': { name: 'Aviation Facilities', fee: 100 },
+        'carbon-dioxide': { name: 'Carbon Dioxide Systems', fee: 100 },
+        'carnivals': { name: 'Carnivals and Fairs', fee: 100 },
+        'cellulose-nitrate': { name: 'Cellulose Nitrate Film', fee: 100 },
+        'combustible-dust': { name: 'Combustible Dust Operations', fee: 100 },
+        'combustible-fibers': { name: 'Combustible Fibers', fee: 100 },
+        'compressed-gas-ops': { name: 'Compressed Gases', fee: 100 },
+        'covered-mall': { name: 'Covered Mall Buildings', fee: 100 },
+        'cryogenic': { name: 'Cryogenic Fluids', fee: 100 },
+        'cutting-welding': { name: 'Cutting/Welding Operations', fee: 100 },
+        'dry-cleaning': { name: 'Dry Cleaning Plants', fee: 100 },
+        'exhibits': { name: 'Exhibits and Trade Shows', fee: 100 },
+        'explosives': { name: 'Explosives', fee: 100 },
+        'floor-finishing': { name: 'Floor Finishing', fee: 100 },
+        'fruit-ripening': { name: 'Fruit/Crop Ripening', fee: 100 },
+        'fumigation': { name: 'Fumigation & Thermal Insecticidal Fogging', fee: 100 },
+        'hazmat-ops': { name: 'Hazardous Materials', fee: 250 },
+        'hpm': { name: 'HPM Facilities', fee: 100 },
+        'high-piled': { name: 'High-Piled Storage', fee: 100 },
+        'hot-work': { name: 'Hot Work Operations', fee: 100 },
+        'industrial-ovens': { name: 'Industrial Ovens', fee: 100 },
+        'lumber-yards': { name: 'Lumber Yards/Woodworking Plants', fee: 100 },
+        'liquid-gas-vehicles': { name: 'Liquid/Gas-Fueled Vehicles in Assembly', fee: 100 },
+        'lp-gas': { name: 'LP Gas', fee: 100 },
+        'magnesium': { name: 'Magnesium Operations', fee: 100 },
+        'misc-combustible': { name: 'Miscellaneous Combustible Storage', fee: 100 },
+        'motor-fuel': { name: 'Motor Fuel-Dispensing Facilities', fee: 100 },
+        'open-burning': { name: 'Open Burning', fee: 100 },
+        'open-flames': { name: 'Open Flames and Torches', fee: 100 },
+        'open-flames-candles': { name: 'Open Flames and Candles', fee: 100 },
+        'organic-coatings': { name: 'Organic Coatings', fee: 100 },
+        'places-assembly': { name: 'Places of Assembly', fee: 100 },
+        'private-hydrants': { name: 'Private Fire Hydrants', fee: 100 },
+        'pyrotechnic': { name: 'Pyrotechnic Special Effects Material', fee: 204 },
+        'pyroxylin': { name: 'Pyroxylin Plastics', fee: 100 },
+        'refrigeration': { name: 'Refrigeration Equipment', fee: 100 },
+        'repair-garages': { name: 'Repair Garages', fee: 100 },
+        'rooftop-heliports': { name: 'Rooftop Heliports', fee: 100 },
+        'spraying-dipping': { name: 'Spraying or Dipping', fee: 100 },
+        'scrap-tires': { name: 'Storage of Scrap Tires & Tire By-Product', fee: 100 },
+        'tire-rebuilding': { name: 'Tire Rebuilding Plants', fee: 100 },
+        'burn-permit': { name: 'Burn Permit (Air Curtain Burn Only)', fee: 100 },
+        'explosives-blasting': { name: 'Explosives Blasting Permit', fee: 100 }
+      };
+
+      let total = 0;
+      let breakdown = [];
+
+      // Check each operational fire permit checkbox
+      Object.keys(operfireList).forEach(key => {
+        const checkbox = document.getElementById(`operfire-${key}`);
+        if (checkbox && checkbox.checked) {
+          const permit = operfireList[key];
+          total += permit.fee;
+          breakdown.push({ label: permit.name, amount: permit.fee.toFixed(2) });
+        }
+      });
+
+      // Add tank installation quantities
+      const tankInstallQty = parseFloat(document.getElementById('tankInstallQty').value) || 0;
+      if (tankInstallQty > 0) {
+        const tankInstallTotal = tankInstallQty * 180;
+        total += tankInstallTotal;
+        breakdown.push({ label: `Tank Installation (${tankInstallQty} tanks @ $180 each)`, amount: tankInstallTotal.toFixed(2) });
       }
 
-      const fee = FEE_SCHEDULE.operfire[type] || 0;
-      document.getElementById('operfireTotal').textContent = fee.toFixed(2);
+      // Add tank removal quantities
+      const tankRemovalQty = parseFloat(document.getElementById('tankRemovalQty').value) || 0;
+      if (tankRemovalQty > 0) {
+        const tankRemovalTotal = tankRemovalQty * 180;
+        total += tankRemovalTotal;
+        breakdown.push({ label: `Tank Removal (${tankRemovalQty} tanks @ $180 each)`, amount: tankRemovalTotal.toFixed(2) });
+      }
+
+      // Update breakdown display
+      const breakdownDiv = document.getElementById('operfireBreakdown');
+      if (breakdown.length > 0) {
+        breakdownDiv.innerHTML = breakdown.map(item => 
+          `<div class="breakdown-item"><span>${item.label}</span><span>$${item.amount}</span></div>`
+        ).join('');
+      } else {
+        breakdownDiv.innerHTML = '';
+      }
+
+      // Update total
+      document.getElementById('operfireTotal').textContent = total.toFixed(2);
     }
 
     function updatePrintArea() {
@@ -1147,47 +1757,58 @@
       let printContent = '';
 
       if (currentTab === 'building') {
-        const type = document.getElementById('buildingType').value;
         const sqft = document.getElementById('sqft').value;
         const units = document.getElementById('units').value;
-        const base = document.getElementById('buildingBase').textContent;
-        const unitsAmount = document.getElementById('buildingUnits').textContent;
-        const trades = document.getElementById('buildingTrades').textContent;
         const total = document.getElementById('buildingTotal').textContent;
+        const breakdownDiv = document.getElementById('buildingBreakdown');
+        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
+          const label = item.querySelector('span:nth-child(1)').textContent;
+          const amount = item.querySelector('span:nth-child(2)').textContent;
+          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
+        }).join('\n          <div class="print-divider"></div>\n          ');
 
         printContent = `
           <div class="print-section">
-            <div class="print-label">Permit Type</div>
-            <div class="print-value">${type}</div>
+            <div class="print-label">Building Permits</div>
           </div>
           ${sqft ? `<div class="print-section"><div class="print-label">Square Footage</div><div class="print-value">${sqft} SF</div></div>` : ''}
-          ${units ? `<div class="print-section"><div class="print-label">Units</div><div class="print-value">${units}</div></div>` : ''}
+          ${units ? `<div class="print-section"><div class="print-label">Number of Units</div><div class="print-value">${units}</div></div>` : ''}
           <div class="print-divider"></div>
-          <div class="print-section"><div class="print-label">Base Permit Fee</div><div class="print-value">$${base}</div></div>
-          ${parseFloat(unitsAmount) > 0 ? `<div class="print-section"><div class="print-label">Unit Add-on</div><div class="print-value">$${unitsAmount}</div></div>` : ''}
-          ${parseFloat(trades) > 0 ? `<div class="print-section"><div class="print-label">Trades Add-ons</div><div class="print-value">$${trades}</div></div>` : ''}
+          ${breakdownItems}
           <div class="print-divider"></div>
           <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL PERMIT FEE</div><div class="print-value">$${total}</div></div>
         `;
       } else if (currentTab === 'fire') {
-        const type = document.getElementById('fireType').value;
         const total = document.getElementById('fireTotal').textContent;
+        const breakdownDiv = document.getElementById('fireBreakdown');
+        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
+          const label = item.querySelector('span:nth-child(1)').textContent;
+          const amount = item.querySelector('span:nth-child(2)').textContent;
+          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
+        }).join('\n          <div class="print-divider"></div>\n          ');
         printContent = `
           <div class="print-section">
-            <div class="print-label">Fire Code Permit Type</div>
-            <div class="print-value">${type || 'Not selected'}</div>
+            <div class="print-label">Fire Code Permits</div>
           </div>
+          <div class="print-divider"></div>
+          ${breakdownItems}
           <div class="print-divider"></div>
           <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL PERMIT FEE</div><div class="print-value">$${total}</div></div>
         `;
       } else if (currentTab === 'inspection') {
-        const type = document.getElementById('serviceType').value;
         const total = document.getElementById('inspectionTotal').textContent;
+        const breakdownDiv = document.getElementById('inspectionBreakdown');
+        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
+          const label = item.querySelector('span:nth-child(1)').textContent;
+          const amount = item.querySelector('span:nth-child(2)').textContent;
+          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
+        }).join('\n          <div class="print-divider"></div>\n          ');
         printContent = `
           <div class="print-section">
-            <div class="print-label">Service Type</div>
-            <div class="print-value">${type || 'Not selected'}</div>
+            <div class="print-label">Inspection & Plan Review Services</div>
           </div>
+          <div class="print-divider"></div>
+          ${breakdownItems}
           <div class="print-divider"></div>
           <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL FEE</div><div class="print-value">$${total}</div></div>
         `;
@@ -1209,13 +1830,19 @@
           <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL FEE</div><div class="print-value">$${total}</div></div>
         `;
       } else if (currentTab === 'operfire') {
-        const type = document.getElementById('operfireType').value;
         const total = document.getElementById('operfireTotal').textContent;
+        const breakdownDiv = document.getElementById('operfireBreakdown');
+        const breakdownItems = Array.from(breakdownDiv.querySelectorAll('.breakdown-item')).map(item => {
+          const label = item.querySelector('span:nth-child(1)').textContent;
+          const amount = item.querySelector('span:nth-child(2)').textContent;
+          return `<div class="print-section"><div class="print-label">${label}</div><div class="print-value">${amount}</div></div>`;
+        }).join('\n          <div class="print-divider"></div>\n          ');
         printContent = `
           <div class="print-section">
-            <div class="print-label">Operational Fire Permit Type</div>
-            <div class="print-value">${type || 'Not selected'}</div>
+            <div class="print-label">Operational Fire Permits</div>
           </div>
+          <div class="print-divider"></div>
+          ${breakdownItems}
           <div class="print-divider"></div>
           <div class="print-section" style="font-weight: bold; font-size: 16px;"><div class="print-label">TOTAL PERMIT FEE</div><div class="print-value">$${total}</div></div>
         `;
@@ -1231,8 +1858,15 @@
 
     function resetForm() {
       document.querySelectorAll('input, select').forEach(el => {
-        if (el.type === 'checkbox') el.checked = false;
-        else el.value = '';
+        if (el.type === 'checkbox') {
+          el.checked = false;
+        } else if (el.id === 'units') {
+          el.value = '1';
+        } else if (el.type === 'number') {
+          el.value = '0';
+        } else {
+          el.value = '';
+        }
       });
       calculateBuildingFee();
       calculateFireFee();
