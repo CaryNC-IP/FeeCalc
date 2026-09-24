@@ -745,10 +745,6 @@
               <label for="building-commercial-sprinkler">Sprinkler System/Standpipe ($0.11/SF, $125 min)</label>
             </div>
             <div class="building-check">
-              <input type="checkbox" id="building-commercial-trades" onchange="calculateBuildingFee(); updatePrintArea()">
-              <label for="building-commercial-trades">Trades (PME) ($0.11/SF, $125 min)</label>
-            </div>
-            <div class="building-check">
               <input type="checkbox" id="building-commercial-equipment-changeout" onchange="calculateBuildingFee(); updatePrintArea()">
               <label for="building-commercial-equipment-changeout">Equipment Change Out ($150)</label>
             </div>
@@ -779,10 +775,6 @@
               <label for="building-residential-deck">Deck ($0.30/SF, $125 min)</label>
             </div>
             <div class="building-check">
-              <input type="checkbox" id="building-residential-trades" onchange="calculateBuildingFee(); updatePrintArea()">
-              <label for="building-residential-trades">Trades (PME) ($0.15/SF, $125 min)</label>
-            </div>
-            <div class="building-check">
               <input type="checkbox" id="building-residential-equipment-changeout" onchange="calculateBuildingFee(); updatePrintArea()">
               <label for="building-residential-equipment-changeout">Equipment Change Out ($125)</label>
             </div>
@@ -808,7 +800,8 @@
         </div>
 
         <div class="section">
-          <div class="section-title">Additional Trades</div>
+          <div class="section-title">Individual Trades (Plumbing, Mechanical, Electrical)</div>
+          <div class="note">Select each trade separately. Each trade is a single fee of $125.</div>
           <div class="trades-grid" id="tradesGrid"></div>
         </div>
 
@@ -1333,46 +1326,52 @@
     }
 
     function updateTradesGrid() {
-      const type = document.getElementById('buildingType').value;
       const grid = document.getElementById('tradesGrid');
       grid.innerHTML = '';
-      if (!type.includes('trades')) {
-        FEE_SCHEDULE.trades.forEach(trade => {
-          const div = document.createElement('div');
-          div.className = 'trade-check';
-          
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.id = `trade-${trade.id}`;
-          checkbox.style.cursor = 'pointer';
-          checkbox.style.pointerEvents = 'auto';
-          
-          const handleChange = () => {
-            calculateBuildingFee();
-            updatePrintArea();
-          };
-          
-          checkbox.addEventListener('change', handleChange);
-          checkbox.addEventListener('click', (e) => {
-            e.stopPropagation();
-          });
-          
-          const label = document.createElement('label');
-          label.htmlFor = `trade-${trade.id}`;
-          label.textContent = `${trade.name} (+$${trade.fee})`;
-          label.style.cursor = 'pointer';
-          label.style.pointerEvents = 'auto';
-          
-          // Allow clicking label to toggle checkbox
-          label.addEventListener('click', (e) => {
-            checkbox.click();
-          });
-          
-          div.appendChild(checkbox);
-          div.appendChild(label);
-          grid.appendChild(div);
+      
+      FEE_SCHEDULE.trades.forEach(trade => {
+        const div = document.createElement('div');
+        div.className = 'trade-check';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `trade-${trade.id}`;
+        checkbox.style.cursor = 'pointer';
+        checkbox.style.pointerEvents = 'auto';
+        checkbox.style.width = '18px';
+        checkbox.style.height = '18px';
+        checkbox.style.margin = '0';
+        checkbox.style.flexShrink = '0';
+        checkbox.style.accentColor = '#0c447c';
+        
+        const handleChange = () => {
+          calculateBuildingFee();
+          updatePrintArea();
+        };
+        
+        checkbox.addEventListener('change', handleChange);
+        checkbox.addEventListener('click', (e) => {
+          e.stopPropagation();
         });
-      }
+        
+        const label = document.createElement('label');
+        label.htmlFor = `trade-${trade.id}`;
+        label.textContent = `${trade.name} (+$${trade.fee})`;
+        label.style.cursor = 'pointer';
+        label.style.pointerEvents = 'auto';
+        label.style.margin = '0';
+        label.style.flex = '1';
+        label.style.userSelect = 'none';
+        
+        // Allow clicking label to toggle checkbox
+        label.addEventListener('click', (e) => {
+          checkbox.click();
+        });
+        
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        grid.appendChild(div);
+      });
     }
 
     function preventNegative(elementId) {
@@ -1388,14 +1387,12 @@
         'commercial-alteration': { name: 'Commercial: Alteration', rate: 0.30, minimum: 250, category: 'commercial' },
         'commercial-fire-alarm': { name: 'Commercial: Fire Alarm System', rate: 0.11, minimum: 125, category: 'commercial' },
         'commercial-sprinkler': { name: 'Commercial: Sprinkler System/Standpipe', rate: 0.11, minimum: 125, category: 'commercial' },
-        'commercial-trades': { name: 'Commercial: Trades (PME)', rate: 0.11, minimum: 125, category: 'commercial' },
         'commercial-equipment-changeout': { name: 'Commercial: Equipment Change Out', flat: 150, category: 'commercial' },
         'commercial-demolition': { name: 'Commercial: Demolition of a Building', flat: 150, category: 'commercial' },
         'residential-new': { name: 'Residential: New or Relocated Dwelling', rate: 0.30, minimum: 225, category: 'residential' },
         'residential-addition': { name: 'Residential: Addition', rate: 0.30, minimum: 225, category: 'residential' },
         'residential-alteration': { name: 'Residential: Alteration', rate: 0.30, minimum: 125, category: 'residential' },
         'residential-deck': { name: 'Residential: Deck', rate: 0.30, minimum: 125, category: 'residential' },
-        'residential-trades': { name: 'Residential: Trades (PME)', rate: 0.15, minimum: 125, category: 'residential' },
         'residential-equipment-changeout': { name: 'Residential: Equipment Change Out', flat: 125, category: 'residential' },
         'residential-demolition': { name: 'Residential: Demolition of a Dwelling', flat: 200, category: 'residential' }
       };
@@ -1444,7 +1441,7 @@
         breakdown.push({ label: `Unit Add-ons (${units} units @ $100 each)`, amount: unitsFee.toFixed(2) });
       }
 
-      // Check for trades to show trades grid
+      // Check for rate-based permits to show trades grid
       const hasRateBasedPermits = Object.keys(buildingPermits).some(key => {
         const checkbox = document.getElementById(`building-${key}`);
         return checkbox && checkbox.checked && !buildingPermits[key].flat;
@@ -1452,7 +1449,7 @@
       
       if (hasRateBasedPermits) {
         updateTradesGrid();
-        // Add trades fees
+        // Add trades fees - PME trades are now individual selections
         document.querySelectorAll('.trade-check input:checked').forEach(cb => {
           const tradeId = cb.id.replace('trade-', '');
           const trade = FEE_SCHEDULE.trades.find(t => t.id === tradeId);
