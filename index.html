@@ -26,7 +26,6 @@
       }
     }
 
-    /* Container for consistent alignment */
     .header-wrapper {
       background: #fff;
       border-bottom: 1px solid #e0e0e0;
@@ -92,9 +91,6 @@
         color: #85b7eb;
         border-bottom-color: #85b7eb;
       }
-    }
-
-    @media (prefers-color-scheme: dark) {
       .header-detail {
         color: #777;
       }
@@ -561,7 +557,6 @@
       flex: 1;
     }
 
-    /* Total Fees Section Styling */
     .total-fees-section {
       background: #f9f9f9;
       border: 1px solid #ddd;
@@ -779,42 +774,35 @@
       }
 
       .print-header {
-        border-bottom: 2px solid #0c447c;
+        border-bottom: 2px solid #1d4886;
         padding-bottom: 1rem;
         margin-bottom: 1.5rem;
         page-break-after: avoid;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
       }
 
       .print-header-branding {
         display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.5rem;
+        flex-direction: column;
+        gap: 0.5rem;
       }
 
       .print-header-logo-svg {
-        width: 48px;
-        height: 48px;
-        flex-shrink: 0;
-      }
-
-      .print-header-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #0c447c;
-        line-height: 1.2;
+        height: 38px;
+        width: auto;
       }
 
       .print-header-subtitle {
-        font-size: 12px;
-        color: #555;
-        margin-top: 0.2rem;
+        font-size: 13px;
+        color: #444;
+        font-weight: 500;
       }
 
       .print-header-date {
         font-size: 11px;
         color: #777;
-        margin-top: 0.5rem;
       }
 
       .print-status {
@@ -864,7 +852,7 @@
       .print-category-header {
         font-weight: 700;
         font-size: 13px;
-        color: #0c447c;
+        color: #1d4886;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         page-break-after: avoid;
@@ -877,8 +865,8 @@
         padding: 1rem 0;
         text-align: right;
         margin-top: 1rem;
-        border-top: 2px solid #0c447c;
-        border-bottom: 2px solid #0c447c;
+        border-top: 2px solid #1d4886;
+        border-bottom: 2px solid #1d4886;
         page-break-after: avoid;
         page-break-inside: avoid;
       }
@@ -887,14 +875,14 @@
         margin-top: 1.5rem;
         padding: 1rem;
         background: #f9f9f9;
-        border-left: 3px solid #0c447c;
+        border-left: 3px solid #1d4886;
         font-size: 11px;
         page-break-inside: avoid;
       }
 
       .print-notes-title {
         font-weight: 600;
-        color: #0c447c;
+        color: #1d4886;
         margin-bottom: 0.5rem;
         font-size: 12px;
       }
@@ -2235,11 +2223,22 @@
       const statusClass = isFinal ? 'final' : 'estimate';
       const statusText = isFinal ? 'FINAL FEES' : 'ESTIMATE ONLY';
 
+      /* SVG vector replica matching the official Town of Cary wordmark with orange star */
       const caryLogoSvg = `
-        <svg class="print-header-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="46" fill="#0c447c"/>
-          <path d="M 30,50 Q 50,20 70,50 Q 50,80 30,50 Z" fill="none" stroke="#68d391" stroke-width="6"/>
-          <circle cx="50" cy="50" r="10" fill="#ffffff"/>
+        <svg class="print-header-logo-svg" viewBox="0 0 520 160" xmlns="http://www.w3.org/2000/svg">
+          <!-- C -->
+          <path fill="#1d4886" d="M 105,25 C 60,25 20,58 20,105 C 20,152 60,185 105,185 C 135,185 160,170 175,148 L 145,130 C 135,145 120,155 105,155 C 75,155 52,132 52,105 C 52,78 75,55 105,55 C 120,55 135,65 145,80 L 175,62 C 160,40 135,25 105,25 Z"/>
+          <!-- A with cutout for Star -->
+          <path fill="#1d4886" d="M 215,185 L 245,185 L 268,128 L 297,128 L 320,185 L 350,185 L 297,55 L 268,55 Z M 282,88 L 290,108 L 275,108 Z"/>
+          <!-- Orange Star -->
+          <polygon fill="#d96b27" points="282.5,75 287,88 301,88 289.5,96 294,109 282.5,100 271,109 275.5,96 264,88 278,88"/>
+          <!-- R -->
+          <path fill="#1d4886" d="M 360,55 L 360,185 L 390,185 L 390,135 L 410,135 L 430,185 L 462,185 L 438,130 C 452,122 462,108 462,88 C 462,65 440,55 410,55 Z M 390,80 L 410,80 C 425,80 432,86 432,96 C 432,106 425,112 410,112 L 390,112 Z"/>
+          <!-- Y -->
+          <path fill="#1d4886" d="M 470,55 L 505,120 L 505,185 L 535,185 L 535,120 L 570,55 L 538,55 L 520,95 L 502,55 Z"/>
+          <!-- Registered Trademark Symbol ® -->
+          <circle cx="580" cy="170" r="10" fill="none" stroke="#1d4886" stroke-width="2"/>
+          <text x="580" y="174" font-family="-apple-system, sans-serif" font-size="12" font-weight="bold" fill="#1d4886" text-anchor="middle">R</text>
         </svg>
       `;
 
@@ -2247,12 +2246,9 @@
         <div class="print-header">
           <div class="print-header-branding">
             ${caryLogoSvg}
-            <div>
-              <div class="print-header-title">TOWN OF CARY</div>
-              <div class="print-header-subtitle">Permit & Fee Calculation Summary</div>
-            </div>
+            <div class="print-header-subtitle">Permit & Fee Calculation Summary</div>
           </div>
-          <div class="print-header-date">Fee Estimate Generated: ${dateStr}</div>
+          <div class="print-header-date">Generated: ${dateStr}</div>
         </div>
 
         <div class="print-status ${statusClass}">
