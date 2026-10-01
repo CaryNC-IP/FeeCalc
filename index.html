@@ -201,8 +201,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 #printArea { display: none; }
 @media print {
   @page {
-    margin: .6in .6in .75in;
-    @bottom-right { content: "Page " counter(page) " of " counter(pages); font-family: Arial, sans-serif; font-size: 8pt; color: #555; }
+    margin: .6in .1in .75in;   /* side space comes mostly from #printArea padding, so it holds even if the print dialog's Margins is set to None */
+    @bottom-right { content: "Page " counter(page) " of " counter(pages); font-family: Arial, sans-serif; font-size: 8pt; color: #555; padding-right: .5in; }
   }
   /* Printouts are always light, whatever the screen theme. */
   :root, :root:not([data-theme="light"]) {
@@ -213,7 +213,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
   html, body { background: #fff !important; color: #000 !important; font-size: 10.5pt; }
   #printArea, #printArea * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .masthead, .disclaimer, .shell, .mobile-bar { display: none !important; }
-  #printArea { display: block; }
+  #printArea { display: block; padding: 0 .5in; }
   .p-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18pt; padding-top: 4pt; border-bottom: 2px solid #0c447c; padding-bottom: 6pt; margin-bottom: 10pt; }
   .p-head-text { min-width: 0; }
   .p-logo { flex: none; width: 1.5in; height: auto; margin-top: 4pt; display: block; }   /* brand guide minimum width: 1.5 in */
@@ -275,7 +275,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
         <label class="check"><input type="checkbox" id="onlySelected"> Show selected fees only</label>
         <div class="legend" aria-label="SB445 classification legend">
           <span class="sb sb-yes">SB445 fee</span>
-          <span class="sb sb-confirm">Confirm classification</span>
+          <span class="sb sb-confirm" title="SB445 coverage not yet determined">Possible SB445 fee</span>
           <span class="sb sb-no">Not SB445</span>
         </div>
       </div>
@@ -348,7 +348,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
              split:{key: name} itemizes each amount key on its own line (e.g. water, sewer)
      custom  user-entered amount
      double  equals the subtotal of the sections listed in "of"
-   SB445 classification (sb): 'yes' covered, 'confirm' classification to confirm, 'no' not covered
+   SB445 classification (sb): 'yes' covered, 'confirm' possibly covered (coverage not yet determined), 'no' not covered
    ===================================================================== */
 const DEFAULT_YEAR = 'FY2027';   // used if the current fiscal year has not been loaded yet
 const PLANNED_YEARS = ['FY2028']; // listed as "not yet loaded" until added below
@@ -446,7 +446,7 @@ FY2027: {
   ]},
   { id: 'fire', n: 'Fire', sections: [
     { id: 'fire-const', n: 'Construction permits', sb: 'confirm',
-      note: 'Commercial estimates include fire alarm, sprinkler, suppression and BDA per the fee estimate procedure. Confirm SB445 classification of fire code permits.',
+      note: 'Commercial estimates include fire alarm, sprinkler, suppression and BDA per the fee estimate procedure. Whether SB445 covers fire code permits is not yet determined.',
       items: [
       { id: 'fire.alarm', n: 'Fire alarm system (installation or modification)', t: 'rate', r: 0.11, min: 125 },
       { id: 'fire.sprinkler', n: 'Fire sprinkler system (installation or modification)', t: 'rate', r: 0.11, min: 125 },
@@ -577,7 +577,7 @@ FY2027: {
       { id: 'rz.minorpdd', n: 'Minor Planned Development District', t: 'flat', a: 3500 },
       { id: 'rz.cpa', n: 'Comprehensive plan amendment', t: 'flat', a: 3000 },
       { id: 'ann.gte2', n: 'Owner-initiated annexation petition, 2 acres or more', t: 'flat', a: 800, sb: 'confirm',
-        note: 'Annexation is authorized outside Chapter 160D; confirm SB445 classification.' },
+        note: 'Annexation is authorized outside Chapter 160D, so SB445 coverage is not yet determined.' },
       { id: 'ann.lt2', n: 'Owner-initiated annexation petition, under 2 acres', t: 'flat', a: 400, sb: 'confirm' }
     ]},
     { id: 'qj', n: 'Special use, variances, appeals & hearings', sb: 'yes', items: [
@@ -621,7 +621,7 @@ FY2027: {
     { id: 'padmin', n: 'Planning administrative fees', sb: 'yes', items: [
       { id: 'padm.refund', n: 'Refund processing', t: 'flat', a: 125 },
       { id: 'padm.row', n: 'Right-of-way closure request (includes advertising and recording)', t: 'flat', a: 2500, sb: 'confirm',
-        note: 'Street closures are authorized outside Chapter 160D; confirm SB445 classification.' }
+        note: 'Street closures are authorized outside Chapter 160D, so SB445 coverage is not yet determined.' }
     ]}
   ]},
   { id: 'site', n: 'Site & infrastructure', sections: [
@@ -657,7 +657,7 @@ FY2027: {
       { id: 'st.greenway', n: 'Public greenway inspection', t: 'unit', a: 1.50, unit: 'linear lane foot' }
     ]},
     { id: 'util', n: 'Utility extension permits & inspections', sb: 'confirm',
-      note: 'Confirm SB445 classification; these relate to public utility construction rather than Chapter 160D permits.',
+      note: 'SB445 coverage not yet determined; these relate to public utility construction rather than Chapter 160D permits.',
       items: [
       { id: 'ue.water', n: 'Water system extension permit (public)', t: 'flat', a: 150, qty: true, unit: 'extension' },
       { id: 'ue.sewer', n: 'Gravity sewer extension, pump station and force main permit (public)', t: 'flat', a: 480, qty: true, unit: 'extension' },
@@ -1085,7 +1085,7 @@ const TOWN_LOGO = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
 <script>
 (() => {
 'use strict';
-const SB_LABEL = { yes: 'SB445 fee', confirm: 'Confirm classification', no: 'Not SB445' };
+const SB_LABEL = { yes: 'SB445 fee', confirm: 'Possible SB445 fee: coverage not yet determined', no: 'Not SB445' };
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1466,7 +1466,7 @@ function renderItem(id) {
   el.innerHTML = `
     <label class="item-head"><input type="checkbox" data-toggle ${s.on ? 'checked' : ''}>
       <span><span class="item-name">${esc(it.n)}</span><span class="item-basis">${esc(basisText(it))}</span></span></label>
-    <div class="item-right"><span class="sb sb-${sb}" title="${SB_LABEL[sb]}">${sb === 'yes' ? 'SB445' : sb === 'confirm' ? 'Confirm' : 'Not SB445'}</span><span class="line-amt num">—</span></div>
+    <div class="item-right"><span class="sb sb-${sb}" title="${SB_LABEL[sb]}">${sb === 'yes' ? 'SB445' : sb === 'confirm' ? 'Possible SB445 fee' : 'Not SB445'}</span><span class="line-amt num">—</span></div>
     ${it.note ? `<p class="item-note">${esc(it.note)}</p>` : ''}
     ${s.on && inputs ? `<div class="item-inputs">${inputs}</div>` : ''}
     <p class="item-warn hidden"></p>`;
@@ -1570,7 +1570,7 @@ function renderLedger(R) {
     <div class="lgroup"><h3>${esc(g.n)}</h3>${lines.map(l => `
       <div class="lline${l.missing ? ' missing' : ''}"><span class="mark sb-${l.sb}" title="${SB_LABEL[l.sb]}"></span><span class="lbl">${esc(l.label)}${l.missing ? ' <b class="star">*</b>' : ''}${l.detail ? `<small>${esc(l.detail)}</small>` : ''}</span><span class="dots"></span><span class="amt num">${money(l.amount)}</span></div>`).join('')}
     </div>`).join('') : '<p class="ledger-empty">Select fees on the left, or start from an application type.</p>';
-  $('#subtotals').innerHTML = c.groups.length ? [['yes', 'SB445 fees'], ['confirm', 'Classification to confirm'], ['no', 'Other fees']]
+  $('#subtotals').innerHTML = c.groups.length ? [['yes', 'SB445 fees'], ['confirm', 'Possible SB445 fees'], ['no', 'Other fees']]
     .filter(([k]) => c.sub[k] > 0).map(([k, n]) => `<div class="lline"><span class="mark sb-${k}"></span><span class="lbl">${n}</span><span class="dots"></span><span class="amt num">${money(c.sub[k])}</span></div>`).join('') : '';
   $('#grandTotal').textContent = money(c.grand);
   $('#mobileTotal').textContent = money(c.grand);
@@ -1627,7 +1627,7 @@ function setPrintFooter() {
   let st = document.getElementById('pageFooterStyle');
   if (!st) { st = document.createElement('style'); st.id = 'pageFooterStyle'; document.head.appendChild(st); }
   const text = docTitle().replace(/\\/g, '').replace(/"/g, "'");
-  st.textContent = `@media print { @page { @bottom-left { content: "${text}"; font-family: Arial, sans-serif; font-size: 8pt; color: #555; } } }`;
+  st.textContent = `@media print { @page { @bottom-left { content: "${text}"; font-family: Arial, sans-serif; font-size: 8pt; color: #555; padding-left: .5in; } } }`;
 }
 function buildPrint() {
   const c = collectLines(lastResults);
