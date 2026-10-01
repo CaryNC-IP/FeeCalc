@@ -135,6 +135,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 @media (max-width: 700px) { .lrow { grid-template-columns: 1fr 1fr; } }
 .lrow .row-amt { padding-bottom: .5rem; font-weight: 600; min-width: 5rem; text-align: right; }
 .lrow .btn-link { padding-bottom: .55rem; }
+.lrow .row-split { grid-column: 1 / -1; justify-self: end; margin-top: -.35rem; font-size: .78rem; color: var(--ink-2); }
+.lrow .row-split:empty { display: none; }
+.tnotes { flex: 1 1 100%; display: flex; flex-direction: column; gap: .5rem; }
+.tnotes:empty { display: none; }
+.trow { display: grid; grid-template-columns: 4.5rem minmax(8rem, 10rem) 1fr; gap: .5rem; align-items: end; }
+.trow .trow-num { font-size: .8rem; font-weight: 600; color: var(--ink-2); padding-bottom: .55rem; }
+@media (max-width: 700px) { .trow { grid-template-columns: 1fr 1fr; } .trow .trow-num { grid-column: 1 / -1; padding-bottom: 0; } }
 .hidden { display: none !important; }
 .items, .searching #panels, .searching .panel { display: flex; flex-direction: column; }
 .searching .panel.hidden { display: none; }
@@ -330,13 +337,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
    switches fiscal years.
 
    Item types (t):
-     flat    fixed amount (a); set qty:true to allow a quantity, unit names it
+     flat    fixed amount (a); set qty:true to allow a quantity, unit names it;
+             tradeNotes:true adds a trade + details entry for each permit, itemized separately
      rate    per-square-foot rate (r) with minimum (min); addon adds a per-unit charge
      unit    amount (a) per unit (unit); optional min, ceil (round qty up)
      hourly  rate (r) per hour with minimum (min)
      express first-hour amount (a) plus q per quarter hour after
      lookup  rows of options (opts); per1000:true means entered in SF, priced per 1,000 SF;
-             variants choose which amount keys to add (e.g. water + sewer)
+             variants choose which amount keys to add (e.g. water + sewer);
+             split:{key: name} itemizes each amount key on its own line (e.g. water, sewer)
      custom  user-entered amount
      double  equals the subtotal of the sections listed in "of"
    SB445 classification (sb): 'yes' covered, 'confirm' classification to confirm, 'no' not covered
@@ -362,7 +371,7 @@ FY2027: {
       { id: 'bldg.com.plumb', n: 'Plumbing trade', t: 'rate', r: 0.11, min: 125 },
       { id: 'bldg.com.mech', n: 'Mechanical trade', t: 'rate', r: 0.11, min: 125 },
       { id: 'bldg.com.elec', n: 'Electrical trade', t: 'rate', r: 0.11, min: 125 },
-      { id: 'bldg.com.trademin', n: 'Additional minimum trade permit', t: 'flat', a: 125, qty: true, unit: 'permit',
+      { id: 'bldg.com.trademin', n: 'Additional minimum trade permit', t: 'flat', a: 125, qty: true, unit: 'permit', tradeNotes: true,
         note: 'Trade minimum. Used for a subsequent contractor for the same trade (Note 2), the plumbing permit for water/sewer lines within 5 ft of a new building, restaurant refrigeration, or gas lines.' },
       { id: 'bldg.com.accessory', n: 'Accessory structure (dumpster or compactor enclosure, roofed structure)', t: 'flat', a: 250, qty: true, unit: 'structure' },
       { id: 'bldg.com.chgocc', n: 'Change of occupancy', t: 'flat', a: 250 },
@@ -392,7 +401,7 @@ FY2027: {
       { id: 'bldg.res.plumb', n: 'Plumbing trade', t: 'rate', r: 0.15, min: 125 },
       { id: 'bldg.res.mech', n: 'Mechanical trade', t: 'rate', r: 0.15, min: 125 },
       { id: 'bldg.res.elec', n: 'Electrical trade', t: 'rate', r: 0.15, min: 125 },
-      { id: 'bldg.res.trademin', n: 'Additional minimum trade permit', t: 'flat', a: 125, qty: true, unit: 'permit',
+      { id: 'bldg.res.trademin', n: 'Additional minimum trade permit', t: 'flat', a: 125, qty: true, unit: 'permit', tradeNotes: true,
         note: 'Trade minimum, e.g. a subsequent contractor for the same trade (Note 2).' },
       { id: 'bldg.res.crawl', n: 'Closed crawl space (inclusive of all trades)', t: 'flat', a: 200 },
       { id: 'bldg.res.trailer', n: 'Construction trailer (includes electrical trade)', t: 'flat', a: 250 },
@@ -672,6 +681,7 @@ FY2027: {
       note: 'Due at building permit issuance. Residential fees are based on total area under roof per meter; for existing development charge only the increased demand.',
       items: [
       { id: 'sdf.res', n: 'Residential water & sewer development fees', t: 'lookup',
+        split: { water: 'Residential water system development fee', sewer: 'Residential sewer system development fee' },
         variants: [ { k: 'both', n: 'Water + sewer', keys: ['water', 'sewer'] }, { k: 'water', n: 'Water only', keys: ['water'] }, { k: 'sewer', n: 'Sewer only', keys: ['sewer'] } ],
         opts: [
           { k: 'sf1', g: 'Single-family (area under roof)', n: 'Under 1,700 SF', unit: 'dwelling', a: { water: 1670, sewer: 2258 } },
@@ -1203,7 +1213,7 @@ function buildIndex() {
 }
 const sbOf = id => index[id].item.sb || index[id].section.sb || 'yes';
 function st(id) {
-  if (!state.items[id]) state.items[id] = { on: false, qty: '', qty2: '', amount: '', desc: '', rows: [], sfLinked: true };
+  if (!state.items[id]) state.items[id] = { on: false, qty: '', qty2: '', amount: '', desc: '', rows: [], notes: [], sfLinked: true };
   return state.items[id];
 }
 function defaultsOnCheck(it, s) {
@@ -1220,6 +1230,21 @@ const newRow = (it, r = {}) => { const row = { opt: r.opt || '', v: r.v || (it.v
    later changes to the project square footage. */
 const projectSF = () => num(state.project.sf) > 0 ? String(num(state.project.sf)) : '';
 const rowUsesSF = (it, r) => { const o = it.opts && it.opts.find(x => x.k === r.opt); return !!(o && o.per1000 && o.sfPrefill !== false); };
+/* Per-permit trade notes (tradeNotes items). Notes are kept when the quantity drops,
+   so lowering and raising the number of permits does not lose what was typed. */
+const TRADES = ['Plumbing', 'Mechanical', 'Electrical', 'Other'];
+const MAX_NOTE_ROWS = 50;
+const permitCount = s => Math.max(0, Math.round(num(s.qty)));
+function ensureNotes(s) { if (!s.notes) s.notes = []; const n = Math.min(permitCount(s), MAX_NOTE_ROWS); while (s.notes.length < n) s.notes.push({ trade: '', desc: '' }); }
+function tradeNotesHtml(s) {
+  ensureNotes(s);
+  const n = Math.min(permitCount(s), MAX_NOTE_ROWS);
+  if (!n) return '';
+  return Array.from({ length: n }, (_, i) => { const t = s.notes[i];
+    return `<div class="trow" data-n="${i}"><span class="trow-num">Permit ${i + 1}</span>
+      <div class="field"><label>Trade<select data-nfield="trade"><option value="">Choose…</option>${TRADES.map(x => `<option${x === t.trade ? ' selected' : ''}>${x}</option>`).join('')}</select></label></div>
+      <div class="field wide"><label>What it is for<input type="text" data-nfield="desc" value="${esc(t.desc)}" placeholder="e.g. second plumbing contractor, gas line to generator"></label></div></div>`; }).join('');
+}
 function fillRowSF(it, r) { if (r.sfLinked !== false && rowUsesSF(it, r)) r.qty = projectSF(); }
 function sfHintHtml(linked, value) {
   if (!projectSF()) return '';
@@ -1280,6 +1305,16 @@ function computeItem(id, sectionTotals) {
   switch (it.t) {
     case 'flat': {
       const q = it.qty ? Math.max(0, Math.round(num(s.qty))) : 1;
+      if (it.tradeNotes && q > 0) {          // one line per permit, with its trade and details
+        ensureNotes(s);
+        for (let i = 0; i < q; i++) {
+          const t = s.notes[i] || { trade: '', desc: '' };
+          const label = it.n + (t.trade ? `: ${t.trade}` : q > 1 ? ` (${i + 1} of ${q})` : '');
+          const d = t.desc.trim();
+          push(label, (d ? d + ' · ' : '') + `1 ${it.unit} × ${rateFmt(it.a)}`, it.a, false);
+        }
+        break;
+      }
       push(it.n, it.qty ? `${qtyFmt(q)} ${plural(it.unit || 'each', q)} × ${rateFmt(it.a)}` : '', it.a * q, it.qty && q === 0);
       if (it.qty && q === 0) out.warn = 'Enter a quantity.';
       break; }
@@ -1329,14 +1364,22 @@ function computeItem(id, sectionTotals) {
       s.rows.forEach((r, i) => {
         const o = it.opts.find(x => x.k === r.opt);
         if (!o) { push(it.n, 'Use not selected', 0, true); warns.push(`Line ${i + 1}: choose a use.`); return; }
+        const n0 = out.lines.length; const tag = () => out.lines.slice(n0).forEach(l => l.row = i);
         const { amt, avail, vName } = optRate(it, o, r.v);
         const q = num(r.qty);
         const label = `${it.n}: ${o.n}` + (vName ? ` (${vName.toLowerCase()})` : '');
-        if (!avail) { push(label, 'No fee for this selection', 0, true); warns.push(`Line ${i + 1}: this use has no ${vName.toLowerCase()} fee.`); return; }
-        if (q <= 0) { push(label, 'Quantity not entered', 0, true); warns.push(`Line ${i + 1}: enter ${optUnitLabel(o)}.`); return; }
-        const fee = o.per1000 ? amt * q / 1000 : amt * q;
-        const detail = o.per1000 ? `${qtyFmt(q)} SF × ${rateFmt(amt)} per 1,000 SF` : `${qtyFmt(q)} ${plural(o.unit || 'unit', q)} × ${rateFmt(amt)}`;
-        push(label, detail, fee, false);
+        if (!avail) { push(label, 'No fee for this selection', 0, true); tag(); warns.push(`Line ${i + 1}: this use has no ${vName.toLowerCase()} fee.`); return; }
+        if (q <= 0) { push(label, 'Quantity not entered', 0, true); tag(); warns.push(`Line ${i + 1}: enter ${optUnitLabel(o)}.`); return; }
+        const priced = (a) => ({ fee: o.per1000 ? a * q / 1000 : a * q,
+          detail: o.per1000 ? `${qtyFmt(q)} SF × ${rateFmt(a)} per 1,000 SF` : `${qtyFmt(q)} ${plural(o.unit || 'unit', q)} × ${rateFmt(a)}` });
+        if (it.split && typeof o.a === 'object') {   // itemize water and sewer separately
+          const v = it.variants.find(x => x.k === r.v) || it.variants[0];
+          const useName = (o.g ? o.g.replace(/\s*\(.*\)$/, '') + ', ' : '') + o.n;
+          v.keys.filter(k => o.a[k] != null).forEach(k => { const p = priced(o.a[k]); push(`${it.split[k] || it.n}: ${useName}`, p.detail, p.fee, false); });
+          tag(); return;
+        }
+        const p = priced(amt);
+        push(label, p.detail, p.fee, false); tag();
       });
       if (s.rows.length === 0) { out.missing = true; warns.push('Add a line.'); }
       out.warn = warns.join(' ');
@@ -1399,7 +1442,10 @@ function renderItem(id) {
   if (s.on) {
     const f = (label, field, attrs = '', val = s[field], cls = '') => `<div class="field ${cls}"><label>${label}<input type="${attrs.includes('text') ? 'text' : 'number'}" data-field="${field}" value="${esc(val)}" ${attrs.includes('text') ? '' : 'min="0" step="any" inputmode="decimal"'} ${attrs}></label></div>`;
     switch (it.t) {
-      case 'flat': if (it.qty) inputs = f(`Number of ${plural(it.unit || 'item', 2)}`, 'qty', 'step="1"'); break;
+      case 'flat':
+        if (it.qty) inputs = f(`Number of ${plural(it.unit || 'item', 2)}`, 'qty', 'step="1"');
+        if (it.tradeNotes) inputs += `<div class="tnotes" data-tnotes>${tradeNotesHtml(s)}</div>`;
+        break;
       case 'rate': {
         inputs = f('Square feet', 'qty', 'placeholder="Enter SF"').replace('</label></div>', `</label><span class="sf-hint" data-sfhint>${sfHintHtml(s.sfLinked !== false, s.qty)}</span></div>`);
         if (it.addon) inputs += f(it.addon.label, 'qty2', 'step="1"');
@@ -1440,6 +1486,7 @@ function lookupRow(it, r, i) {
     <div class="field"><label>${qLabel}<input type="number" min="0" step="any" inputmode="decimal" data-rfield="qty" value="${esc(r.qty)}"></label>${rowUsesSF(it, r) ? `<span class="sf-hint" data-sfhint>${sfHintHtml(r.sfLinked !== false, r.qty)}</span>` : ''}</div>
     <span class="row-amt num" data-rowamt>—</span>
     <button class="btn-link" type="button" data-delrow aria-label="Remove line ${i + 1}">Remove</button>
+    ${it.split ? '<small class="row-split" data-rowsplit></small>' : ''}
   </div>`;
 }
 
@@ -1492,7 +1539,12 @@ function update() {
     amtEl.textContent = s.on ? money(r.total) : '—';
     el.classList.toggle('missing', s.on && r.missing);
     const w = $('.item-warn', el); w.textContent = r.warn || ''; w.classList.toggle('hidden', !(s.on && r.warn));
-    if (index[id].item.t === 'lookup' && s.on) $$('[data-rowamt]', el).forEach((x, i) => { x.textContent = r.lines[i] ? money(r.lines[i].amount) : '—'; });
+    if (index[id].item.t === 'lookup' && s.on) $$('[data-rowamt]', el).forEach((x, i) => {
+      const ls = r.lines.filter(l => l.row === i);
+      x.textContent = ls.length ? money(ls.reduce((t, l) => t + l.amount, 0)) : '—';
+      const b = x.parentElement.querySelector('[data-rowsplit]');
+      if (b) b.textContent = ls.length > 1 ? ls.map(l => `${/sewer/i.test(l.label) ? 'Sewer' : /water/i.test(l.label) ? 'Water' : ''} ${money(l.amount)}`.trim()).join(' + ') : '';
+    });
     if (s.on) { counts[group.id] = (counts[group.id] || 0) + 1; secCounts[section.id] = (secCounts[section.id] || 0) + 1; secTotals[section.id] = (secTotals[section.id] || 0) + r.total; }
   });
   $$('[data-chip]').forEach(c => c.textContent = counts[c.dataset.chip] || '');
@@ -1651,8 +1703,13 @@ function bind() {
     const el = e.target.closest('.item'); if (!el) return; const s = st(el.dataset.id);
     const v = e.target.value; const linked = v === '' || (projectSF() !== '' && num(v) === num(projectSF()));
     const hint = e.target.closest('.field') && $('[data-sfhint]', e.target.closest('.field'));
+    if (e.target.dataset.nfield) {
+      ensureNotes(s); s.notes[+e.target.closest('.trow').dataset.n][e.target.dataset.nfield] = v;
+      update(); return;
+    }
     if (e.target.dataset.field) {
       s[e.target.dataset.field] = v;
+      if (e.target.dataset.field === 'qty' && index[el.dataset.id].item.tradeNotes) { const box = $('[data-tnotes]', el); if (box) box.innerHTML = tradeNotesHtml(s); }
       if (e.target.dataset.field === 'qty' && index[el.dataset.id].item.t === 'rate') { s.sfLinked = linked; if (hint) hint.innerHTML = sfHintHtml(linked, v); }
     } else if (e.target.dataset.rfield === 'qty') {
       const r = s.rows[+e.target.closest('.lrow').dataset.row]; r.qty = v;
