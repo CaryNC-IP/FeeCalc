@@ -137,6 +137,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .lrow .btn-link { padding-bottom: .55rem; }
 .lrow .row-split { grid-column: 1 / -1; justify-self: end; margin-top: -.35rem; font-size: .78rem; color: var(--ink-2); }
 .lrow .row-split:empty { display: none; }
+.item-inputs .memo-add { align-self: flex-end; padding-bottom: .55rem; font-size: .8rem; }
+.item-inputs .field.memo { flex: 1 1 100%; }
 .tnotes { flex: 1 1 100%; display: flex; flex-direction: column; gap: .5rem; }
 .tnotes:empty { display: none; }
 .trow { display: grid; grid-template-columns: 4.5rem minmax(8rem, 10rem) 1fr; gap: .5rem; align-items: end; }
@@ -187,6 +189,40 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .ledger .actions-file { margin-top: .5rem; }
 .ledger .actions-file .btn { flex: 1; }
 .ledger .pair-check { margin-top: .55rem; font-size: .8rem; }
+.compare { margin-top: .75rem; padding: .6rem .7rem; border: 1px solid var(--rule); border-radius: 6px; font-size: .82rem; }
+.compare.hidden { display: none; }
+.compare.over { border-color: var(--warn); background: var(--warn-tint); }
+.compare .cmp-head { font-weight: 700; margin-bottom: .3rem; }
+.compare .lline { font-size: .82rem; }
+.compare .cmp-up { color: var(--warn); font-weight: 700; } .compare .cmp-down { color: var(--yes); font-weight: 700; }
+.compare .cmp-note { margin: .4rem 0 0; color: var(--ink-2); }
+.compare .cmp-warn { margin: .45rem 0 0; color: var(--warn); font-weight: 600; }
+.compare details { margin-top: .4rem; } .compare summary { cursor: pointer; color: var(--navy); font-weight: 600; }
+.compare ul { margin: .3rem 0 0; padding-left: 1.1rem; } .compare li { margin: .15rem 0; }
+.banner .btn { margin: .4rem .4rem 0 0; padding: .3rem .7rem; font-size: .82rem; }
+.preset-links { display: flex; gap: 1rem; margin-top: .25rem; font-size: .78rem; } .preset-links .btn-link { font-size: .78rem; } .preset-links .hidden { display: none; }
+.sched-dlg { width: min(1150px, 96vw); max-height: 92vh; padding: 0; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); color: var(--ink); }
+.sched-dlg::backdrop { background: rgba(0, 0, 0, .55); }
+.sched-dlg[open] { display: flex; flex-direction: column; }
+.sched-head { padding: 1rem 1.2rem .6rem; border-bottom: 1px solid var(--rule); }
+.sched-head h2 { margin: 0; font-size: 1.15rem; }
+.sched-intro { margin: .2rem 0 .7rem; font-size: .82rem; color: var(--ink-3); }
+.sched-controls { display: flex; flex-wrap: wrap; gap: .6rem .9rem; align-items: end; }
+.sched-controls .field { min-width: 12rem; }
+.sched-controls select { padding: .45rem .5rem; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); color: var(--ink); }
+.sched-controls .spacer { flex: 1; }
+.sched-sum { margin: .6rem 0 0; font-size: .82rem; color: var(--ink-2); }
+.sched-body { overflow: auto; padding: 0 1.2rem 1rem; }
+.sched-table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+.sched-table th { position: sticky; top: 0; background: var(--paper); text-align: left; padding: .55rem .4rem .35rem; border-bottom: 1px solid var(--ink-3); }
+.sched-table td { padding: .3rem .4rem; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+.sched-table tr.sec td { padding-top: .8rem; font-weight: 700; color: var(--navy); border-bottom: 1px solid var(--rule); }
+.sched-table td.sub { padding-left: 1.4rem; color: var(--ink-2); }
+.sched-table .fid { display: block; font-size: .7rem; color: var(--ink-3); }
+.sched-table tr.st-changed td { background: var(--confirm-tint); }
+.sched-table tr.st-new td { background: var(--yes-tint); }
+.sched-table tr.st-removed td { background: var(--warn-tint); }
+.sched-table .tag { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
 .sf-hint { display: block; margin-top: .2rem; font-size: .74rem; color: var(--ink-3); }
 .sf-hint .btn-link { font-size: .74rem; padding: 0 0 0 .3rem; }
 .print-hint { margin: .5rem 0 0; font-size: .76rem; color: var(--ink-3); }
@@ -253,6 +289,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
       <select id="fySelect"></select>
       <small id="fySource"></small>
       <small id="fyEffective"></small>
+      <small><button class="btn-link" id="schedBtn" type="button">Schedule check</button></small>
     </div>
   </div>
 </header>
@@ -267,6 +304,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
           <select id="presetSelect"><option value="">Choose an application type…</option></select>
           <button class="btn" id="presetApply" type="button">Apply</button>
         </div>
+        <span class="preset-links"><button class="btn-link" id="presetSave" type="button">Save current selection as a type</button><button class="btn-link hidden" id="presetDelete" type="button">Delete this saved type</button></span>
       </div>
       <div class="field">
         <label for="search">Find a fee</label>
@@ -310,6 +348,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
     <div id="ledgerLines"></div>
     <div class="subtotals" id="subtotals"></div>
     <div class="grand"><span>Total</span><span class="num" id="grandTotal">$0.00</span></div>
+    <div class="compare hidden" id="compare"></div>
     <p class="ledger-warn hidden" id="ledgerWarn"></p>
     <fieldset>
       <legend>Document type</legend>
@@ -329,6 +368,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
       <button class="btn" id="openBtn" type="button">Open saved estimate</button>
       <input type="file" id="openFile" accept=".json,application/json" hidden>
     </div>
+    <div class="actions actions-file">
+      <button class="btn" id="copyBtn" type="button">Copy fee lines</button>
+    </div>
     <p class="print-hint">The estimate file has the same name as the PDF, ending in the date and time (for example, 2026.10.01-14.31). Open it later to pick up where you left off.</p>
     <p class="print-hint">The printout is written for the applicant. SB445 classifications and incomplete lines are left off.</p>
     <p class="print-hint">In the print window, open <strong>More settings</strong> and uncheck <strong>Headers and footers</strong>. The estimate prints its own page numbers.</p>
@@ -337,6 +379,23 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 
 <div class="mobile-bar"><span>Total <strong class="num" id="mobileTotal">$0.00</strong></span><a class="btn-link" href="#ledger">View estimate</a></div>
 <div id="printArea"></div>
+
+<dialog id="schedDlg" class="sched-dlg" aria-labelledby="schedTitle">
+  <div class="sched-head">
+    <h2 id="schedTitle">Schedule check</h2>
+    <p class="sched-intro">Every fee and rate in the selected schedule. Compare against another year to review an update before it goes live.</p>
+    <div class="sched-controls">
+      <div class="field"><label>Fee schedule<select id="schedFy"></select></label></div>
+      <div class="field"><label>Compare with<select id="schedCmp"></select></label></div>
+      <label class="check"><input type="checkbox" id="schedChanged"> Show differences only</label>
+      <span class="spacer"></span>
+      <button class="btn" id="schedCopy" type="button">Copy table</button>
+      <button class="btn btn-primary" id="schedClose" type="button">Close</button>
+    </div>
+    <p class="sched-sum" id="schedSum"></p>
+  </div>
+  <div class="sched-body"><table class="sched-table" id="schedTable"></table></div>
+</dialog>
 
 <script>
 /* =====================================================================
@@ -355,7 +414,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
      express first-hour amount (a) plus q per quarter hour after
      lookup  rows of options (opts); per1000:true means entered in SF, priced per 1,000 SF;
              variants choose which amount keys to add (e.g. water + sewer);
-             split:{key: name} itemizes each amount key on its own line (e.g. water, sewer)
+             split:{key: name} itemizes each amount key on its own line (e.g. water, sewer);
+             splitGroup:true puts the option's group name in front of the use name on those lines
      custom  user-entered amount
      double  equals the subtotal of the sections listed in "of"
    SB445 classification (sb): 'yes' covered, 'confirm' possibly covered (coverage not yet determined), 'no' not covered
@@ -691,7 +751,7 @@ FY2027: {
       note: 'Due at building permit issuance. Residential fees are based on total area under roof per meter; for existing development charge only the increased demand.',
       items: [
       { id: 'sdf.res', n: 'Residential water & sewer development fees', t: 'lookup',
-        split: { water: 'Residential water system development fee', sewer: 'Residential sewer system development fee' },
+        split: { water: 'Residential water system development fee', sewer: 'Residential sewer system development fee' }, splitGroup: true,
         variants: [ { k: 'both', n: 'Water + sewer', keys: ['water', 'sewer'] }, { k: 'water', n: 'Water only', keys: ['water'] }, { k: 'sewer', n: 'Sewer only', keys: ['sewer'] } ],
         opts: [
           { k: 'sf1', g: 'Single-family (area under roof)', n: 'Under 1,700 SF', unit: 'dwelling', a: { water: 1670, sewer: 2258 } },
@@ -703,6 +763,7 @@ FY2027: {
           { k: 'irr', g: 'Other residential', n: 'Irrigation (potable water)', unit: 'lot', a: { water: 1639 } }
         ]},
       { id: 'sdf.nonres', n: 'Non-residential water & sewer development fees', t: 'lookup',
+        split: { water: 'Non-residential water system development fee', sewer: 'Non-residential sewer system development fee' },
         note: 'Based on $7.79 per peak-day gallon (water) and $11.96 per average-day gallon (sewer). Uses not listed require sealed demand estimates.',
         variants: [ { k: 'both', n: 'Water + sewer', keys: ['water', 'sewer'] }, { k: 'water', n: 'Water only', keys: ['water'] }, { k: 'sewer', n: 'Sewer only', keys: ['sewer'] } ],
         opts: [
@@ -1130,7 +1191,7 @@ const CURRENT_FY = 'FY' + (today.getMonth() >= 6 ? today.getFullYear() + 1 : tod
 let fy = FEE_SCHEDULES[CURRENT_FY] ? CURRENT_FY : FEE_SCHEDULES[DEFAULT_YEAR] ? DEFAULT_YEAR : Object.keys(FEE_SCHEDULES).sort().slice(-1)[0];
 let S = resolveSchedule(fy);
 let activeGroup = S.groups[0].id;
-const state = { items: {}, project: {} };
+const state = { items: {}, project: {}, history: [] };   // history: printed versions (#2)
 let index = {};          // id -> { item, section, group }
 let searchIndex = {};    // id -> { id, tokens, joins, amounts }
 
@@ -1223,7 +1284,7 @@ function buildIndex() {
 }
 const sbOf = id => index[id].item.sb || index[id].section.sb || 'yes';
 function st(id) {
-  if (!state.items[id]) state.items[id] = { on: false, qty: '', qty2: '', amount: '', desc: '', rows: [], notes: [], sfLinked: true };
+  if (!state.items[id]) state.items[id] = { on: false, qty: '', qty2: '', amount: '', desc: '', rows: [], notes: [], memo: '', sfLinked: true };
   return state.items[id];
 }
 function defaultsOnCheck(it, s) {
@@ -1384,8 +1445,8 @@ function computeItem(id, sectionTotals) {
           detail: o.per1000 ? `${qtyFmt(q)} SF × ${rateFmt(a)} per 1,000 SF` : `${qtyFmt(q)} ${plural(o.unit || 'unit', q)} × ${rateFmt(a)}` });
         if (it.split && typeof o.a === 'object') {   // itemize water and sewer separately
           const v = it.variants.find(x => x.k === r.v) || it.variants[0];
-          const useName = (o.g ? o.g.replace(/\s*\(.*\)$/, '') + ', ' : '') + o.n;
-          v.keys.filter(k => o.a[k] != null).forEach(k => { const p = priced(o.a[k]); push(`${it.split[k] || it.n}: ${useName}`, p.detail, p.fee, false); });
+          const useName = (it.splitGroup && o.g ? o.g.replace(/\s*\(.*\)$/, '') + ', ' : '') + o.n;
+          v.keys.filter(k => o.a[k] != null).forEach(k => { const p = priced(o.a[k]); push(`${it.split[k] || it.n}: ${useName}`, p.detail, p.fee, false); out.lines[out.lines.length - 1].key = k; });
           tag(); return;
         }
         const p = priced(amt);
@@ -1395,8 +1456,11 @@ function computeItem(id, sectionTotals) {
       out.warn = warns.join(' ');
       break; }
   }
+  if (s.memo && s.memo.trim() && out.lines.length && !it.tradeNotes) out.lines[0].memo = s.memo.trim();   // fee note (#5)
   return out;
 }
+/* Basis text plus any fee note, as shown in the ledger, printout and copied table. */
+const lineDetail = (l, print) => [print && l.missing ? 'Minimum fee' : l.detail, l.memo ? 'Note: ' + l.memo : ''].filter(Boolean).join(' · ');
 function computeAll() {
   const results = {}; const sectionTotals = {};
   const ids = Object.keys(index);
@@ -1472,6 +1536,9 @@ function renderItem(id) {
         break;
     }
   }
+  if (s.on && !it.tradeNotes) inputs += (s.memo || s.memoOpen)
+    ? `<div class="field wide memo"><label>Note for the applicant (prints with this fee)<input type="text" data-field="memo" value="${esc(s.memo)}" placeholder="e.g. assumes two re-reviews"></label></div>`
+    : `<button class="btn-link memo-add" type="button" data-addmemo>Add a note</button>`;
   el.classList.toggle('missing', false);
   el.innerHTML = `
     <label class="item-head"><input type="checkbox" data-toggle ${s.on ? 'checked' : ''}>
@@ -1553,7 +1620,7 @@ function update() {
       const ls = r.lines.filter(l => l.row === i);
       x.textContent = ls.length ? money(ls.reduce((t, l) => t + l.amount, 0)) : '—';
       const b = x.parentElement.querySelector('[data-rowsplit]');
-      if (b) b.textContent = ls.length > 1 ? ls.map(l => `${/sewer/i.test(l.label) ? 'Sewer' : /water/i.test(l.label) ? 'Water' : ''} ${money(l.amount)}`.trim()).join(' + ') : '';
+      if (b) b.textContent = ls.length > 1 ? ls.map(l => `${l.key ? l.key[0].toUpperCase() + l.key.slice(1) : ''} ${money(l.amount)}`.trim()).join(' + ') : '';
     });
     if (s.on) { counts[group.id] = (counts[group.id] || 0) + 1; secCounts[section.id] = (secCounts[section.id] || 0) + 1; secTotals[section.id] = (secTotals[section.id] || 0) + r.total; }
   });
@@ -1578,7 +1645,7 @@ function renderLedger(R) {
   const c = collectLines(R);
   $('#ledgerLines').innerHTML = c.groups.length ? c.groups.map(({ g, lines }) => `
     <div class="lgroup"><h3>${esc(g.n)}</h3>${lines.map(l => `
-      <div class="lline${l.missing ? ' missing' : ''}"><span class="mark sb-${l.sb}" title="${SB_LABEL[l.sb]}"></span><span class="lbl">${esc(l.label)}${l.missing ? ' <b class="star">*</b>' : ''}${l.detail ? `<small>${esc(l.detail)}</small>` : ''}</span><span class="dots"></span><span class="amt num">${money(l.amount)}</span></div>`).join('')}
+      <div class="lline${l.missing ? ' missing' : ''}"><span class="mark sb-${l.sb}" title="${SB_LABEL[l.sb]}"></span><span class="lbl">${esc(l.label)}${l.missing ? ' <b class="star">*</b>' : ''}${lineDetail(l) ? `<small>${esc(lineDetail(l))}</small>` : ''}</span><span class="dots"></span><span class="amt num">${money(l.amount)}</span></div>`).join('')}
     </div>`).join('') : '<p class="ledger-empty">Select fees on the left, or start from an application type.</p>';
   $('#subtotals').innerHTML = c.groups.length ? [['yes', 'SB445 fees'], ['confirm', 'Possible SB445 fees'], ['no', 'Other fees']]
     .filter(([k]) => c.sub[k] > 0).map(([k, n]) => `<div class="lline"><span class="mark sb-${k}"></span><span class="lbl">${n}</span><span class="dots"></span><span class="amt num">${money(c.sub[k])}</span></div>`).join('') : '';
@@ -1587,14 +1654,19 @@ function renderLedger(R) {
   const w = $('#ledgerWarn');
   w.textContent = c.missing ? `* ${c.missing} ${c.missing === 1 ? 'line needs' : 'lines need'} a quantity or selection. Minimum fees or $0 are shown until entered.` : '';
   w.classList.toggle('hidden', !c.missing);
+  renderCompare();
+  scheduleAutosave();
 }
 
 /* ---------- presets ---------- */
 function renderPresets() {
+  const mine = userTypes();
   $('#presetSelect').innerHTML = '<option value="">Choose an application type…</option>' +
-    PRESETS.map(p => `<option value="${p.k}">${esc(p.n)}</option>`).join('');
+    (mine.length ? '<optgroup label="Standard application types">' : '') + PRESETS.map(p => `<option value="${p.k}">${esc(p.n)}</option>`).join('') +
+    (mine.length ? '</optgroup><optgroup label="Saved in this browser">' + mine.map(t => `<option value="${esc(t.k)}">${esc(t.n)}</option>`).join('') + '</optgroup>' : '');
 }
 function applyPreset(k) {
+  const ut = userTypes().find(x => x.k === k); if (ut) { applyUserType(ut); return; }
   const p = PRESETS.find(x => x.k === k); if (!p) return;
   const anyOn = Object.values(state.items).some(s => s.on);
   if (anyOn && !confirm('Replace the fees currently selected with this application type?')) return;
@@ -1658,14 +1730,15 @@ function buildPrint() {
     : '<strong>Fee estimate.</strong> This estimate lists the fees that may reasonably be assessed for this project, based on the project information shown below.';
   const rows = groups.map(({ g, lines, total }) =>
     `<tr class="grp"><td colspan="2">${esc(g.n)}</td><td class="r">${money(total)}</td></tr>` +
-    lines.map(l => `<tr><td>${esc(l.label)}${l.missing ? ' *' : ''}</td><td>${esc(l.missing ? 'Minimum fee' : l.detail)}</td><td class="r">${money(l.amount)}</td></tr>`).join('')).join('');
+    lines.map(l => `<tr><td>${esc(l.label)}${l.missing ? ' *' : ''}</td><td>${esc(lineDetail(l, true))}</td><td class="r">${money(l.amount)}</td></tr>`).join('')).join('');
   const notes = $('#notes').value.trim();
   const field = (label, v) => `<div><span>${label}:</span> ${esc(v && String(v).trim() ? v : '—')}</div>`;
   $('#printArea').innerHTML = `
     <div class="p-head"><div class="p-head-text"><h1>${final ? 'Final Fee Statement' : 'Development Fee Estimate'}</h1>
       <p>${esc(S.title)}, effective ${esc(S.effective)}</p>
       <p>${esc(TOWN_CONTACT)}</p>
-      <p>Date: ${now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}, ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</p></div>
+      <p>Date: ${now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}, ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</p>
+      ${revisionText() ? `<p>${esc(revisionText())}</p>` : ''}</div>
       <span id="pLogoSlot"></span></div>
     <div class="p-status${final ? ' final' : ''}">${statusText}</div>
     <div class="p-grid">
@@ -1690,7 +1763,8 @@ function estimateData() {
   const items = {}; const names = {};
   Object.entries(state.items).forEach(([id, s]) => { if (s.on) { items[id] = JSON.parse(JSON.stringify(s)); names[id] = lastNames[id] || id; } });
   return { app: FILE_APP, format: FILE_FORMAT, savedAt: (stampDate || new Date()).toISOString(), version: makeStamp(stampDate || new Date()),
-    fy, docType: $('input[name=docType]:checked').value, project: { ...state.project }, notes: $('#notes').value, items, names };
+    fy, docType: $('input[name=docType]:checked').value, project: { ...state.project }, notes: $('#notes').value, items, names,
+    history: state.history };
 }
 function downloadEstimate() {
   const blob = new Blob([JSON.stringify(estimateData(), null, 1)], { type: 'application/json' });
@@ -1698,10 +1772,10 @@ function downloadEstimate() {
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   return a.download;
 }
-function loadEstimate(d, fileName) {
+function loadEstimate(d, fileName, opts = {}) {
   if (!d || d.app !== FILE_APP || !d.items) throw new Error('not an estimate file');
   const anyOn = Object.values(state.items).some(s => s.on);
-  if (anyOn && !confirm('Replace the current estimate with the one in this file?')) return;
+  if (anyOn && !opts.quiet && !confirm('Replace the current estimate with the one in this file?')) return;
   const msgs = [];
   if (d.fy && FEE_SCHEDULES[d.fy]) {
     if (d.fy !== fy) { fy = d.fy; S = resolveSchedule(fy); buildIndex(); if (!S.groups.find(g => g.id === activeGroup)) activeGroup = S.groups[0].id; }
@@ -1713,6 +1787,7 @@ function loadEstimate(d, fileName) {
     if (!Array.isArray(s.rows)) s.rows = []; if (!Array.isArray(s.notes)) s.notes = [];
   });
   state.project = { ...(d.project || {}) };
+  state.history = Array.isArray(d.history) ? d.history : [];
   $$('[data-project]').forEach(i => i.value = state.project[i.dataset.project] || '');
   $('#notes').value = d.notes || '';
   const dt = $(`input[name=docType][value="${d.docType === 'final' ? 'final' : 'estimate'}"]`); if (dt) dt.checked = true;
@@ -1722,9 +1797,221 @@ function loadEstimate(d, fileName) {
   applyVisibility(); update();
   if (dropped.length) msgs.push(`Not in the ${S.label} schedule, so left out: ${dropped.join('; ')}.`);
   const when = d.version ? ` (version ${d.version})` : '';
-  const b = $('#banner');
-  b.textContent = `Opened “${fileName}”${when}. ${Object.values(state.items).filter(x => x.on).length} fees restored using the ${S.label} fee schedule. Adjust as needed, then print to save a new version.` + (msgs.length ? ' ' + msgs.join(' ') : '');
-  b.classList.add('show');
+  if (!opts.draft) markSaved(); else scheduleAutosave();
+  const n = Object.values(state.items).filter(x => x.on).length;
+  const text = opts.draft
+    ? `Restored your unsaved work from ${new Date(d.savedAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}. ${n} fees selected.`
+    : `Opened “${fileName}”${when}. ${n} fees restored using the ${S.label} fee schedule. Adjust as needed, then print to save a new version.`;
+  const actions = [];
+  if (fy !== CURRENT_FY && FEE_SCHEDULES[CURRENT_FY]) {     // #3: offer to re-price under the current year
+    actions.push({ label: `Re-price under ${FEE_SCHEDULES[CURRENT_FY].label || CURRENT_FY}`, fn: repriceCurrent });
+    msgs.push(`This estimate uses ${S.label}, which is not the current fiscal year.`);
+  }
+  showBanner(text + (msgs.length ? ' ' + msgs.join(' ') : ''), actions);
+}
+function repriceCurrent() {
+  const fromLabel = S.label; const before = printedTotal();
+  const dropped = switchFY(CURRENT_FY); const after = printedTotal(); const d = after - before;
+  showBanner(`Re-priced from ${fromLabel} to ${S.label}: ${money(before)} → ${money(after)} (${d >= 0 ? '+' : '−'}${money(Math.abs(d))}). ` +
+    `An adopted fee schedule change is one of the reasons a final fee statement may exceed the estimate.` +
+    (dropped.length ? ` Not in the ${S.label} schedule, so left out: ${dropped.join('; ')}.` : ''));
+}
+
+/* ---------- banner with optional buttons ---------- */
+function showBanner(text, actions = []) {
+  const b = $('#banner'); b.innerHTML = esc(text) + (actions.length ? '<div>' + actions.map((a, i) => `<button class="btn" type="button" data-bact="${i}">${esc(a.label)}</button>`).join('') + '</div>' : '');
+  b._actions = actions; b.classList.add('show');
+}
+
+/* ---------- switch fiscal year (keeps selections, re-prices) ---------- */
+function switchFY(newFy) {
+  fy = newFy; S = resolveSchedule(fy); buildIndex();
+  if (!S.groups.find(g => g.id === activeGroup)) activeGroup = S.groups[0].id;
+  renderHeader(); renderTabs(); renderPanels(); applyVisibility(); update();
+  return Object.keys(state.items).filter(id => state.items[id].on && !index[id]).map(id => lastNames[id] || id);
+}
+
+/* ---------- printed totals, revision history and comparison (#1, #2) ---------- */
+const printedGroups = () => printableLines(collectLines(lastResults));
+const printedTotal = () => printedGroups().reduce((t, g) => t + g.total, 0);
+const printedSnapshot = () => printedGroups().flatMap(g => g.lines.map(l => ({ g: g.g.n, label: l.label, amount: l.amount })));
+const docTypeNow = () => $('input[name=docType]:checked').value;
+const docName = t => t === 'final' ? 'final fee statement' : 'fee estimate';
+const fmtDate = iso => new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const priorPrints = () => { const v = stampDate ? makeStamp(stampDate) : null; return state.history.filter(h => h.version !== v); };
+function revisionText() {
+  const prior = priorPrints(); if (!prior.length) return '';
+  const last = prior[prior.length - 1];
+  return `Revision ${prior.length + 1}. Supersedes the ${docName(last.docType)} dated ${fmtDate(last.savedAt)} (version ${last.version}).`;
+}
+function recordPrint() {
+  const entry = { version: makeStamp(stampDate), savedAt: stampDate.toISOString(), docType: docTypeNow(), fy, total: Math.round(printedTotal() * 100) / 100, lines: printedSnapshot() };
+  state.history = state.history.filter(h => h.version !== entry.version).concat(entry);
+}
+const baseline = () => priorPrints().filter(h => h.docType === 'estimate').slice(-1)[0];
+function diffLines(oldL, newL) {
+  const norm = t => t.replace(/ \(\d+ of \d+\)$/, '');   // "(1 of 3)" numbering changes with the count; compare by fee name
+  const keyed = arr => { const seen = {}; const m = new Map(); arr.forEach(l0 => { const l = { ...l0, label: norm(l0.label) }; const k = l.g + '|' + l.label; seen[k] = (seen[k] || 0) + 1; m.set(k + '#' + seen[k], l); }); return m; };
+  const A = keyed(oldL), B = keyed(newL); const out = [];
+  B.forEach((l, k) => { const o = A.get(k); if (!o) out.push({ label: l.label, from: null, to: l.amount }); else if (Math.abs(o.amount - l.amount) > 0.004) out.push({ label: l.label, from: o.amount, to: l.amount }); });
+  A.forEach((l, k) => { if (!B.has(k)) out.push({ label: l.label, from: l.amount, to: null }); });
+  return out;
+}
+function renderCompare() {
+  const box = $('#compare'); const base = baseline();
+  if (!base) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+  const now = printedTotal(); const d = Math.round((now - base.total) * 100) / 100;
+  const final = docTypeNow() === 'final'; const over = final && d > 0;
+  const changes = diffLines(base.lines || [], printedSnapshot());
+  const sign = d > 0 ? `<span class="cmp-up">+${money(d)}</span>` : d < 0 ? `<span class="cmp-down">−${money(-d)}</span>` : 'No change';
+  const row = (lbl, v) => `<div class="lline"><span class="lbl">${lbl}</span><span class="dots"></span><span class="amt num">${v}</span></div>`;
+  box.className = 'compare' + (over ? ' over' : '');
+  box.innerHTML = `<div class="cmp-head">Compared with the fee estimate of ${esc(fmtDate(base.savedAt))}</div>
+    ${row(`Estimate (version ${esc(base.version)})`, money(base.total))}
+    ${row(final ? 'This final fee statement' : 'This estimate', money(now))}
+    ${row('Difference', sign)}
+    ${base.fy && base.fy !== fy ? `<p class="cmp-note">The estimate used the ${esc(base.fy)} fee schedule; this uses ${esc(S.label)}.</p>` : ''}
+    ${over ? `<p class="cmp-warn">This final fee statement is higher than the most recent estimate. It may exceed the estimate only if the project changed or the Town adopted a new fee schedule. Explain the reason in the notes to the applicant.</p>` : ''}
+    ${changes.length ? `<details${over ? ' open' : ''}><summary>${changes.length} ${changes.length === 1 ? 'line' : 'lines'} changed</summary><ul>${changes.map(c =>
+      `<li>${esc(c.label)}: ${c.from == null ? `added, ${money(c.to)}` : c.to == null ? `removed (was ${money(c.from)})` : `${money(c.from)} → ${money(c.to)}`}</li>`).join('')}</ul></details>` : ''}`;
+}
+
+/* ---------- unsaved-work protection and autosave (#4) ---------- */
+const DRAFT_KEY = 'caryFeeEstimator.draft.v1'; const TEMPLATE_KEY = 'caryFeeEstimator.templates.v1';
+const lsGet = k => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+const hasWork = () => Object.values(state.items).some(x => x.on) || Object.values(state.project).some(v => v && String(v).trim()) || $('#notes').value.trim();
+function snapshot() {
+  const items = {}; Object.entries(state.items).forEach(([id, x]) => { if (x.on) { const { memoOpen, ...rest } = x; items[id] = rest; } });
+  return JSON.stringify({ fy, d: docTypeNow(), p: state.project, n: $('#notes').value, items, h: state.history.map(h => h.version) });
+}
+let savedSnap = null; let autosaveTimer = null; let autosaveReady = false;
+const isDirty = () => hasWork() && snapshot() !== savedSnap;
+function markSaved() { savedSnap = snapshot(); scheduleAutosave(); }
+function scheduleAutosave() {
+  if (!autosaveReady) return;
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(() => { if (isDirty()) lsSet(DRAFT_KEY, estimateData()); else lsSet(DRAFT_KEY, null); }, 600);
+}
+function offerDraft() {
+  const d = lsGet(DRAFT_KEY);
+  if (!d || d.app !== FILE_APP || !d.items || !Object.keys(d.items).length) return;
+  const when = new Date(d.savedAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+  const what = [d.project && d.project.name, `${Object.keys(d.items).length} fees`].filter(Boolean).join(', ');
+  showBanner(`Unsaved work from ${when} was found (${what}).`, [
+    { label: 'Restore it', fn: () => loadEstimate(d, 'unsaved work', { quiet: true, draft: true }) },
+    { label: 'Discard', fn: () => { lsSet(DRAFT_KEY, null); $('#banner').classList.remove('show'); } }]);
+}
+
+/* ---------- copy fee lines (#8) ---------- */
+async function copyRich(html, text) {
+  try { if (navigator.clipboard && window.ClipboardItem) {
+    await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([text], { type: 'text/plain' }) })]); return true; } } catch (e) { }
+  try {
+    const d = document.createElement('div'); d.contentEditable = 'true'; d.style.cssText = 'position:fixed;left:-9999px;top:0'; d.innerHTML = html; document.body.appendChild(d);
+    const r = document.createRange(); r.selectNodeContents(d); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    const ok = document.execCommand('copy'); sel.removeAllRanges(); d.remove(); return ok;
+  } catch (e) { return false; }
+}
+const tableFrom = (head, rows) => ({
+  html: `<table border="1" cellspacing="0" cellpadding="3"><thead><tr>${head.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`,
+  text: [head, ...rows].map(r => r.map(c => String(c).replace(/[\t\n]+/g, ' ')).join('\t')).join('\n') });
+async function copyFeeLines() {
+  const c = collectLines(lastResults);
+  const lines = c.groups.flatMap(g => g.lines.map(l => [g.g.n, l.label + (l.missing ? ' (incomplete)' : ''), lineDetail(l), SB_LABEL[l.sb].split(':')[0], money(l.amount)]));
+  if (!lines.length) { showBanner('No fees are selected, so there is nothing to copy.'); return; }
+  lines.push(['', 'Total', '', '', money(c.grand)]);
+  const t = tableFrom(['Fee group', 'Fee', 'Basis and assumptions', 'SB445', 'Amount'], lines);
+  const ok = await copyRich(t.html, t.text);
+  showBanner(ok ? `Copied ${lines.length - 1} fee lines and the total. Paste into Excel, an email or the permitting system.` : 'The browser blocked copying. Try again, or use Save estimate file.');
+}
+
+/* ---------- saved application types (#9) ---------- */
+const userTypes = () => lsGet(TEMPLATE_KEY) || [];
+function saveCurrentAsType() {
+  const items = {}; Object.entries(state.items).forEach(([id, x]) => { if (x.on) { const { memoOpen, ...rest } = x; items[id] = JSON.parse(JSON.stringify(rest)); } });
+  if (!Object.keys(items).length) { alert('Select the fees for this application type first.'); return; }
+  const name = (prompt('Name for this application type (saved in this browser):', '') || '').trim(); if (!name) return;
+  const list = userTypes(); const existing = list.find(t => t.n.toLowerCase() === name.toLowerCase());
+  if (existing && !confirm(`Replace the saved type “${existing.n}”?`)) return;
+  const entry = { k: existing ? existing.k : 'u' + Date.now(), n: name, items, savedAt: new Date().toISOString() };
+  const next = existing ? list.map(t => t === existing ? entry : t) : list.concat(entry);
+  if (!lsSet(TEMPLATE_KEY, next)) { alert('This browser would not save the type (storage may be turned off).'); return; }
+  renderPresets(); $('#presetSelect').value = entry.k; syncPresetButtons();
+  showBanner(`Saved “${name}” as an application type in this browser. It appears under “Saved in this browser” in the list.`);
+}
+function deleteType() {
+  const k = $('#presetSelect').value; const t = userTypes().find(x => x.k === k); if (!t) return;
+  if (!confirm(`Delete the saved application type “${t.n}”?`)) return;
+  lsSet(TEMPLATE_KEY, userTypes().filter(x => x.k !== k)); renderPresets(); syncPresetButtons();
+}
+const syncPresetButtons = () => $('#presetDelete').classList.toggle('hidden', !userTypes().some(t => t.k === $('#presetSelect').value));
+function applyUserType(t) {
+  const anyOn = Object.values(state.items).some(x => x.on);
+  if (anyOn && !confirm('Replace the fees currently selected with this application type?')) return;
+  state.items = {}; const skipped = [];
+  Object.entries(t.items).forEach(([id, saved]) => { if (!index[id]) { skipped.push(id); return; } Object.assign(st(id), JSON.parse(JSON.stringify(saved)), { on: true }); });
+  renderPanels(); syncProjectSF();
+  const first = Object.keys(state.items).find(id => state.items[id].on); if (first) setTab(index[first].group.id);
+  $('#search').value = ''; applyVisibility(); update();
+  showBanner(`Applied “${t.n}”. ${Object.keys(t.items).length - skipped.length} fees are selected. Remove any that do not apply.` + (skipped.length ? ` Not in this fiscal year: ${skipped.join(', ')}.` : ''));
+}
+
+/* ---------- schedule check (#10) ---------- */
+function scheduleRows(fyA, fyB) {
+  const A = resolveSchedule(fyA); const B = fyB ? resolveSchedule(fyB) : null;
+  const idxB = {}; if (B) B.groups.forEach(g => g.sections.forEach(sec => sec.items.forEach(it => { idxB[it.id] = { it, sec, g }; })));
+  const sbIn = (it, sec) => it.sb || sec.sb || 'yes';
+  const sbTxt = k => k ? SB_LABEL[k].split(':')[0] : '';
+  const optTxt = o => (typeof o.a === 'number' ? rateFmt(o.a) : Object.entries(o.a).map(([k, v]) => `${k} ${rateFmt(v)}`).join(', ')) + (o.per1000 ? ' per 1,000 SF' : o.unit ? ' per ' + o.unit : '');
+  const itemTxt = it => it.t === 'lookup' ? 'Rate table (options below)' : basisText(it);
+  const status = (a, b, sa, sb2) => !B ? '' : b == null ? 'new' : (a !== b || sa !== sb2) ? 'changed' : '';
+  const rows = []; const seen = new Set();
+  A.groups.forEach(g => g.sections.forEach(sec => {
+    const where = `${g.n} › ${sec.n}`;
+    sec.items.forEach(it => {
+      seen.add(it.id); const b = idxB[it.id];
+      const sa = sbTxt(sbIn(it, sec)), sbb = b ? sbTxt(sbIn(b.it, b.sec)) : '';
+      rows.push({ where, id: it.id, name: it.n, sb: sa + (b && sbb !== sa ? ` (was ${sbb})` : ''), a: itemTxt(it), b: B ? (b ? itemTxt(b.it) : '') : null, st: status(itemTxt(it), b ? itemTxt(b.it) : null, sa, sbb) });
+      if (it.t === 'lookup') {
+        const seenO = new Set();
+        it.opts.forEach(o => { seenO.add(o.k); const ob = b && b.it.opts ? b.it.opts.find(x => x.k === o.k) : null;
+          rows.push({ where, sub: true, id: it.id + ' · ' + o.k, name: (o.g ? o.g + ' › ' : '') + o.n, sb: '', a: optTxt(o), b: B ? (ob ? optTxt(ob) : '') : null, st: status(optTxt(o), ob ? optTxt(ob) : null) }); });
+        if (b && b.it.opts) b.it.opts.filter(o => !seenO.has(o.k)).forEach(o => rows.push({ where, sub: true, id: it.id + ' · ' + o.k, name: (o.g ? o.g + ' › ' : '') + o.n, sb: '', a: '', b: optTxt(o), st: 'removed' }));
+      }
+    });
+  }));
+  if (B) Object.keys(idxB).filter(id => !seen.has(id)).forEach(id => { const { it, sec, g } = idxB[id];
+    rows.push({ where: `${g.n} › ${sec.n}`, id, name: it.n, sb: sbTxt(sbIn(it, sec)), a: '', b: itemTxt(it), st: 'removed' }); });
+  return { rows, A, B };
+}
+let schedLast = null;
+function renderSchedule() {
+  const fyA = $('#schedFy').value, fyB = $('#schedCmp').value; const only = $('#schedChanged').checked;
+  const { rows, A, B } = scheduleRows(fyA, fyB);
+  const shown = only && B ? rows.filter(r => r.st) : rows;
+  const tagTxt = { changed: 'Changed', new: 'New', removed: 'Removed' };
+  const cols = ['Fee', 'SB445', A.label].concat(B ? [B.label, 'Status'] : []);
+  let lastWhere = ''; let html = `<thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>`;
+  shown.forEach(r => {
+    if (r.where !== lastWhere) { lastWhere = r.where; html += `<tr class="sec"><td colspan="${cols.length}">${esc(r.where)}</td></tr>`; }
+    html += `<tr class="${r.st ? 'st-' + r.st : ''}"><td class="${r.sub ? 'sub' : ''}">${esc(r.name)}<span class="fid">${esc(r.id)}</span></td><td>${esc(r.sb)}</td><td>${esc(r.a)}</td>` +
+      (B ? `<td>${esc(r.b)}</td><td><span class="tag">${tagTxt[r.st] || ''}</span></td>` : '') + '</tr>';
+  });
+  $('#schedTable').innerHTML = html + '</tbody>';
+  const fees = rows.filter(r => !r.sub).length; const opts = rows.length - fees;
+  const n = k => rows.filter(r => r.st === k).length;
+  $('#schedSum').textContent = `${A.label}: ${fees} fees and ${opts} rate-table options.` +
+    (B ? ` Compared with ${B.label}: ${n('changed')} changed, ${n('new')} new, ${n('removed')} removed.` : '') +
+    (only && B && !shown.length ? ' No differences found.' : '');
+  schedLast = { cols, rows: shown.map(r => [r.where, r.name, r.id, r.sb, r.a].concat(B ? [r.b, tagTxt[r.st] || ''] : [])), B };
+}
+function openSchedule() {
+  const keys = Object.keys(FEE_SCHEDULES).sort().reverse();
+  $('#schedFy').innerHTML = keys.map(k => `<option value="${k}"${k === fy ? ' selected' : ''}>${esc(FEE_SCHEDULES[k].label || k)}</option>`).join('');
+  const other = keys.find(k => k !== fy) || '';
+  $('#schedCmp').innerHTML = '<option value="">No comparison</option>' + keys.map(k => `<option value="${k}"${k === other ? ' selected' : ''}>${esc(FEE_SCHEDULES[k].label || k)}</option>`).join('');
+  renderSchedule(); $('#schedDlg').showModal();
 }
 
 /* ---------- events ---------- */
@@ -1784,6 +2071,7 @@ function bind() {
       if (row) { const r = s.rows[+row.dataset.row]; r.sfLinked = true; r.qty = projectSF(); } else { s.sfLinked = true; s.qty = projectSF(); }
       renderItem(id); update(); return;
     }
+    if (e.target.matches('[data-addmemo]')) { s.memoOpen = true; renderItem(id); update(); const m = $('[data-field="memo"]', el); if (m) m.focus(); return; }
     if (e.target.matches('[data-addrow]')) { s.rows.push(newRow(it)); renderItem(id); update(); const sels = $$('[data-rfield="opt"]', el); sels[sels.length - 1].focus(); }
     if (e.target.matches('[data-delrow]')) { s.rows.splice(+e.target.closest('.lrow').dataset.row, 1); if (!s.rows.length) s.on = false; renderItem(id); update(); }
   });
@@ -1797,37 +2085,36 @@ function bind() {
   $('#onlySelected').addEventListener('change', applyVisibility);
   $('#presetApply').addEventListener('click', () => applyPreset($('#presetSelect').value));
   $('#fySelect').addEventListener('change', e => {
-    fy = e.target.value; S = resolveSchedule(fy); buildIndex();
-    if (!S.groups.find(g => g.id === activeGroup)) activeGroup = S.groups[0].id;
-    renderHeader(); renderTabs(); renderPanels(); applyVisibility(); update();
-    const dropped = Object.keys(state.items).filter(id => state.items[id].on && !index[id]);
-    const b = $('#banner');
-    b.textContent = `Now using the ${S.label} fee schedule. Your selections and quantities were kept and re-priced.` +
-      (dropped.length ? ` Not in the ${S.label} schedule, so left out of this estimate: ${dropped.map(id => lastNames[id] || id).join('; ')}.` : '');
-    b.classList.add('show');
+    const dropped = switchFY(e.target.value);
+    showBanner(`Now using the ${S.label} fee schedule. Your selections and quantities were kept and re-priced.` +
+      (dropped.length ? ` Not in the ${S.label} schedule, so left out of this estimate: ${dropped.join('; ')}.` : ''));
   });
+  $('#banner').addEventListener('click', e => { const b = e.target.closest('[data-bact]'); if (!b) return; const a = $('#banner')._actions[+b.dataset.bact]; if (a) a.fn(); });
   $('#printBtn').addEventListener('click', () => {
     const c = collectLines(lastResults);
     const blank = c.groups.flatMap(g => g.lines).filter(l => l.missing && l.amount === 0).length;
     const mins = c.groups.flatMap(g => g.lines).filter(l => l.missing && l.amount > 0).length;
-    if (blank || mins) {
-      const msg = ['This printout goes to the applicant, and some fee lines are incomplete:'];
-      if (blank) msg.push(`- ${blank} ${blank === 1 ? 'line has' : 'lines have'} no amount and will be left off.`);
-      if (mins) msg.push(`- ${mins} ${mins === 1 ? 'line shows' : 'lines show'} only the minimum fee because a quantity was not entered.`);
-      msg.push('', 'Print anyway? Choose Cancel to go back and complete them.');
-      if (!confirm(msg.join('\n'))) return;
-    }
+    const final = docTypeNow() === 'final'; const P = state.project; const issues = [];   // #6 pre-print checks
+    if (blank) issues.push(`${blank} fee ${blank === 1 ? 'line has' : 'lines have'} no amount and will be left off.`);
+    if (mins) issues.push(`${mins} fee ${mins === 1 ? 'line shows' : 'lines show'} only the minimum fee because a quantity was not entered.` + (final ? ' A final fee statement should use confirmed quantities.' : ''));
+    const empty = [['name', 'Project name'], ['app', 'Application number'], ['prepared', 'Prepared by']].filter(([k]) => !(P[k] && String(P[k]).trim())).map(([, n]) => n);
+    if (empty.length) issues.push(`${empty.join(', ')} ${empty.length === 1 ? 'is' : 'are'} blank and will print as “—”.`);
+    const base = baseline(); const over = final && base && printedTotal() > base.total + 0.004;
+    if (over) issues.push(`This final fee statement (${money(printedTotal())}) is higher than the most recent estimate (${money(base.total)}, version ${base.version}). It may exceed the estimate only if the project changed or a new fee schedule was adopted.` + ($('#notes').value.trim() ? '' : ' The notes to the applicant are empty; consider explaining the reason.'));
+    if (!c.groups.length) issues.push('No fees are selected.');
+    if (issues.length && !confirm(['This printout goes to the applicant. Please check:', '', ...issues.map(i => '• ' + i), '', 'Print anyway? Choose Cancel to go back.'].join('\n'))) return;
     stampDate = new Date();                          // one stamp for both the PDF and the estimate file
-    if ($('#pairSave').checked) downloadEstimate();
+    recordPrint();                                   // #2 revision history
+    if ($('#pairSave').checked) { downloadEstimate(); markSaved(); }
     buildPrint(); setPrintFooter(); document.title = docTitle();
     logoReady.then(() => requestAnimationFrame(() => window.print()));   // wait until the logo is ready
   });
-  window.addEventListener('beforeprint', () => { if (!stampDate) stampDate = new Date(); buildPrint(); setPrintFooter(); document.title = docTitle(); });   // title sets the saved PDF's file name
+  window.addEventListener('beforeprint', () => { if (!stampDate) { stampDate = new Date(); recordPrint(); } buildPrint(); setPrintFooter(); document.title = docTitle(); });   // title sets the saved PDF's file name
   window.addEventListener('afterprint', () => { stampDate = null; document.title = `Cary Development Fees and Charges Estimator (${S.label})`; });
   $('#saveBtn').addEventListener('click', () => {
     if (!Object.values(state.items).some(s => s.on) && !confirm('No fees are selected. Save the estimate file anyway?')) return;
-    stampDate = new Date(); const name = downloadEstimate(); stampDate = null;
-    const b = $('#banner'); b.textContent = `Saved “${name}”. Use Open saved estimate to load it later.`; b.classList.add('show');
+    stampDate = new Date(); const name = downloadEstimate(); stampDate = null; markSaved();
+    showBanner(`Saved “${name}”. Use Open saved estimate to load it later.`);
   });
   $('#openBtn').addEventListener('click', () => $('#openFile').click());
   $('#openFile').addEventListener('change', e => {
@@ -1837,15 +2124,32 @@ function bind() {
   });
   $('#resetBtn').addEventListener('click', () => {
     if (!confirm('Clear all selected fees, project details and notes?')) return;
-    state.items = {}; state.project = {};
+    state.items = {}; state.project = {}; state.history = [];
     $$('[data-project]').forEach(i => i.value = ''); $('#notes').value = ''; $('#search').value = '';
-    $('#presetSelect').value = ''; $('#banner').classList.remove('show');
+    $('#presetSelect').value = ''; $('#banner').classList.remove('show'); syncPresetButtons();
     $('input[name=docType][value=estimate]').checked = true;
-    renderPanels(); applyVisibility(); update();
+    renderPanels(); applyVisibility(); update(); markSaved();
   });
+  $('#notes').addEventListener('input', scheduleAutosave);
+  $$('input[name=docType]').forEach(r => r.addEventListener('change', update));
+  $('#copyBtn').addEventListener('click', copyFeeLines);
+  $('#presetSave').addEventListener('click', saveCurrentAsType);
+  $('#presetDelete').addEventListener('click', deleteType);
+  $('#presetSelect').addEventListener('change', syncPresetButtons);
+  $('#schedBtn').addEventListener('click', openSchedule);
+  ['#schedFy', '#schedCmp', '#schedChanged'].forEach(sel => $(sel).addEventListener('change', renderSchedule));
+  $('#schedClose').addEventListener('click', () => $('#schedDlg').close());
+  $('#schedCopy').addEventListener('click', async () => {
+    if (!schedLast) return;
+    const head = ['Section', 'Fee', 'ID', 'SB445'].concat(schedLast.cols.slice(2));
+    const t = tableFrom(head, schedLast.rows); const ok = await copyRich(t.html, t.text);
+    $('#schedSum').textContent = ok ? `Copied ${schedLast.rows.length} rows. Paste into Excel to review.` : 'The browser blocked copying.';
+  });
+  window.addEventListener('beforeunload', e => { if (isDirty()) { e.preventDefault(); e.returnValue = ''; } });
 }
 
 buildIndex(); renderHeader(); renderPresets(); renderTabs(); renderPanels(); bind(); applyVisibility(); update();
+markSaved(); autosaveReady = true; offerDraft();
 })();
 </script>
 </body>
