@@ -184,6 +184,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .ledger textarea { min-height: 4.5rem; resize: vertical; }
 .ledger .actions { display: flex; gap: .5rem; margin-top: .75rem; }
 .ledger .actions .btn-primary { flex: 1; }
+.ledger .actions-file { margin-top: .5rem; }
+.ledger .actions-file .btn { flex: 1; }
+.ledger .pair-check { margin-top: .55rem; font-size: .8rem; }
 .sf-hint { display: block; margin-top: .2rem; font-size: .74rem; color: var(--ink-3); }
 .sf-hint .btn-link { font-size: .74rem; padding: 0 0 0 .3rem; }
 .print-hint { margin: .5rem 0 0; font-size: .76rem; color: var(--ink-3); }
@@ -320,6 +323,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
       <button class="btn btn-primary" id="printBtn" type="button">Print or save as PDF</button>
       <button class="btn" id="resetBtn" type="button">Clear all</button>
     </div>
+    <label class="check pair-check"><input type="checkbox" id="pairSave" checked> Also download a matching estimate file when printing</label>
+    <div class="actions actions-file">
+      <button class="btn" id="saveBtn" type="button">Save estimate file</button>
+      <button class="btn" id="openBtn" type="button">Open saved estimate</button>
+      <input type="file" id="openFile" accept=".json,application/json" hidden>
+    </div>
+    <p class="print-hint">The estimate file has the same name as the PDF, ending in the date and time (for example, 2026.10.01-14.31). Open it later to pick up where you left off.</p>
     <p class="print-hint">The printout is written for the applicant. SB445 classifications and incomplete lines are left off.</p>
     <p class="print-hint">In the print window, open <strong>More settings</strong> and uncheck <strong>Headers and footers</strong>. The estimate prints its own page numbers.</p>
   </aside>
@@ -1618,9 +1628,16 @@ const TOWN_CONTACT = 'Town of Cary | 316 N. Academy St., Cary, NC 27513 | (919) 
 /* Lines that are incomplete ($0 with no quantity/selection) never go on a public document. */
 const printableLines = c => c.groups.map(gr => ({ ...gr, lines: gr.lines.filter(l => !(l.missing && l.amount === 0)) }))
   .map(gr => ({ ...gr, total: gr.lines.reduce((t, l) => t + l.amount, 0) })).filter(gr => gr.lines.length);
+/* Version stamp: date and time at the end of the PDF and estimate file names, e.g. 2026.10.01-14.31.
+   (Colons are not allowed in Windows file names, so the time uses a period.) */
+let stampDate = null;            // set when printing or saving; shared so the PDF and file names match
+const pad2 = n => String(n).padStart(2, '0');
+const makeStamp = d => `${d.getFullYear()}.${pad2(d.getMonth() + 1)}.${pad2(d.getDate())}-${pad2(d.getHours())}.${pad2(d.getMinutes())}`;
+const safeName = t => String(t).replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, ' ').trim();
 function docTitle() {
   const final = $('input[name=docType]:checked').value === 'final'; const P = state.project;
-  return ['Town of Cary', final ? 'Final Fee Statement' : 'Fee Estimate', P.app, P.name].filter(x => x && String(x).trim()).join(' - ');
+  return safeName(['Town of Cary', final ? 'Final Fee Statement' : 'Fee Estimate', P.app, P.name, makeStamp(stampDate || new Date())]
+    .filter(x => x && String(x).trim()).join(' - '));
 }
 /* Page footer printed by the tool itself (bottom left: document name; bottom right: page numbers). */
 function setPrintFooter() {
@@ -1635,7 +1652,7 @@ function buildPrint() {
   const grand = groups.reduce((t, g) => t + g.total, 0);
   const hasMin = groups.some(g => g.lines.some(l => l.missing));
   const final = $('input[name=docType]:checked').value === 'final';
-  const P = state.project; const now = new Date();
+  const P = state.project; const now = stampDate || new Date();
   const statusText = final
     ? '<strong>Final fee statement.</strong> This statement lists the fees due for this development approval under the fee schedule shown.'
     : '<strong>Fee estimate.</strong> This estimate lists the fees that may reasonably be assessed for this project, based on the project information shown below.';
@@ -1648,7 +1665,7 @@ function buildPrint() {
     <div class="p-head"><div class="p-head-text"><h1>${final ? 'Final Fee Statement' : 'Development Fee Estimate'}</h1>
       <p>${esc(S.title)}, effective ${esc(S.effective)}</p>
       <p>${esc(TOWN_CONTACT)}</p>
-      <p>Date: ${now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p></div>
+      <p>Date: ${now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}, ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</p></div>
       <span id="pLogoSlot"></span></div>
     <div class="p-status${final ? ' final' : ''}">${statusText}</div>
     <div class="p-grid">
@@ -1665,6 +1682,49 @@ function buildPrint() {
       <p>Fee schedule used: ${esc(S.label)} (${esc(S.source || S.title)}). Current fee schedules: ${esc(S.url)}. Provided under G.S. 160D-402.1 (S.L. 2026-59, Section 49).</p>
     </div>`;
   const slot = $('#pLogoSlot'); if (slot && LOGO_IMG) slot.replaceWith(LOGO_IMG);   // same preloaded image every time
+}
+
+/* ---------- save / open estimate file ---------- */
+const FILE_APP = 'cary-fee-estimator'; const FILE_FORMAT = 1;
+function estimateData() {
+  const items = {}; const names = {};
+  Object.entries(state.items).forEach(([id, s]) => { if (s.on) { items[id] = JSON.parse(JSON.stringify(s)); names[id] = lastNames[id] || id; } });
+  return { app: FILE_APP, format: FILE_FORMAT, savedAt: (stampDate || new Date()).toISOString(), version: makeStamp(stampDate || new Date()),
+    fy, docType: $('input[name=docType]:checked').value, project: { ...state.project }, notes: $('#notes').value, items, names };
+}
+function downloadEstimate() {
+  const blob = new Blob([JSON.stringify(estimateData(), null, 1)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = docTitle() + '.json';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  return a.download;
+}
+function loadEstimate(d, fileName) {
+  if (!d || d.app !== FILE_APP || !d.items) throw new Error('not an estimate file');
+  const anyOn = Object.values(state.items).some(s => s.on);
+  if (anyOn && !confirm('Replace the current estimate with the one in this file?')) return;
+  const msgs = [];
+  if (d.fy && FEE_SCHEDULES[d.fy]) {
+    if (d.fy !== fy) { fy = d.fy; S = resolveSchedule(fy); buildIndex(); if (!S.groups.find(g => g.id === activeGroup)) activeGroup = S.groups[0].id; }
+  } else if (d.fy) msgs.push(`The ${d.fy} fee schedule is not in this tool, so the fees were priced with ${S.label}.`);
+  state.items = {}; const dropped = [];
+  Object.entries(d.items).forEach(([id, saved]) => {
+    if (!index[id]) { dropped.push((d.names && d.names[id]) || id); return; }
+    const s = st(id); Object.assign(s, saved, { on: true });
+    if (!Array.isArray(s.rows)) s.rows = []; if (!Array.isArray(s.notes)) s.notes = [];
+  });
+  state.project = { ...(d.project || {}) };
+  $$('[data-project]').forEach(i => i.value = state.project[i.dataset.project] || '');
+  $('#notes').value = d.notes || '';
+  const dt = $(`input[name=docType][value="${d.docType === 'final' ? 'final' : 'estimate'}"]`); if (dt) dt.checked = true;
+  $('#presetSelect').value = ''; $('#search').value = '';
+  renderHeader(); renderTabs(); renderPanels();
+  const first = Object.keys(state.items).find(id => state.items[id].on); setTab(first ? index[first].group.id : activeGroup);
+  applyVisibility(); update();
+  if (dropped.length) msgs.push(`Not in the ${S.label} schedule, so left out: ${dropped.join('; ')}.`);
+  const when = d.version ? ` (version ${d.version})` : '';
+  const b = $('#banner');
+  b.textContent = `Opened “${fileName}”${when}. ${Object.values(state.items).filter(x => x.on).length} fees restored using the ${S.label} fee schedule. Adjust as needed, then print to save a new version.` + (msgs.length ? ' ' + msgs.join(' ') : '');
+  b.classList.add('show');
 }
 
 /* ---------- events ---------- */
@@ -1757,11 +1817,24 @@ function bind() {
       msg.push('', 'Print anyway? Choose Cancel to go back and complete them.');
       if (!confirm(msg.join('\n'))) return;
     }
-    buildPrint(); setPrintFooter();
+    stampDate = new Date();                          // one stamp for both the PDF and the estimate file
+    if ($('#pairSave').checked) downloadEstimate();
+    buildPrint(); setPrintFooter(); document.title = docTitle();
     logoReady.then(() => requestAnimationFrame(() => window.print()));   // wait until the logo is ready
   });
-  window.addEventListener('beforeprint', () => { buildPrint(); setPrintFooter(); document.title = docTitle(); });   // title sets the saved PDF's file name
-  window.addEventListener('afterprint', () => { document.title = `Cary Development Fees and Charges Estimator (${S.label})`; });
+  window.addEventListener('beforeprint', () => { if (!stampDate) stampDate = new Date(); buildPrint(); setPrintFooter(); document.title = docTitle(); });   // title sets the saved PDF's file name
+  window.addEventListener('afterprint', () => { stampDate = null; document.title = `Cary Development Fees and Charges Estimator (${S.label})`; });
+  $('#saveBtn').addEventListener('click', () => {
+    if (!Object.values(state.items).some(s => s.on) && !confirm('No fees are selected. Save the estimate file anyway?')) return;
+    stampDate = new Date(); const name = downloadEstimate(); stampDate = null;
+    const b = $('#banner'); b.textContent = `Saved “${name}”. Use Open saved estimate to load it later.`; b.classList.add('show');
+  });
+  $('#openBtn').addEventListener('click', () => $('#openFile').click());
+  $('#openFile').addEventListener('change', e => {
+    const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+    f.text().then(t => loadEstimate(JSON.parse(t), f.name))
+      .catch(() => alert(`“${f.name}” could not be opened. Choose an estimate file (.json) saved from this tool. PDFs cannot be opened directly.`));
+  });
   $('#resetBtn').addEventListener('click', () => {
     if (!confirm('Clear all selected fees, project details and notes?')) return;
     state.items = {}; state.project = {};
