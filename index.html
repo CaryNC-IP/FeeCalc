@@ -74,6 +74,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .btn:hover { border-color: var(--navy); }
 .btn-open { background: rgba(255, 236, 150, .10); border-color: rgba(255, 228, 130, .32); color: #f1e6b8; }   /* subtle yellow tint */
 .btn-open:hover { background: rgba(255, 236, 150, .17); border-color: rgba(255, 228, 130, .5); }
+#presetSelect { background: rgba(255, 236, 150, .10); border-color: rgba(255, 228, 130, .32); color: #f1e6b8; }   /* same subtle yellow as Open Saved Estimate */
+#presetSelect:hover { border-color: rgba(255, 228, 130, .5); }
+#presetSelect option { background: var(--paper); color: var(--ink); }
+.btn-new { margin-left: auto; background: rgba(255, 120, 110, .10); border-color: rgba(255, 130, 120, .35); color: #f5c4be; }   /* subtle red */
+.btn-new:hover { background: rgba(255, 120, 110, .18); border-color: rgba(255, 130, 120, .55); }
 .btn-primary { background: var(--navy); border-color: var(--navy); color: #fff; }
 :root:not([data-theme="light"]) .btn-primary { color: #0e1a27; }
 .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
@@ -350,6 +355,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
       </div>
       <div class="toolbar-row">
         <label class="check"><input type="checkbox" id="onlySelected"> Show selected fees only</label>
+        <button class="btn btn-new" id="startNewBtn" type="button">Clear (Start New)</button>
       </div>
       <div class="banner" id="banner" role="status"></div>
     </div>
@@ -1574,12 +1580,17 @@ function renderTabs() {
   $('#tabs').innerHTML = S.groups.map(g =>
     `<button class="tab" role="tab" id="tab-${g.id}" aria-controls="panel-${g.id}" aria-selected="${g.id === activeGroup}" data-group="${g.id}">${esc(tabName(g.n))}<span class="chip" data-chip="${g.id}"></span></button>`).join('');
 }
+/* Fee sections start collapsed. Sections the user opens stay open when the panels are redrawn,
+   and sections with selected fees open after applying a type or opening a saved estimate. */
+const openSections = new Set();
+const openSelectedSections = () => { openSections.clear();
+  Object.keys(state.items).forEach(id => { if (state.items[id].on && index[id]) openSections.add(index[id].section.id); }); };
 function renderPanels() {
   $('#panels').innerHTML = S.groups.map(g => `
     <section class="panel${g.id === activeGroup ? ' active' : ''}" id="panel-${g.id}" role="tabpanel" aria-labelledby="tab-${g.id}" data-group="${g.id}">
       <h2 class="panel-title">${esc(g.n)}</h2>
       ${g.sections.map(sec => `
-        <details class="section" data-section="${sec.id}" data-sb="${sec.sb || 'yes'}" open>
+        <details class="section" data-section="${sec.id}" data-sb="${sec.sb || 'yes'}"${openSections.has(sec.id) ? ' open' : ''}>
           <summary><span class="section-name">${esc(sec.n)}</span><span class="section-meta" data-secmeta="${sec.id}"></span></summary>
           ${sec.note ? `<p class="section-note">${esc(sec.note)}</p>` : ''}
           <div class="items">${sec.items.map(it => `<div class="item" data-id="${it.id}"></div>`).join('')}</div>
@@ -1766,7 +1777,7 @@ function applyPreset(k) {
     defaultsOnCheck(it, s);
     added++; if (!firstGroup) firstGroup = index[id].group.id;
   });
-  renderPanels(); if (firstGroup) setTab(firstGroup);
+  openSelectedSections(); renderPanels(); if (firstGroup) setTab(firstGroup);
   $('#search').value = ''; applyVisibility(); update();
   const missing = Object.keys(state.items).filter(id => lastResults[id] && lastResults[id].missing).length;
   const b = $('#banner');
@@ -1982,7 +1993,7 @@ function loadEstimate(d, fileName, opts = {}) {
   $('#notes').value = d.notes || '';
   const dt = $(`input[name=docType][value="${d.docType === 'final' ? 'final' : 'estimate'}"]`); if (dt) dt.checked = true;
   $('#presetSelect').value = ''; $('#search').value = '';
-  renderHeader(); renderTabs(); renderPanels();
+  openSelectedSections(); renderHeader(); renderTabs(); renderPanels();
   const first = Object.keys(state.items).find(id => state.items[id].on); setTab(first ? index[first].group.id : activeGroup);
   applyVisibility(); update();
   if (dropped.length) msgs.push(`Not in the ${S.label} schedule, so left out: ${dropped.join('; ')}.`);
@@ -2216,7 +2227,7 @@ function applyUserType(t) {
   if (anyOn && !confirm('Replace the fees currently selected with this application type?')) return;
   state.items = {}; const skipped = [];
   Object.entries(t.items).forEach(([id, saved]) => { if (!index[id]) { skipped.push(id); return; } Object.assign(st(id), JSON.parse(JSON.stringify(saved)), { on: true }); });
-  renderPanels(); syncProjectSF();
+  openSelectedSections(); renderPanels(); syncProjectSF();
   const first = Object.keys(state.items).find(id => state.items[id].on); if (first) setTab(index[first].group.id);
   $('#search').value = ''; applyVisibility(); update();
   showBanner(`Applied “${t.n}”. ${Object.keys(t.items).length - skipped.length} fees are selected. Remove any that do not apply.` + (skipped.length ? ` Not in this fiscal year: ${skipped.join(', ')}.` : ''));
@@ -2409,8 +2420,14 @@ function bind() {
     $$('[data-project]').forEach(i => i.value = ''); $('#notes').value = ''; $('#search').value = '';
     $('#presetSelect').value = ''; $('#banner').classList.remove('show'); syncPresetButtons();
     $('input[name=docType][value=estimate]').checked = true;
-    renderPanels(); applyVisibility(); update(); markSaved();
+    openSections.clear(); renderPanels(); applyVisibility(); update(); markSaved();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+  $('#startNewBtn').addEventListener('click', () => $('#resetBtn').click());
+  $('#panels').addEventListener('toggle', e => {
+    const d = e.target; if (!d.classList || !d.classList.contains('section')) return;
+    d.open ? openSections.add(d.dataset.section) : openSections.delete(d.dataset.section);
+  }, true);
   $('#notes').addEventListener('input', scheduleAutosave);
   $$('input[name=docType]').forEach(r => r.addEventListener('change', update));
   $('#contPct').addEventListener('input', e => { state.contingency = e.target.value === '' ? 0 : e.target.value; update(); });
