@@ -41,7 +41,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Masthead */
-.masthead { background: var(--paper); border-bottom: 1px solid var(--rule); }
+.masthead { background: #0d1116; border-bottom: 1px solid var(--rule); }   /* a shade darker than the page so the header stands out */
 .masthead-inner { max-width: 1320px; margin: 0 auto; padding: 1.1rem 1.25rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: end; justify-content: space-between; }
 .title { margin: 0; font-size: 1.55rem; font-weight: 700; letter-spacing: -0.01em; color: var(--navy); line-height: 1.15; }
 .subtitle { margin: .3rem 0 0; color: var(--ink-2); font-size: .9rem; }
@@ -72,6 +72,8 @@ input[type=text], input[type=number], input[type=search], select, textarea {
 input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .btn { border: 1px solid var(--rule); background: var(--paper); border-radius: 6px; padding: .5rem .9rem; cursor: pointer; font-weight: 600; white-space: nowrap; }
 .btn:hover { border-color: var(--navy); }
+.btn-open { background: #fff7cc; border-color: #e9d987; color: #3d3300; }
+.btn-open:hover { background: #fff0a8; border-color: #d9c35a; }
 .btn-primary { background: var(--navy); border-color: var(--navy); color: #fff; }
 :root:not([data-theme="light"]) .btn-primary { color: #0e1a27; }
 .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
@@ -111,8 +113,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .section > summary::-webkit-details-marker { display: none; }
 .section > summary::before { content: ''; width: .5rem; height: .5rem; border-right: 2px solid var(--ink-3); border-bottom: 2px solid var(--ink-3); transform: rotate(-45deg); transition: transform .15s; flex: none; }
 .section[open] > summary::before { transform: rotate(45deg); }
-.section-name { font-weight: 600; font-size: 1rem; }
-.section-meta { margin-left: auto; font-size: .82rem; color: var(--ink-3); white-space: nowrap; }
+/* Section title bars: highlighted in an amber tint for faster scanning */
+.section > summary { background: var(--confirm-tint); border-radius: 7px; }
+.section[open] > summary { border-radius: 7px 7px 0 0; border-bottom: 1px solid color-mix(in srgb, var(--confirm) 35%, transparent); margin-bottom: .6rem; }
+.section > summary:hover { background: color-mix(in srgb, var(--confirm-tint) 80%, var(--confirm)); }
+.section > summary::before { border-color: var(--confirm); }
+.section-name { font-weight: 700; font-size: 1rem; color: var(--confirm); }
+.section-meta { margin-left: auto; font-size: .82rem; color: var(--ink-2); white-space: nowrap; }
 .section-note { margin: 0 1rem .6rem; font-size: .83rem; color: var(--ink-2); max-width: 75ch; }
 .items { border-top: 1px solid var(--rule-soft); }
 .item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .2rem 1rem; padding: .55rem 1rem; border-bottom: 1px solid var(--rule-soft); }
@@ -174,6 +181,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .mark.sb-yes { background: var(--yes); } .mark.sb-confirm { background: var(--confirm); } .mark.sb-no { background: var(--no); }
 .lline .star { color: var(--confirm); }
 .ledger-empty { color: var(--ink-3); font-size: .9rem; padding: .5rem 0 1rem; }
+.subtotals:empty { display: none; }
 .subtotals { border-top: 1px solid var(--rule); padding-top: .6rem; margin-top: .4rem; }
 .subtotals .lline { font-size: .84rem; color: var(--ink-2); }
 .grand { display: flex; justify-content: space-between; align-items: baseline; border-top: 2px solid var(--ink); margin-top: .5rem; padding-top: .55rem; }
@@ -187,7 +195,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .ledger .actions { display: flex; gap: .5rem; margin-top: .75rem; }
 .ledger .actions .btn-primary { flex: 1; }
 .ledger .actions-file { margin-top: .5rem; }
-.ledger .actions-file .btn { flex: 1; }
+.ledger .actions-file { flex-wrap: wrap; }
+.ledger .actions-file .btn { flex: 1 1 auto; }
 .ledger .pair-check { margin-top: .55rem; font-size: .8rem; }
 .compare { margin-top: .75rem; padding: .6rem .7rem; border: 1px solid var(--rule); border-radius: 6px; font-size: .82rem; }
 .compare.hidden { display: none; }
@@ -201,6 +210,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .compare ul { margin: .3rem 0 0; padding-left: 1.1rem; } .compare li { margin: .15rem 0; }
 .banner .btn { margin: .4rem .4rem 0 0; padding: .3rem .7rem; font-size: .82rem; }
 .preset-links { display: flex; gap: 1rem; margin-top: .25rem; font-size: .78rem; } .preset-links .btn-link { font-size: .78rem; } .preset-links .hidden { display: none; }
+.cont-row { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: .2rem .4rem; margin-top: .3rem; font-size: .84rem; color: var(--ink-2); }
+.cont-row label { white-space: nowrap; }
+.cont-row .cont-input { display: inline-flex; align-items: center; gap: .15rem; }
+.cont-row input { width: 3.3rem; padding: .15rem .3rem; text-align: right; font-size: .84rem; }
+.cont-row .dots { border-bottom: 1px dotted var(--ink-3); transform: translateY(-.3em); min-width: 1rem; }
+.cont-row small { grid-column: 1 / -1; font-size: .76rem; color: var(--ink-3); }
+.cont-row small:empty { display: none; }
+.cont-row.off .amt, .cont-row.off label { color: var(--ink-3); }
+.check-dlg { width: min(560px, 94vw); padding: 1.25rem 1.4rem 1.1rem; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); color: var(--ink); }
+.check-dlg::backdrop { background: rgba(0, 0, 0, .55); }
+.check-title { margin: 0 0 .6rem; font-size: 1.45rem; font-weight: 700; color: #ff5c57; }
+.check-list { margin: 0 0 1.1rem; padding-left: 1.2rem; font-size: .95rem; line-height: 1.45; }
+.check-list li + li { margin-top: .45rem; }
+.check-actions { display: flex; justify-content: flex-end; gap: .6rem; }
 .sched-dlg { width: min(1150px, 96vw); max-height: 92vh; padding: 0; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); color: var(--ink); }
 .sched-dlg::backdrop { background: rgba(0, 0, 0, .55); }
 .sched-dlg[open] { display: flex; flex-direction: column; }
@@ -226,6 +249,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .sf-hint { display: block; margin-top: .2rem; font-size: .74rem; color: var(--ink-3); }
 .sf-hint .btn-link { font-size: .74rem; padding: 0 0 0 .3rem; }
 .print-hint { margin: .5rem 0 0; font-size: .76rem; color: var(--ink-3); }
+.print-hint:empty { display: none; }
+#pdfFolderHint { padding: .45rem .6rem; border: 1px solid var(--rule); border-radius: 6px; color: var(--ink-2); font-size: .8rem; line-height: 1.4; }
+#pdfFolderHint strong { color: var(--ink); }
+.save-folder { margin: .55rem 0 0; padding: .45rem .6rem; border: 1px solid var(--rule); border-radius: 6px; font-size: .8rem; color: var(--ink-2); line-height: 1.4; }
+.save-folder strong { color: var(--ink); word-break: break-word; }
+.save-folder.unset { border-color: var(--confirm); background: var(--confirm-tint); }
+.save-folder .btn-link { font-size: .8rem; }
+@media print { .save-folder { display: none; } }
 
 /* Mobile total bar */
 .mobile-bar { display: none; }
@@ -270,6 +301,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
   .p-table tr { break-inside: avoid; }
   .p-totals { width: 45%; margin-left: auto; font-size: 9.5pt; }
   .p-totals div { display: flex; justify-content: space-between; padding: 2pt 0; }
+  .p-totals .c { color: #333; }
   .p-totals .g { border-top: 1.5pt solid #000; font-weight: 700; font-size: 12pt; margin-top: 3pt; padding-top: 4pt; }
   .p-note, .p-legal { font-size: 8.5pt; color: #333; margin-top: 10pt; }
   .p-legal p { margin: 0 0 4pt; }
@@ -312,13 +344,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
         <span class="search-hint" id="searchHint">Ignores hyphens and small typos. Try abbreviations like TCO or BDA, or an amount.</span>
       </div>
       <div class="toolbar-row">
-        <label class="check"><input type="checkbox" id="hideNonSb"> Hide fees not covered by SB445</label>
         <label class="check"><input type="checkbox" id="onlySelected"> Show selected fees only</label>
-        <div class="legend" aria-label="SB445 classification legend">
-          <span class="sb sb-yes">SB445 fee</span>
-          <span class="sb sb-confirm" title="SB445 coverage not yet determined">Possible SB445 fee</span>
-          <span class="sb sb-no">Not SB445</span>
-        </div>
       </div>
       <div class="banner" id="banner" role="status"></div>
     </div>
@@ -347,6 +373,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
     <p class="fy-note" id="fyNote"></p>
     <div id="ledgerLines"></div>
     <div class="subtotals" id="subtotals"></div>
+    <div class="cont-row" id="contRow">
+      <label for="contPct">Calculation contingency</label>
+      <span class="cont-input"><input type="number" id="contPct" min="0" max="100" step="1" inputmode="decimal" aria-describedby="contNote"><span>%</span></span>
+      <span class="dots"></span><span class="amt num" id="contAmt">$0.00</span>
+      <small id="contNote"></small>
+    </div>
     <div class="grand"><span>Total</span><span class="num" id="grandTotal">$0.00</span></div>
     <div class="compare hidden" id="compare"></div>
     <p class="ledger-warn hidden" id="ledgerWarn"></p>
@@ -362,23 +394,30 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
       <button class="btn btn-primary" id="printBtn" type="button">Print or save as PDF</button>
       <button class="btn" id="resetBtn" type="button">Clear all</button>
     </div>
-    <label class="check pair-check"><input type="checkbox" id="pairSave" checked> Also download a matching estimate file when printing</label>
     <div class="actions actions-file">
-      <button class="btn" id="saveBtn" type="button">Save estimate file</button>
-      <button class="btn" id="openBtn" type="button">Open saved estimate</button>
+      <button class="btn btn-open" id="openBtn" type="button">Open saved estimate</button>
+      <button class="btn" id="copyBtn" type="button">Copy Fee Lines to Excel</button>
       <input type="file" id="openFile" accept=".json,application/json" hidden>
     </div>
-    <div class="actions actions-file">
-      <button class="btn" id="copyBtn" type="button">Copy fee lines</button>
-    </div>
-    <p class="print-hint">The estimate file has the same name as the PDF, ending in the date and time (for example, 2026.10.01-14.31). Open it later to pick up where you left off.</p>
-    <p class="print-hint">The printout is written for the applicant. SB445 classifications and incomplete lines are left off.</p>
+    <p class="save-folder" id="saveFolder"></p>
+    <p class="print-hint">Each printout also saves a matching estimate file with the same name, ending in the date and time (for example, 2026.10.01-14.31). Use Open saved estimate to pick up where you left off.</p>
+    <p class="print-hint" id="pdfFolderHint"></p>
+    <p class="print-hint">The printout is written for the applicant. Incomplete lines are left off.</p>
     <p class="print-hint">In the print window, open <strong>More settings</strong> and uncheck <strong>Headers and footers</strong>. The estimate prints its own page numbers.</p>
   </aside>
 </div>
 
 <div class="mobile-bar"><span>Total <strong class="num" id="mobileTotal">$0.00</strong></span><a class="btn-link" href="#ledger">View estimate</a></div>
 <div id="printArea"></div>
+
+<dialog id="checkDlg" class="check-dlg" aria-labelledby="checkTitle">
+  <h2 id="checkTitle" class="check-title">Please check:</h2>
+  <ul id="checkList" class="check-list"></ul>
+  <div class="check-actions">
+    <button class="btn" type="button" id="checkBack">Go back</button>
+    <button class="btn btn-primary" type="button" id="checkGo">Print anyway</button>
+  </div>
+</dialog>
 
 <dialog id="schedDlg" class="sched-dlg" aria-labelledby="schedTitle">
   <div class="sched-head">
@@ -406,7 +445,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
    switches fiscal years.
 
    Item types (t):
-     flat    fixed amount (a); set qty:true to allow a quantity, unit names it;
+     flat    fixed amount (a); set qty:true to allow a quantity, unit names it (each:true shows "each" and "Quantity" instead);
              tradeNotes:true adds a trade + details entry for each permit, itemized separately
      rate    per-square-foot rate (r) with minimum (min); addon adds a per-unit charge
      unit    amount (a) per unit (unit); optional min, ceil (round qty up)
@@ -418,8 +457,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
              splitGroup:true puts the option's group name in front of the use name on those lines
      custom  user-entered amount
      double  equals the subtotal of the sections listed in "of"
-   SB445 classification (sb): 'yes' covered, 'confirm' possibly covered (coverage not yet determined), 'no' not covered
+   SB445 classification (sb): 'yes' covered, 'confirm' possibly covered (coverage not yet determined), 'no' not covered.
+     Kept for reference only; classifications are no longer shown on screen, in copied tables or on printouts.
    ===================================================================== */
+/* Shared folders. PDFs are saved by the browser's print window into path; estimate files (.json) are
+   saved by the tool into the jsonSub folder inside it. Browsers cannot open a folder from a typed path,
+   so each user picks the folder once with "Choose save folder"; the tool remembers it on that computer.
+   Picking either the main folder or the subfolder works. */
+const SAVE_FOLDER = { path: 'R:\\IPDrv\\FEE ESTIMATES - SB445', name: 'FEE ESTIMATES - SB445',
+  jsonSub: 'Open a Previous Fee Estimate' };
+
+/* Calculation contingency added to fee estimates (percent of the itemized fees). Staff can change it per estimate.
+   Not applied to final fee statements, which list the fees actually due. */
+const DEFAULT_CONTINGENCY = 30;
+
 const DEFAULT_YEAR = 'FY2027';   // used if the current fiscal year has not been loaded yet
 const PLANNED_YEARS = ['FY2028']; // listed as "not yet loaded" until added below
 
@@ -516,7 +567,7 @@ FY2027: {
   ]},
   { id: 'fire', n: 'Fire', sections: [
     { id: 'fire-const', n: 'Construction permits', sb: 'confirm',
-      note: 'Commercial estimates include fire alarm, sprinkler, suppression and BDA per the fee estimate procedure. Whether SB445 covers fire code permits is not yet determined.',
+      note: 'Commercial estimates include fire alarm, sprinkler, suppression and BDA per the fee estimate procedure.',
       items: [
       { id: 'fire.alarm', n: 'Fire alarm system (installation or modification)', t: 'rate', r: 0.11, min: 125 },
       { id: 'fire.sprinkler', n: 'Fire sprinkler system (installation or modification)', t: 'rate', r: 0.11, min: 125 },
@@ -536,11 +587,16 @@ FY2027: {
       { id: 'fire.solar', n: 'Solar photovoltaic power system', t: 'flat', a: 100 },
       { id: 'fire.spray', n: 'Spray room, dip tank or booth (install or modify)', t: 'flat', a: 100 },
       { id: 'fire.tent', n: 'Temporary membrane structure, tent or stage canopy', t: 'flat', a: 100, qty: true, unit: 'structure',
-        note: 'Membrane structures or stage canopies over 400 SF; tents over 800 SF (open-sided tents up to 1,800 SF excepted).' },
-      { id: 'fire.tankin', n: 'Tank installation', t: 'flat', a: 180, qty: true, unit: 'tank' },
-      { id: 'fire.tankout', n: 'Tank removal', t: 'flat', a: 180, qty: true, unit: 'tank' }
+        note: 'Membrane structures or stage canopies over 400 SF; tents over 800 SF (open-sided tents up to 1,800 SF excepted). Tank installation and removal are listed first under Fire › Operational permits.' }
     ]},
-    { id: 'fire-oper', n: 'Operational permits', sb: 'no', items: [
+    { id: 'fire-oper', n: 'Operational permits', sb: 'no',
+      note: 'The most commonly used permits are listed first; the rest follow in fee schedule order.',
+      items: [
+      { id: 'op.tents', n: 'Temporary membrane structures, tents and canopies', t: 'flat', a: 100,
+        note: 'The operational permit used for temporary events.' },
+      { id: 'op.blasting', n: 'Explosives blasting permit (30 days)', t: 'flat', a: 100 },
+      { id: 'fire.tankin', n: 'Tank installation', t: 'flat', a: 180, qty: true, unit: 'tank', sb: 'confirm' },
+      { id: 'fire.tankout', n: 'Tank removal', t: 'flat', a: 180, qty: true, unit: 'tank', sb: 'confirm' },
       { id: 'op.aerosol', n: 'Aerosol products', t: 'flat', a: 100 },
       { id: 'op.amusement', n: 'Amusement buildings', t: 'flat', a: 100 },
       { id: 'op.aviation', n: 'Aviation facilities', t: 'flat', a: 100 },
@@ -584,10 +640,8 @@ FY2027: {
       { id: 'op.heliport', n: 'Rooftop heliports', t: 'flat', a: 100 },
       { id: 'op.spraying', n: 'Spraying or dipping', t: 'flat', a: 100 },
       { id: 'op.tires', n: 'Storage of scrap tires and tire by-products', t: 'flat', a: 100 },
-      { id: 'op.tents', n: 'Temporary membrane structures, tents and canopies', t: 'flat', a: 100 },
       { id: 'op.tirerebuild', n: 'Tire rebuilding plants', t: 'flat', a: 100 },
-      { id: 'op.burn', n: 'Burn permit, air curtain burn only (30 days)', t: 'flat', a: 100 },
-      { id: 'op.blasting', n: 'Explosives blasting permit (30 days)', t: 'flat', a: 100 }
+      { id: 'op.burn', n: 'Burn permit, air curtain burn only (30 days)', t: 'flat', a: 100 }
     ]},
     { id: 'fire-insp', n: 'Fire inspections outside Town limits (ETJ)', sb: 'no',
       note: 'Initial inspection fees apply only to inspections outside Cary Town limits in the ETJ.',
@@ -646,8 +700,7 @@ FY2027: {
       { id: 'rz.pdd', n: 'Planned Development District rezoning or amendment', t: 'flat', a: 4000 },
       { id: 'rz.minorpdd', n: 'Minor Planned Development District', t: 'flat', a: 3500 },
       { id: 'rz.cpa', n: 'Comprehensive plan amendment', t: 'flat', a: 3000 },
-      { id: 'ann.gte2', n: 'Owner-initiated annexation petition, 2 acres or more', t: 'flat', a: 800, sb: 'confirm',
-        note: 'Annexation is authorized outside Chapter 160D, so SB445 coverage is not yet determined.' },
+      { id: 'ann.gte2', n: 'Owner-initiated annexation petition, 2 acres or more', t: 'flat', a: 800, sb: 'confirm' },
       { id: 'ann.lt2', n: 'Owner-initiated annexation petition, under 2 acres', t: 'flat', a: 400, sb: 'confirm' }
     ]},
     { id: 'qj', n: 'Special use, variances, appeals & hearings', sb: 'yes', items: [
@@ -690,8 +743,7 @@ FY2027: {
     ]},
     { id: 'padmin', n: 'Planning administrative fees', sb: 'yes', items: [
       { id: 'padm.refund', n: 'Refund processing', t: 'flat', a: 125 },
-      { id: 'padm.row', n: 'Right-of-way closure request (includes advertising and recording)', t: 'flat', a: 2500, sb: 'confirm',
-        note: 'Street closures are authorized outside Chapter 160D, so SB445 coverage is not yet determined.' }
+      { id: 'padm.row', n: 'Right-of-way closure request (includes advertising and recording)', t: 'flat', a: 2500, sb: 'confirm' }
     ]}
   ]},
   { id: 'site', n: 'Site & infrastructure', sections: [
@@ -721,13 +773,14 @@ FY2027: {
     ]},
     { id: 'street', n: 'Street & greenway inspections', sb: 'yes', items: [
       { id: 'st.public', n: 'Public streets (including widening)', t: 'unit', a: 1.75, unit: 'linear lane foot' },
-      { id: 'st.private', n: 'Private streets and fire lanes', t: 'unit', a: 1.75, unit: 'linear lane foot' },
+      { id: 'st.private', n: 'Private streets', t: 'unit', a: 1.75, unit: 'linear lane foot' },
+      { id: 'st.firelane', n: 'Fire lanes', t: 'unit', a: 1.75, unit: 'linear lane foot',
+        note: 'The fee schedule lists private streets and fire lanes together.' },
       { id: 'st.curb', n: 'Curb cut/encroachment (residential driveway or drainage)', t: 'flat', a: 125, qty: true, unit: 'curb cut' },
       { id: 'st.rr', n: 'Street re-inspection', t: 'flat', a: 100, qty: true, unit: 're-inspection' },
       { id: 'st.greenway', n: 'Public greenway inspection', t: 'unit', a: 1.50, unit: 'linear lane foot' }
     ]},
     { id: 'util', n: 'Utility extension permits & inspections', sb: 'confirm',
-      note: 'SB445 coverage not yet determined; these relate to public utility construction rather than Chapter 160D permits.',
       items: [
       { id: 'ue.water', n: 'Water system extension permit (public)', t: 'flat', a: 150, qty: true, unit: 'extension' },
       { id: 'ue.sewer', n: 'Gravity sewer extension, pump station and force main permit (public)', t: 'flat', a: 480, qty: true, unit: 'extension' },
@@ -735,8 +788,11 @@ FY2027: {
       { id: 'ui.water', n: 'Water line inspection', t: 'unit', a: 1.25, unit: 'linear foot' },
       { id: 'ui.reclaimed', n: 'Reclaimed water line inspection', t: 'unit', a: 1.25, unit: 'linear foot' },
       { id: 'ui.sewer', n: 'Sewer line inspection', t: 'unit', a: 1.25, unit: 'linear foot' },
-      { id: 'ui.tap', n: 'Water and sewer tap inspection', t: 'unit', a: 100, unit: 'tap' },
-      { id: 'ui.rtap', n: 'Reclaimed water and sewer tap inspection', t: 'unit', a: 100, unit: 'tap' },
+      { id: 'ui.tap', n: 'Water tap inspection', t: 'unit', a: 100, unit: 'tap' },
+      { id: 'ui.stap', n: 'Sewer tap inspection', t: 'unit', a: 100, unit: 'tap',
+        note: 'Use for every sewer tap, including projects with reclaimed water service. The fee schedule lists water, reclaimed water and sewer taps together at $100 per tap.' },
+      { id: 'ui.rtap', n: 'Reclaimed water tap inspection', t: 'unit', a: 100, unit: 'tap',
+        note: 'Reclaimed water taps only; enter the sewer tap under Sewer tap inspection.' },
       { id: 'ui.pump', n: 'Pump station construction inspection', t: 'unit', a: 1500, unit: 'pump station' },
       { id: 'ui.abandon', n: 'Abandonment procedures (Policy Statement 44)', t: 'flat', a: 250, qty: true, unit: 'occurrence' },
       { id: 'ui.rr', n: 'Utility re-inspection', t: 'flat', a: 100, qty: true, unit: 're-inspection' }
@@ -833,12 +889,22 @@ FY2027: {
           { k: 'tennis', g: 'Recreational', n: 'Tennis court', unit: 'court', a: { central: 3815, base: 5438 } }
         ]}
     ]},
+    { id: 'school', n: 'Chatham County school fees', sb: 'confirm',
+      note: 'Applies to residential development in the Chatham County portion of Cary.',
+      items: [
+      { id: 'school.chatham.res', n: 'Chatham County school fee, residential dwelling unit', t: 'flat', a: 3500 },
+      { id: 'school.chatham.adu', n: 'Chatham County school fee, residential accessory dwelling unit', t: 'flat', a: 1100 },
+      { id: 'school.chatham.mf', n: 'Chatham County school fee, multifamily', t: 'flat', a: 1100, qty: true, each: true }
+    ]},
     { id: 'pil', n: 'Payments in lieu', sb: 'yes', items: [
       { id: 'pil.rec', n: 'Multi-family recreation fund payment', t: 'unit', a: 4263, unit: 'dwelling unit',
         note: 'Rate as of July 1, 2026. The rate in effect when the plan is approved applies; due before building permit issuance.' },
       { id: 'pil.land', n: 'Payment in lieu of land dedication (residential subdivision)', t: 'custom', note: 'Calculated per LDO Section 8.2; due before plat approval.' },
       { id: 'pil.street', n: 'Street or sidewalk payment in lieu', t: 'custom', note: 'Per LDO Section 8.1.5; due before construction package issuance.' },
-      { id: 'pil.light', n: 'Street lighting payment in lieu', t: 'custom', note: 'Per LDO Section 8.1; due before construction package issuance.' }
+      { id: 'pil.light', n: 'Street lighting payment in lieu', t: 'custom', note: 'Per LDO Section 8.1; due before construction package issuance.' },
+      { id: 'pil.bike', n: 'Bike lane payment in lieu', t: 'custom', note: 'Amount per sealed engineer\u2019s estimate.' },
+      { id: 'pil.reclaimed', n: 'Reclaimed water line payment in lieu', t: 'custom', sb: 'confirm',
+        note: 'Amount per sealed engineer\u2019s estimate.' }
     ]},
     { id: 'conn', n: 'Utility connections & meters', sb: 'no',
       note: 'Town-performed taps and meter installations. These are service charges, not system development fees, but the fee estimate procedure includes them.',
@@ -971,6 +1037,7 @@ FY2026: {
     'si.sf': { a: 100 },
     'si.denuded': { a: 515 },
     'si.field': { a: 75 },
+    'st.firelane': { a: 0.40 },   // FY2026 fire lane rate confirmed by Town staff (Oct 2026)
     'pil.rec': { a: 4005, note: 'Rate as of July 1, 2025. The rate in effect when the plan is approved applies; due before building permit issuance.' },
     'sdf.res': { opts: {
         sf1: { a: { water: 1562, sewer: 2053 } },
@@ -1141,12 +1208,12 @@ const SEARCH_ALIASES = {
   pil: ['payment in lieu'], feeinlieu: ['payment in lieu'], recreation: ['recreation'],
   hrf: ['homeowners recovery'], expedite: ['express plan review'], expedited: ['express plan review'], fasttrack: ['express plan review'],
   resubmittal: ['re-review'], resubmit: ['re-review'], rereview: ['re-review'],
-  hydrant: ['hydrant'], flowtest: ['hydrant flow test'], tank: ['tank'], ust: ['tank'],
+  hydrant: ['hydrant'], flowtest: ['hydrant flow test'], tank: ['tank'], ust: ['tank'], ast: ['tank'],
   meter: ['meter'], tap: ['tap'], lateral: ['lateral', 'sewer tap'], backflow: ['backflow'],
   permit: ['permit'], sign: ['sign'], banner: ['time-limited sign'], awning: ['awning'],
   tent: ['tent', 'membrane'], stage: ['stage canopy'], event: ['events', 'tent'], festival: ['events', 'carnival'],
   foodtruck: ['accessory use'], chickens: ['accessory use'], bees: ['accessory use'], homeoccupation: ['accessory use'],
-  etj: ['etj', 'outside town limits'], dumpster: ['dumpster'], trailer: ['trailer'],
+  etj: ['etj', 'outside town limits'], bicycle: ['bike lane'], bikelane: ['bike lane'], dumpster: ['dumpster'], trailer: ['trailer'],
   sq: ['sf', 'square'], ft: ['sf', 'feet', 'foot'], sqft: ['sf', 'square feet'], squarefeet: ['sf'], squarefoot: ['sf']
 };
 
@@ -1164,7 +1231,7 @@ const num = v => { const n = parseFloat(String(v ?? '').replace(/,/g, '')); retu
 const money = n => '$' + (Math.round(n * 100) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const rateFmt = n => '$' + (Number.isInteger(n) ? n.toLocaleString('en-US') : n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 const qtyFmt = n => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
-const plural = (w, n) => n === 1 ? w : (/(s|sh|ch|x)$/.test(w) ? w + 'es' : w + 's');
+const plural = (w, n) => n === 1 ? w : /foot$/.test(w) ? w.replace(/foot$/, 'feet') : (/(s|sh|ch|x)$/.test(w) ? w + 'es' : w + 's');
 
 /* ---------- schedule resolution (supports baseOn + changes) ---------- */
 function resolveSchedule(fy) {
@@ -1191,7 +1258,7 @@ const CURRENT_FY = 'FY' + (today.getMonth() >= 6 ? today.getFullYear() + 1 : tod
 let fy = FEE_SCHEDULES[CURRENT_FY] ? CURRENT_FY : FEE_SCHEDULES[DEFAULT_YEAR] ? DEFAULT_YEAR : Object.keys(FEE_SCHEDULES).sort().slice(-1)[0];
 let S = resolveSchedule(fy);
 let activeGroup = S.groups[0].id;
-const state = { items: {}, project: {}, history: [] };   // history: printed versions (#2)
+const state = { items: {}, project: {}, history: [], contingency: DEFAULT_CONTINGENCY };   // history: printed versions (#2)
 let index = {};          // id -> { item, section, group }
 let searchIndex = {};    // id -> { id, tokens, joins, amounts }
 
@@ -1345,7 +1412,7 @@ function syncProjectSF() {
 /* ---------- basis text ---------- */
 function basisText(it) {
   switch (it.t) {
-    case 'flat': return rateFmt(it.a) + (it.qty ? ' per ' + (it.unit || 'each') : '');
+    case 'flat': return rateFmt(it.a) + (it.qty ? (it.each ? ' each' : ' per ' + (it.unit || 'each')) : '');
     case 'rate': return `${rateFmt(it.r)}/SF, ${rateFmt(it.min)} minimum` + (it.addon ? `, plus ${rateFmt(it.addon.a)} per unit` : '');
     case 'unit': return `${rateFmt(it.a)} per ${it.unit}` + (it.ceil ? ' or fraction' : '') + (it.min ? `, ${rateFmt(it.min)} minimum` : '');
     case 'hourly': return `${rateFmt(it.r)} per hour, ${rateFmt(it.min)} minimum`;
@@ -1386,7 +1453,7 @@ function computeItem(id, sectionTotals) {
         }
         break;
       }
-      push(it.n, it.qty ? `${qtyFmt(q)} ${plural(it.unit || 'each', q)} × ${rateFmt(it.a)}` : '', it.a * q, it.qty && q === 0);
+      push(it.n, it.qty ? (it.each ? `${qtyFmt(q)} × ${rateFmt(it.a)}` : `${qtyFmt(q)} ${plural(it.unit || 'each', q)} × ${rateFmt(it.a)}`) : '', it.a * q, it.qty && q === 0);
       if (it.qty && q === 0) out.warn = 'Enter a quantity.';
       break; }
     case 'rate': {
@@ -1517,7 +1584,7 @@ function renderItem(id) {
     const f = (label, field, attrs = '', val = s[field], cls = '') => `<div class="field ${cls}"><label>${label}<input type="${attrs.includes('text') ? 'text' : 'number'}" data-field="${field}" value="${esc(val)}" ${attrs.includes('text') ? '' : 'min="0" step="any" inputmode="decimal"'} ${attrs}></label></div>`;
     switch (it.t) {
       case 'flat':
-        if (it.qty) inputs = f(`Number of ${plural(it.unit || 'item', 2)}`, 'qty', 'step="1"');
+        if (it.qty) inputs = f(it.each ? 'Quantity' : `Number of ${plural(it.unit || 'item', 2)}`, 'qty', 'step="1"');
         if (it.tradeNotes) inputs += `<div class="tnotes" data-tnotes>${tradeNotesHtml(s)}</div>`;
         break;
       case 'rate': {
@@ -1543,7 +1610,7 @@ function renderItem(id) {
   el.innerHTML = `
     <label class="item-head"><input type="checkbox" data-toggle ${s.on ? 'checked' : ''}>
       <span><span class="item-name">${esc(it.n)}</span><span class="item-basis">${esc(basisText(it))}</span></span></label>
-    <div class="item-right"><span class="sb sb-${sb}" title="${SB_LABEL[sb]}">${sb === 'yes' ? 'SB445' : sb === 'confirm' ? 'Possible SB445 fee' : 'Not SB445'}</span><span class="line-amt num">—</span></div>
+    <div class="item-right"><span class="line-amt num">—</span></div>
     ${it.note ? `<p class="item-note">${esc(it.note)}</p>` : ''}
     ${s.on && inputs ? `<div class="item-inputs">${inputs}</div>` : ''}
     <p class="item-warn hidden"></p>`;
@@ -1570,7 +1637,7 @@ function lookupRow(it, r, i) {
 /* ---------- visibility (search / filters) ---------- */
 function applyVisibility() {
   const q = $('#search').value.trim().toLowerCase();
-  const hideNo = $('#hideNonSb').checked; const onlySel = $('#onlySelected').checked;
+  const onlySel = $('#onlySelected').checked;
   document.body.classList.toggle('searching', !!q || onlySel);
   let anyVisible = false;
   if (q) prepareSearch(q);
@@ -1578,7 +1645,6 @@ function applyVisibility() {
     const s = st(el.dataset.id);
     const score = q ? searchScore(q, searchIndex[el.dataset.id]) : 1;
     let show = score > 0;
-    if (hideNo && el.dataset.sb === 'no') show = false;
     if (onlySel && !s.on) show = false;
     el.classList.toggle('hidden', !show);
     el.dataset.score = show ? score : 0;
@@ -1645,12 +1711,17 @@ function renderLedger(R) {
   const c = collectLines(R);
   $('#ledgerLines').innerHTML = c.groups.length ? c.groups.map(({ g, lines }) => `
     <div class="lgroup"><h3>${esc(g.n)}</h3>${lines.map(l => `
-      <div class="lline${l.missing ? ' missing' : ''}"><span class="mark sb-${l.sb}" title="${SB_LABEL[l.sb]}"></span><span class="lbl">${esc(l.label)}${l.missing ? ' <b class="star">*</b>' : ''}${lineDetail(l) ? `<small>${esc(lineDetail(l))}</small>` : ''}</span><span class="dots"></span><span class="amt num">${money(l.amount)}</span></div>`).join('')}
+      <div class="lline${l.missing ? ' missing' : ''}"><span class="lbl">${esc(l.label)}${l.missing ? ' <b class="star">*</b>' : ''}${lineDetail(l) ? `<small>${esc(lineDetail(l))}</small>` : ''}</span><span class="dots"></span><span class="amt num">${money(l.amount)}</span></div>`).join('')}
     </div>`).join('') : '<p class="ledger-empty">Select fees on the left, or start from an application type.</p>';
-  $('#subtotals').innerHTML = c.groups.length ? [['yes', 'SB445 fees'], ['confirm', 'Possible SB445 fees'], ['no', 'Other fees']]
-    .filter(([k]) => c.sub[k] > 0).map(([k, n]) => `<div class="lline"><span class="mark sb-${k}"></span><span class="lbl">${n}</span><span class="dots"></span><span class="amt num">${money(c.sub[k])}</span></div>`).join('') : '';
-  $('#grandTotal').textContent = money(c.grand);
-  $('#mobileTotal').textContent = money(c.grand);
+  const cont = contAmount(c.grand); const final = docTypeNow() === 'final';
+  $('#subtotals').innerHTML = c.groups.length && !final ? `<div class="lline"><span class="lbl">Itemized fees</span><span class="dots"></span><span class="amt num">${money(c.grand)}</span></div>` : '';
+  const pctEl = $('#contPct'); if (document.activeElement !== pctEl) pctEl.value = state.contingency;
+  pctEl.disabled = final;
+  $('#contRow').classList.toggle('off', !contApplies());
+  $('#contAmt').textContent = final ? 'Not applied' : money(cont);
+  $('#contNote').textContent = final ? 'Final fee statements list the fees due, so no contingency is added.' : '';
+  $('#grandTotal').textContent = money(c.grand + cont);
+  $('#mobileTotal').textContent = money(c.grand + cont);
   const w = $('#ledgerWarn');
   w.textContent = c.missing ? `* ${c.missing} ${c.missing === 1 ? 'line needs' : 'lines need'} a quantity or selection. Minimum fees or $0 are shown until entered.` : '';
   w.classList.toggle('hidden', !c.missing);
@@ -1722,6 +1793,7 @@ function buildPrint() {
   const c = collectLines(lastResults);
   const groups = printableLines(c);
   const grand = groups.reduce((t, g) => t + g.total, 0);
+  const cont = contAmount(grand);
   const hasMin = groups.some(g => g.lines.some(l => l.missing));
   const final = $('input[name=docType]:checked').value === 'final';
   const P = state.project; const now = stampDate || new Date();
@@ -1747,7 +1819,10 @@ function buildPrint() {
       ${field('Project square footage', num(P.sf) > 0 ? qtyFmt(num(P.sf)) + ' SF' : '')}${field('Prepared by', P.prepared)}
     </div>
     ${groups.length ? `<table class="p-table"><thead><tr><th>Fee</th><th>Basis and assumptions</th><th class="r">Amount</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="p-totals"><div class="g"><span>${final ? 'Total due' : 'Estimated total'}</span><span>${money(grand)}</span></div></div>
+    <div class="p-totals">${cont > 0 ? `<div><span>Itemized fees</span><span>${money(grand)}</span></div>
+      <div class="c"><span>Calculation contingency (${pctFmt(contPct())})</span><span>${money(cont)}</span></div>` : ''}
+      <div class="g"><span>${final ? 'Total due' : 'Estimated total'}</span><span>${money(grand + cont)}</span></div></div>
+    ${cont > 0 ? `<p class="p-note">The estimated total includes a ${pctFmt(contPct())} calculation contingency on the itemized fees to allow for changes as project information is confirmed.</p>` : ''}
     ${hasMin ? `<p class="p-note">* Minimum fee shown. The final amount will be based on confirmed project information.</p>` : ''}` : '<p>No fees are listed.</p>'}
     ${notes ? `<div class="p-note"><strong>Notes:</strong><br>${esc(notes).replace(/\n/g, '<br>')}</div>` : ''}
     <div class="p-legal">
@@ -1764,13 +1839,113 @@ function estimateData() {
   Object.entries(state.items).forEach(([id, s]) => { if (s.on) { items[id] = JSON.parse(JSON.stringify(s)); names[id] = lastNames[id] || id; } });
   return { app: FILE_APP, format: FILE_FORMAT, savedAt: (stampDate || new Date()).toISOString(), version: makeStamp(stampDate || new Date()),
     fy, docType: $('input[name=docType]:checked').value, project: { ...state.project }, notes: $('#notes').value, items, names,
+    contingency: state.contingency,
     history: state.history };
 }
-function downloadEstimate() {
-  const blob = new Blob([JSON.stringify(estimateData(), null, 1)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = docTitle() + '.json';
+function downloadBlob(blob, name) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-  return a.download;
+  return name;
+}
+
+/* ---------- save folder (Chrome and Edge: File System Access API) ----------
+   The chosen folder is remembered in this browser (IndexedDB). Each session the browser may ask once
+   for permission to save there. Anything that fails falls back to a normal download. */
+const FOLDER_API = typeof window.showDirectoryPicker === 'function';
+let saveDir = null;            // FileSystemDirectoryHandle
+let folderPromptShown = false; // remind once per session when printing without a folder
+function idb() {
+  return new Promise((res, rej) => { const q = indexedDB.open('cary-fee-estimator', 1);
+    q.onupgradeneeded = () => q.result.createObjectStore('handles'); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); });
+}
+async function idbDo(mode, fn) {
+  const db = await idb(); return new Promise((res, rej) => { const tx = db.transaction('handles', mode); const r = fn(tx.objectStore('handles'));
+    tx.oncomplete = () => res(r && r.result); tx.onerror = () => rej(tx.error); });
+}
+async function loadSaveFolder() {
+  if (!FOLDER_API) return renderSaveFolder();
+  try { saveDir = (await idbDo('readonly', st => st.get('saveFolder'))) || null; } catch (e) { saveDir = null; }
+  renderSaveFolder();
+}
+function renderSaveFolder() {
+  const el = $('#saveFolder');
+  const hint = `<strong>PDFs:</strong> the print window saves the PDF, not this tool. The first time, set Destination to <strong>Save as PDF</strong>, choose Save, and go to <strong>${esc(SAVE_FOLDER.path)}</strong>. The browser remembers that folder after that.`;
+  $('#pdfFolderHint').innerHTML = hint;
+  if (!FOLDER_API) { el.classList.remove('unset'); el.innerHTML = `Matching estimate files save to your Downloads folder. To save them to <strong>${esc(SAVE_FOLDER.path)}</strong> automatically, use Chrome or Edge.`; return; }
+  el.classList.toggle('unset', !saveDir);
+  el.innerHTML = saveDir
+    ? `Matching estimate files save to <strong>${esc(jsonWhere())}</strong> · <button class="btn-link" type="button" id="chooseFolderBtn">Change Saved Folder</button>`
+    : `Matching estimate files save to your Downloads folder. <button class="btn-link" type="button" id="chooseFolderBtn">Choose save folder</button> and pick <strong>${esc(SAVE_FOLDER.path)}</strong>.`;
+}
+async function chooseSaveFolder() {
+  if (!FOLDER_API) return false;
+  let dir;
+  try { dir = await window.showDirectoryPicker({ id: 'fee-estimates', mode: 'readwrite', ...(saveDir ? { startIn: saveDir } : {}) }); }
+  catch (e) { return false; }   // canceled
+  if (!isKnownFolder(dir) &&
+      !confirm(`You chose “${dir.name}”. The shared folder for fee estimates is ${SAVE_FOLDER.path}.\n\nUse “${dir.name}” anyway? Choose Cancel to keep the current setting.`)) return false;
+  saveDir = dir;
+  try { await idbDo('readwrite', st => st.put(dir, 'saveFolder')); } catch (e) { /* remembered for this session only */ }
+  renderSaveFolder();
+  return true;
+}
+const jsonPath = () => SAVE_FOLDER.path + '\\' + SAVE_FOLDER.jsonSub;
+const isKnownFolder = d => d && (d.name === SAVE_FOLDER.name || d.name === SAVE_FOLDER.jsonSub);
+/* Folder that estimate files go into: the subfolder inside the chosen main folder (created if missing). */
+async function jsonDir(create) {
+  if (!saveDir) return null;
+  if (saveDir.name === SAVE_FOLDER.jsonSub || saveDir.name !== SAVE_FOLDER.name) return saveDir;
+  return saveDir.getDirectoryHandle(SAVE_FOLDER.jsonSub, { create });
+}
+const jsonWhere = () => !saveDir ? '' : isKnownFolder(saveDir) ? jsonPath() : saveDir.name;
+async function folderWritable(ask) {
+  if (!saveDir) return false;
+  try {
+    const opt = { mode: 'readwrite' };
+    if ((await saveDir.queryPermission(opt)) === 'granted') return true;
+    return ask && (await saveDir.requestPermission(opt)) === 'granted';
+  } catch (e) { return false; }
+}
+async function uniqueName(dir, name) {
+  const dot = name.lastIndexOf('.'); const base = name.slice(0, dot), ext = name.slice(dot);
+  for (let i = 1; i < 100; i++) {
+    const n = i === 1 ? name : `${base} (${i})${ext}`;
+    try { await dir.getFileHandle(n); } catch (e) { return n; }   // not found: free to use
+  }
+  return name;
+}
+/* Saves the estimate file. Data and name are captured right away (stampDate), then written.
+   Returns { name, where } where "where" is the folder name or 'Downloads'. */
+async function saveEstimateFile() {
+  const blob = new Blob([JSON.stringify(estimateData(), null, 1)], { type: 'application/json' });
+  const name = docTitle() + '.json';
+  if (await folderWritable(true)) {
+    try {
+      const dir = await jsonDir(true);
+      const n = await uniqueName(dir, name);
+      const fh = await dir.getFileHandle(n, { create: true }); const w = await fh.createWritable();
+      await w.write(blob); await w.close();
+      return { name: n, where: jsonWhere() };
+    } catch (e) {
+      downloadBlob(blob, name);
+      return { name, where: 'Downloads', error: `It could not be saved to “${saveDir.name}” (the drive may be disconnected or read-only), so it was downloaded instead.` };
+    }
+  }
+  downloadBlob(blob, name);
+  return { name, where: 'Downloads', error: saveDir ? `Permission to save to “${saveDir.name}” was not given, so it was downloaded instead. Print again and choose Allow when the browser asks.` : '' };
+}
+async function openSavedEstimate() {
+  if (typeof window.showOpenFilePicker !== 'function') { $('#openFile').click(); return; }
+  let fh;
+  try {
+    let startIn = saveDir;
+    if (saveDir) { try { if ((await saveDir.queryPermission({ mode: 'read' })) === 'granted') startIn = await jsonDir(false); } catch (e) { startIn = saveDir; } }
+    [fh] = await window.showOpenFilePicker({ id: 'fee-estimates', ...(startIn ? { startIn } : {}),
+      types: [{ description: 'Fee estimate file', accept: { 'application/json': ['.json'] } }] });
+  } catch (e) { if (e && e.name === 'AbortError') return; $('#openFile').click(); return; }
+  const f = await fh.getFile();
+  f.text().then(t => loadEstimate(JSON.parse(t), f.name))
+    .catch(() => alert(`“${f.name}” could not be opened. Choose an estimate file (.json) saved from this tool. PDFs cannot be opened directly.`));
 }
 function loadEstimate(d, fileName, opts = {}) {
   if (!d || d.app !== FILE_APP || !d.items) throw new Error('not an estimate file');
@@ -1788,6 +1963,7 @@ function loadEstimate(d, fileName, opts = {}) {
   });
   state.project = { ...(d.project || {}) };
   state.history = Array.isArray(d.history) ? d.history : [];
+  state.contingency = d.contingency != null ? d.contingency : DEFAULT_CONTINGENCY;
   $$('[data-project]').forEach(i => i.value = state.project[i.dataset.project] || '');
   $('#notes').value = d.notes || '';
   const dt = $(`input[name=docType][value="${d.docType === 'final' ? 'final' : 'estimate'}"]`); if (dt) dt.checked = true;
@@ -1817,6 +1993,17 @@ function repriceCurrent() {
     (dropped.length ? ` Not in the ${S.label} schedule, so left out: ${dropped.join('; ')}.` : ''));
 }
 
+/* ---------- pre-print check dialog (replaces the browser's confirm box so it can be styled) ---------- */
+function askToPrint(issues, onPrint) {
+  const dlg = $('#checkDlg');
+  $('#checkList').innerHTML = issues.map(i => `<li>${esc(i)}</li>`).join('');
+  const close = go => { dlg.close(); $('#checkGo').onclick = $('#checkBack').onclick = dlg.oncancel = null; if (go) onPrint(); };
+  $('#checkGo').onclick = () => close(true);          // runs inside the click, so the folder picker is still allowed
+  $('#checkBack').onclick = () => close(false);
+  dlg.oncancel = e => { e.preventDefault(); close(false); };   // Esc = go back
+  dlg.showModal(); $('#checkGo').focus();
+}
+
 /* ---------- banner with optional buttons ---------- */
 function showBanner(text, actions = []) {
   const b = $('#banner'); b.innerHTML = esc(text) + (actions.length ? '<div>' + actions.map((a, i) => `<button class="btn" type="button" data-bact="${i}">${esc(a.label)}</button>`).join('') + '</div>' : '');
@@ -1833,7 +2020,13 @@ function switchFY(newFy) {
 
 /* ---------- printed totals, revision history and comparison (#1, #2) ---------- */
 const printedGroups = () => printableLines(collectLines(lastResults));
-const printedTotal = () => printedGroups().reduce((t, g) => t + g.total, 0);
+const itemizedTotal = () => printedGroups().reduce((t, g) => t + g.total, 0);
+/* Contingency: percent of the itemized fees, on fee estimates only. */
+const contPct = () => { const v = num(state.contingency); return Math.min(Math.max(v, 0), 100); };
+const contApplies = () => docTypeNow() !== 'final' && contPct() > 0;
+const contAmount = itemized => contApplies() ? Math.round(itemized * contPct()) / 100 : 0;
+const pctFmt = n => qtyFmt(n) + '%';
+const printedTotal = () => { const i = itemizedTotal(); return i + contAmount(i); };
 const printedSnapshot = () => printedGroups().flatMap(g => g.lines.map(l => ({ g: g.g.n, label: l.label, amount: l.amount })));
 const docTypeNow = () => $('input[name=docType]:checked').value;
 const docName = t => t === 'final' ? 'final fee statement' : 'fee estimate';
@@ -1883,7 +2076,7 @@ const lsSet = (k, v) => { try { v == null ? localStorage.removeItem(k) : localSt
 const hasWork = () => Object.values(state.items).some(x => x.on) || Object.values(state.project).some(v => v && String(v).trim()) || $('#notes').value.trim();
 function snapshot() {
   const items = {}; Object.entries(state.items).forEach(([id, x]) => { if (x.on) { const { memoOpen, ...rest } = x; items[id] = rest; } });
-  return JSON.stringify({ fy, d: docTypeNow(), p: state.project, n: $('#notes').value, items, h: state.history.map(h => h.version) });
+  return JSON.stringify({ fy, d: docTypeNow(), p: state.project, n: $('#notes').value, items, h: state.history.map(h => h.version), c: state.contingency });
 }
 let savedSnap = null; let autosaveTimer = null; let autosaveReady = false;
 const isDirty = () => hasWork() && snapshot() !== savedSnap;
@@ -1916,14 +2109,72 @@ async function copyRich(html, text) {
 const tableFrom = (head, rows) => ({
   html: `<table border="1" cellspacing="0" cellpadding="3"><thead><tr>${head.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`,
   text: [head, ...rows].map(r => r.map(c => String(c).replace(/[\t\n]+/g, ' ')).join('\t')).join('\n') });
+/* ---------- Excel workbook (.xlsx) built in the browser, no outside library ----------
+   A minimal Office Open XML workbook: one sheet, bold headings, currency-formatted amounts.
+   Files are stored uncompressed in the zip, which Excel accepts. */
+const CRC_TABLE = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+const crc32 = b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_TABLE[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+function zipStore(files) {          // files: [{ name, data: Uint8Array }]
+  const enc = new TextEncoder(); const parts = []; const central = []; let offset = 0;
+  const u16 = v => [v & 255, (v >>> 8) & 255], u32 = v => [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255];
+  files.forEach(f => {
+    const name = enc.encode(f.name), crc = crc32(f.data), size = f.data.length;
+    const head = new Uint8Array([...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(crc), ...u32(size), ...u32(size), ...u16(name.length), ...u16(0)]);
+    parts.push(head, name, f.data);
+    central.push(new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(crc), ...u32(size), ...u32(size), ...u16(name.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(offset)]), name);
+    offset += head.length + name.length + size;
+  });
+  const cdSize = central.reduce((t, p) => t + p.length, 0);
+  const end = new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(files.length), ...u16(files.length), ...u32(cdSize), ...u32(offset), ...u16(0)]);
+  return new Blob([...parts, ...central, end], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+/* rows: arrays of cells; a cell is a string, a number, or { v, s } where s is a style:
+   1 bold, 2 currency, 3 bold currency, 4 title, 5 header row */
+function buildXlsx(rows, widths) {
+  const x = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
+  const col = i => { let s = ''; i++; while (i) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
+  const sheetRows = rows.map((r, ri) => `<row r="${ri + 1}">` + r.map((c, ci) => {
+    if (c == null || c === '') return '';
+    const cell = typeof c === 'object' ? c : { v: c }; const ref = col(ci) + (ri + 1); const st = cell.s ? ` s="${cell.s}"` : '';
+    return typeof cell.v === 'number' ? `<c r="${ref}"${st}><v>${cell.v}</v></c>` : `<c r="${ref}" t="inlineStr"${st}><is><t xml:space="preserve">${x(cell.v)}</t></is></c>`;
+  }).join('') + '</row>').join('');
+  const cols = '<cols>' + widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('') + '</cols>';
+  const enc = new TextEncoder(); const f = (name, xml) => ({ name, data: enc.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' + xml) });
+  return zipStore([
+    f('[Content_Types].xml', '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'),
+    f('_rels/.rels', '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'),
+    f('xl/workbook.xml', '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Fee lines" sheetId="1" r:id="rId1"/></sheets></workbook>'),
+    f('xl/_rels/workbook.xml.rels', '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'),
+    f('xl/styles.xml', '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="&quot;$&quot;#,##0.00"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="14"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDDE7F2"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="6"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="1" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1"/><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'),
+    f('xl/worksheets/sheet1.xml', `<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">${cols}<sheetData>${sheetRows}</sheetData></worksheet>`)
+  ]);
+}
 async function copyFeeLines() {
   const c = collectLines(lastResults);
-  const lines = c.groups.flatMap(g => g.lines.map(l => [g.g.n, l.label + (l.missing ? ' (incomplete)' : ''), lineDetail(l), SB_LABEL[l.sb].split(':')[0], money(l.amount)]));
-  if (!lines.length) { showBanner('No fees are selected, so there is nothing to copy.'); return; }
-  lines.push(['', 'Total', '', '', money(c.grand)]);
-  const t = tableFrom(['Fee group', 'Fee', 'Basis and assumptions', 'SB445', 'Amount'], lines);
-  const ok = await copyRich(t.html, t.text);
-  showBanner(ok ? `Copied ${lines.length - 1} fee lines and the total. Paste into Excel, an email or the permitting system.` : 'The browser blocked copying. Try again, or use Save estimate file.');
+  const fees = c.groups.flatMap(g => g.lines.map(l => ({ g: g.g.n, label: l.label + (l.missing ? ' (incomplete)' : ''), detail: lineDetail(l), amount: l.amount })));
+  if (!fees.length) { showBanner('No fees are selected, so there is nothing to copy.'); return; }
+  const cont = contAmount(c.grand); const total = c.grand + cont; const contLabel = `Calculation contingency (${pctFmt(contPct())})`;
+  // 1. clipboard, for pasting into an existing sheet
+  const lines = fees.map(f => [f.g, f.label, f.detail, money(f.amount)]);
+  if (cont > 0) { lines.push(['', 'Itemized fees', '', money(c.grand)]); lines.push(['', contLabel, '', money(cont)]); }
+  lines.push(['', 'Total', '', money(total)]);
+  const t = tableFrom(['Fee group', 'Fee', 'Basis and assumptions', 'Amount'], lines);
+  const copied = await copyRich(t.html, t.text);
+  // 2. Excel workbook download, which opens in Excel from the browser's download bar
+  const P = state.project; const final = docTypeNow() === 'final'; const r2 = n => Math.round(n * 100) / 100;
+  const rows = [[{ v: final ? 'Town of Cary Final Fee Statement: fee lines' : 'Town of Cary Fee Estimate: fee lines', s: 4 }]];
+  [['Project', P.name], ['Application no.', P.app], ['Address/PIN', P.address], ['Applicant', P.applicant], ['Prepared by', P.prepared]]
+    .filter(([, v]) => v && String(v).trim()).forEach(([k, v]) => rows.push([{ v: k, s: 1 }, v]));
+  rows.push([{ v: 'Fee schedule', s: 1 }, `${S.label} (${S.effective})`], [{ v: 'Created', s: 1 }, new Date().toLocaleString('en-US')], []);
+  rows.push(['Fee group', 'Fee', 'Basis and assumptions', 'Amount'].map(v => ({ v, s: 5 })));
+  fees.forEach(f => rows.push([f.g, f.label, f.detail, { v: r2(f.amount), s: 2 }]));
+  rows.push([]);
+  if (cont > 0) { rows.push(['', 'Itemized fees', '', { v: r2(c.grand), s: 2 }]); rows.push(['', contLabel, '', { v: r2(cont), s: 2 }]); }
+  rows.push(['', { v: final ? 'Total due' : 'Estimated total', s: 1 }, '', { v: r2(total), s: 3 }]);
+  let saved = false;
+  try { downloadBlob(buildXlsx(rows, [24, 52, 60, 16]), docTitle() + ' - Fee Lines.xlsx'); saved = true; } catch (e) { saved = false; }
+  showBanner((copied ? `Copied ${fees.length} fee lines and the total.` : 'The browser blocked copying.') +
+    (saved ? ' An Excel file with the same lines was also downloaded; open it from the browser\u2019s download bar, or paste the copied lines into an existing sheet.' : ''));
 }
 
 /* ---------- saved application types (#9) ---------- */
@@ -1965,7 +2216,7 @@ function scheduleRows(fyA, fyB) {
   const sbTxt = k => k ? SB_LABEL[k].split(':')[0] : '';
   const optTxt = o => (typeof o.a === 'number' ? rateFmt(o.a) : Object.entries(o.a).map(([k, v]) => `${k} ${rateFmt(v)}`).join(', ')) + (o.per1000 ? ' per 1,000 SF' : o.unit ? ' per ' + o.unit : '');
   const itemTxt = it => it.t === 'lookup' ? 'Rate table (options below)' : basisText(it);
-  const status = (a, b, sa, sb2) => !B ? '' : b == null ? 'new' : (a !== b || sa !== sb2) ? 'changed' : '';
+  const status = (a, b) => !B ? '' : b == null ? 'new' : a !== b ? 'changed' : '';
   const rows = []; const seen = new Set();
   A.groups.forEach(g => g.sections.forEach(sec => {
     const where = `${g.n} › ${sec.n}`;
@@ -1991,11 +2242,11 @@ function renderSchedule() {
   const { rows, A, B } = scheduleRows(fyA, fyB);
   const shown = only && B ? rows.filter(r => r.st) : rows;
   const tagTxt = { changed: 'Changed', new: 'New', removed: 'Removed' };
-  const cols = ['Fee', 'SB445', A.label].concat(B ? [B.label, 'Status'] : []);
+  const cols = ['Fee', A.label].concat(B ? [B.label, 'Status'] : []);
   let lastWhere = ''; let html = `<thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>`;
   shown.forEach(r => {
     if (r.where !== lastWhere) { lastWhere = r.where; html += `<tr class="sec"><td colspan="${cols.length}">${esc(r.where)}</td></tr>`; }
-    html += `<tr class="${r.st ? 'st-' + r.st : ''}"><td class="${r.sub ? 'sub' : ''}">${esc(r.name)}<span class="fid">${esc(r.id)}</span></td><td>${esc(r.sb)}</td><td>${esc(r.a)}</td>` +
+    html += `<tr class="${r.st ? 'st-' + r.st : ''}"><td class="${r.sub ? 'sub' : ''}">${esc(r.name)}<span class="fid">${esc(r.id)}</span></td><td>${esc(r.a)}</td>` +
       (B ? `<td>${esc(r.b)}</td><td><span class="tag">${tagTxt[r.st] || ''}</span></td>` : '') + '</tr>';
   });
   $('#schedTable').innerHTML = html + '</tbody>';
@@ -2004,7 +2255,7 @@ function renderSchedule() {
   $('#schedSum').textContent = `${A.label}: ${fees} fees and ${opts} rate-table options.` +
     (B ? ` Compared with ${B.label}: ${n('changed')} changed, ${n('new')} new, ${n('removed')} removed.` : '') +
     (only && B && !shown.length ? ' No differences found.' : '');
-  schedLast = { cols, rows: shown.map(r => [r.where, r.name, r.id, r.sb, r.a].concat(B ? [r.b, tagTxt[r.st] || ''] : [])), B };
+  schedLast = { cols, rows: shown.map(r => [r.where, r.name, r.id, r.a].concat(B ? [r.b, tagTxt[r.st] || ''] : [])), B };
 }
 function openSchedule() {
   const keys = Object.keys(FEE_SCHEDULES).sort().reverse();
@@ -2081,7 +2332,6 @@ function bind() {
     update();
   }));
   $('#search').addEventListener('input', applyVisibility);
-  $('#hideNonSb').addEventListener('change', applyVisibility);
   $('#onlySelected').addEventListener('change', applyVisibility);
   $('#presetApply').addEventListener('click', () => applyPreset($('#presetSelect').value));
   $('#fySelect').addEventListener('change', e => {
@@ -2102,21 +2352,38 @@ function bind() {
     const base = baseline(); const over = final && base && printedTotal() > base.total + 0.004;
     if (over) issues.push(`This final fee statement (${money(printedTotal())}) is higher than the most recent estimate (${money(base.total)}, version ${base.version}). It may exceed the estimate only if the project changed or a new fee schedule was adopted.` + ($('#notes').value.trim() ? '' : ' The notes to the applicant are empty; consider explaining the reason.'));
     if (!c.groups.length) issues.push('No fees are selected.');
-    if (issues.length && !confirm(['This printout goes to the applicant. Please check:', '', ...issues.map(i => '• ' + i), '', 'Print anyway? Choose Cancel to go back.'].join('\n'))) return;
+    if (issues.length) { askToPrint(issues, startPrint); return; }
+    startPrint();
+  });
+  function startPrint() {
     stampDate = new Date();                          // one stamp for both the PDF and the estimate file
     recordPrint();                                   // #2 revision history
-    if ($('#pairSave').checked) { downloadEstimate(); markSaved(); }
-    buildPrint(); setPrintFooter(); document.title = docTitle();
-    logoReady.then(() => requestAnimationFrame(() => window.print()));   // wait until the logo is ready
+    const doPrint = () => { buildPrint(); setPrintFooter(); document.title = docTitle();
+      logoReady.then(() => requestAnimationFrame(() => window.print())); };   // wait until the logo is ready
+    const saveThenPrint = () => saveEstimateFile().then(r => {
+      markSaved();
+      if (r.error) showBanner(`Estimate file “${r.name}”: ${r.error}`);
+      else if (r.where === 'Downloads' && FOLDER_API && !folderPromptShown) { folderPromptShown = true;
+        showBanner(`The estimate file “${r.name}” went to your Downloads folder. Choose ${SAVE_FOLDER.path} as the save folder to keep estimate files there.`,
+          [{ label: 'Choose save folder', fn: () => chooseSaveFolder() }]); }
+      else if (r.where !== 'Downloads') showBanner(`Saved the estimate file “${r.name}” to ${r.where}. In the print window, save the PDF to ${SAVE_FOLDER.path}.`);
+      doPrint();
+    });
+    if (FOLDER_API && !saveDir && !folderPromptShown) {   // first print on this computer: pick the shared folder (Cancel downloads instead)
+      folderPromptShown = true;
+      showBanner(`Choose the folder for estimate files: go to ${SAVE_FOLDER.path} and choose Select Folder. The tool will remember it. Cancel downloads the estimate file instead.`);
+      chooseSaveFolder().then(saveThenPrint); return;
+    }
+    saveThenPrint();
+  }
+  /* Ctrl+P / Cmd+P goes through the same button so the PDF always has its estimate file. */
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key === 'p' || e.key === 'P')) { e.preventDefault(); if (!$('#checkDlg').open) $('#printBtn').click(); }
   });
-  window.addEventListener('beforeprint', () => { if (!stampDate) { stampDate = new Date(); recordPrint(); } buildPrint(); setPrintFooter(); document.title = docTitle(); });   // title sets the saved PDF's file name
+  window.addEventListener('beforeprint', () => { if (!stampDate) { stampDate = new Date(); recordPrint(); saveEstimateFile().then(markSaved); } buildPrint(); setPrintFooter(); document.title = docTitle(); });   // title sets the saved PDF's file name
   window.addEventListener('afterprint', () => { stampDate = null; document.title = `Cary Development Fees and Charges Estimator (${S.label})`; });
-  $('#saveBtn').addEventListener('click', () => {
-    if (!Object.values(state.items).some(s => s.on) && !confirm('No fees are selected. Save the estimate file anyway?')) return;
-    stampDate = new Date(); const name = downloadEstimate(); stampDate = null; markSaved();
-    showBanner(`Saved “${name}”. Use Open saved estimate to load it later.`);
-  });
-  $('#openBtn').addEventListener('click', () => $('#openFile').click());
+  $('#openBtn').addEventListener('click', openSavedEstimate);
+  $('#saveFolder').addEventListener('click', e => { if (e.target.id === 'chooseFolderBtn') chooseSaveFolder(); });
   $('#openFile').addEventListener('change', e => {
     const f = e.target.files[0]; e.target.value = ''; if (!f) return;
     f.text().then(t => loadEstimate(JSON.parse(t), f.name))
@@ -2124,7 +2391,7 @@ function bind() {
   });
   $('#resetBtn').addEventListener('click', () => {
     if (!confirm('Clear all selected fees, project details and notes?')) return;
-    state.items = {}; state.project = {}; state.history = [];
+    state.items = {}; state.project = {}; state.history = []; state.contingency = DEFAULT_CONTINGENCY;
     $$('[data-project]').forEach(i => i.value = ''); $('#notes').value = ''; $('#search').value = '';
     $('#presetSelect').value = ''; $('#banner').classList.remove('show'); syncPresetButtons();
     $('input[name=docType][value=estimate]').checked = true;
@@ -2132,6 +2399,8 @@ function bind() {
   });
   $('#notes').addEventListener('input', scheduleAutosave);
   $$('input[name=docType]').forEach(r => r.addEventListener('change', update));
+  $('#contPct').addEventListener('input', e => { state.contingency = e.target.value === '' ? 0 : e.target.value; update(); });
+  $('#contPct').addEventListener('change', e => { state.contingency = String(contPct()); e.target.value = state.contingency; update(); });
   $('#copyBtn').addEventListener('click', copyFeeLines);
   $('#presetSave').addEventListener('click', saveCurrentAsType);
   $('#presetDelete').addEventListener('click', deleteType);
@@ -2141,14 +2410,14 @@ function bind() {
   $('#schedClose').addEventListener('click', () => $('#schedDlg').close());
   $('#schedCopy').addEventListener('click', async () => {
     if (!schedLast) return;
-    const head = ['Section', 'Fee', 'ID', 'SB445'].concat(schedLast.cols.slice(2));
+    const head = ['Section', 'Fee', 'ID'].concat(schedLast.cols.slice(1));
     const t = tableFrom(head, schedLast.rows); const ok = await copyRich(t.html, t.text);
     $('#schedSum').textContent = ok ? `Copied ${schedLast.rows.length} rows. Paste into Excel to review.` : 'The browser blocked copying.';
   });
   window.addEventListener('beforeunload', e => { if (isDirty()) { e.preventDefault(); e.returnValue = ''; } });
 }
 
-buildIndex(); renderHeader(); renderPresets(); renderTabs(); renderPanels(); bind(); applyVisibility(); update();
+buildIndex(); renderHeader(); renderPresets(); renderTabs(); renderPanels(); bind(); applyVisibility(); update(); loadSaveFolder();
 markSaved(); autosaveReady = true; offerDraft();
 })();
 </script>
