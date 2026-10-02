@@ -41,7 +41,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Masthead */
-.masthead { background: #0d1116; border-bottom: 1px solid var(--rule); }   /* a shade darker than the page so the header stands out */
+.masthead { background: var(--tabs-band); border-bottom: 1px solid var(--tabs-edge); }   /* same light blue shading as the fee category tabs */
 .masthead-inner { max-width: 1320px; margin: 0 auto; padding: 1.1rem 1.25rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: end; justify-content: space-between; }
 .title { margin: 0; font-size: 1.55rem; font-weight: 700; letter-spacing: -0.01em; color: var(--navy); line-height: 1.15; }
 .subtitle { margin: .3rem 0 0; color: var(--ink-2); font-size: .9rem; }
@@ -72,8 +72,8 @@ input[type=text], input[type=number], input[type=search], select, textarea {
 input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 .btn { border: 1px solid var(--rule); background: var(--paper); border-radius: 6px; padding: .5rem .9rem; cursor: pointer; font-weight: 600; white-space: nowrap; }
 .btn:hover { border-color: var(--navy); }
-.btn-open { background: #fff7cc; border-color: #e9d987; color: #3d3300; }
-.btn-open:hover { background: #fff0a8; border-color: #d9c35a; }
+.btn-open { background: rgba(255, 236, 150, .10); border-color: rgba(255, 228, 130, .32); color: #f1e6b8; }   /* subtle yellow tint */
+.btn-open:hover { background: rgba(255, 236, 150, .17); border-color: rgba(255, 228, 130, .5); }
 .btn-primary { background: var(--navy); border-color: var(--navy); color: #fff; }
 :root:not([data-theme="light"]) .btn-primary { color: #0e1a27; }
 .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
@@ -259,10 +259,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 @media print { .save-folder { display: none; } }
 
 /* Mobile total bar */
+.admin-footer { max-width: 1320px; margin: 1.5rem auto 0; padding: 1rem 1.25rem 1.5rem; border-top: 1px solid var(--rule); font-size: .8rem; color: var(--ink-3); }
+.admin-footer strong { color: var(--ink-2); }
+.admin-footer a { color: var(--navy); }
+@media print { .admin-footer { display: none !important; } }
 .mobile-bar { display: none; }
 @media (max-width: 1020px) {
   .mobile-bar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; background: var(--paper); border-top: 1px solid var(--rule); padding: .6rem 1rem; padding-bottom: calc(.6rem + env(safe-area-inset-bottom, 0px)); justify-content: space-between; align-items: center; z-index: 5; }
   .mobile-bar strong { font-size: 1.15rem; color: var(--navy); }
+  .admin-footer { padding-bottom: 4.5rem; }   /* keep clear of the fixed total bar */
 }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -395,17 +400,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
       <button class="btn" id="resetBtn" type="button">Clear all</button>
     </div>
     <div class="actions actions-file">
-      <button class="btn btn-open" id="openBtn" type="button">Open saved estimate</button>
+      <button class="btn btn-open" id="openBtn" type="button">Open Saved Estimate</button>
       <button class="btn" id="copyBtn" type="button">Copy Fee Lines to Excel</button>
       <input type="file" id="openFile" accept=".json,application/json" hidden>
     </div>
     <p class="save-folder" id="saveFolder"></p>
-    <p class="print-hint">Each printout also saves a matching estimate file with the same name, ending in the date and time (for example, 2026.10.01-14.31). Use Open saved estimate to pick up where you left off.</p>
+    <p class="print-hint">Each printout also saves a matching estimate file with the same name, ending in the date and time (for example, 2026.10.01-14.31). Use Open Saved Estimate to pick up where you left off.</p>
     <p class="print-hint" id="pdfFolderHint"></p>
     <p class="print-hint">The printout is written for the applicant. Incomplete lines are left off.</p>
     <p class="print-hint">In the print window, open <strong>More settings</strong> and uncheck <strong>Headers and footers</strong>. The estimate prints its own page numbers.</p>
   </aside>
 </div>
+
+<footer class="admin-footer" id="adminFooter"></footer>
 
 <div class="mobile-bar"><span>Total <strong class="num" id="mobileTotal">$0.00</strong></span><a class="btn-link" href="#ledger">View estimate</a></div>
 <div id="printArea"></div>
@@ -466,6 +473,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
    Picking either the main folder or the subfolder works. */
 const SAVE_FOLDER = { path: 'R:\\IPDrv\\FEE ESTIMATES - SB445', name: 'FEE ESTIMATES - SB445',
   jsonSub: 'Open a Previous Fee Estimate' };
+
+/* Administrator note shown in the footer (screen only). Update TOOL_REVISED whenever this file is revised. */
+const TOOL_REVISED = 'October 2, 2026';
+const TOOL_ADMIN = 'bryan.webb@carync.gov';
 
 /* Calculation contingency added to fee estimates (percent of the itemized fees). Staff can change it per estimate.
    Not applied to final fee statements, which list the fees actually due. */
@@ -1556,9 +1567,11 @@ function renderHeader() {
   sel.innerHTML = Object.keys(FEE_SCHEDULES).sort().reverse().map(k => `<option value="${k}"${k === fy ? ' selected' : ''}>${esc(yearName(k))}</option>`).join('') +
     PLANNED_YEARS.filter(k => !FEE_SCHEDULES[k]).map(k => `<option disabled>${k} (not yet loaded)</option>`).join('');
 }
+/* Tab labels only: capitalize each word ("Building Permits", "Inspections & Review"). Group names elsewhere stay as written. */
+const tabName = n => n.replace(/(^|[\s/-])([a-z])/g, (m, a, b) => a + b.toUpperCase());
 function renderTabs() {
   $('#tabs').innerHTML = S.groups.map(g =>
-    `<button class="tab" role="tab" id="tab-${g.id}" aria-controls="panel-${g.id}" aria-selected="${g.id === activeGroup}" data-group="${g.id}">${esc(g.n)}<span class="chip" data-chip="${g.id}"></span></button>`).join('');
+    `<button class="tab" role="tab" id="tab-${g.id}" aria-controls="panel-${g.id}" aria-selected="${g.id === activeGroup}" data-group="${g.id}">${esc(tabName(g.n))}<span class="chip" data-chip="${g.id}"></span></button>`).join('');
 }
 function renderPanels() {
   $('#panels').innerHTML = S.groups.map(g => `
@@ -2417,6 +2430,8 @@ function bind() {
   window.addEventListener('beforeunload', e => { if (isDirty()) { e.preventDefault(); e.returnValue = ''; } });
 }
 
+$('#adminFooter').innerHTML = `<strong>Administrator note:</strong> This tool was last revised ${esc(TOOL_REVISED)}. ` +
+  `For issues with this tool, contact <a href="mailto:${esc(TOOL_ADMIN)}?subject=${encodeURIComponent('Fee estimator tool issue')}">${esc(TOOL_ADMIN)}</a>.`;
 buildIndex(); renderHeader(); renderPresets(); renderTabs(); renderPanels(); bind(); applyVisibility(); update(); loadSaveFolder();
 markSaved(); autosaveReady = true; offerDraft();
 })();
