@@ -474,8 +474,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--navy); }
 const SAVE_FOLDER = { path: 'R:\\IPDrv\\FEE ESTIMATES - SB445', name: 'FEE ESTIMATES - SB445',
   jsonSub: 'Open a Previous Fee Estimate' };
 
-/* Administrator note shown in the footer (screen only). Update TOOL_REVISED whenever this file is revised. */
+/* Administrator note shown in the footer (screen only). Update TOOL_REVISED and TOOL_REVISED_TIME whenever this file is revised. */
 const TOOL_REVISED = 'October 2, 2026';
+const TOOL_REVISED_TIME = '12:34 p.m.';
 const TOOL_ADMIN = 'bryan.webb@carync.gov';
 
 /* Calculation contingency added to fee estimates (percent of the itemized fees). Staff can change it per estimate.
@@ -2430,7 +2431,7 @@ function bind() {
   window.addEventListener('beforeunload', e => { if (isDirty()) { e.preventDefault(); e.returnValue = ''; } });
 }
 
-$('#adminFooter').innerHTML = `<strong>Administrator note:</strong> This tool was last revised ${esc(TOOL_REVISED)}. ` +
+$('#adminFooter').innerHTML = `<strong>Administrator note:</strong> This tool was last revised ${(TOOL_REVISED + (TOOL_REVISED_TIME ? ' at ' + TOOL_REVISED_TIME : '') + '.').replace(/\.\.$/, '.').replace(/[&<>"']/g, c => esc(c))} ` +
   `For issues with this tool, contact <a href="mailto:${esc(TOOL_ADMIN)}?subject=${encodeURIComponent('Fee estimator tool issue')}">${esc(TOOL_ADMIN)}</a>.`;
 buildIndex(); renderHeader(); renderPresets(); renderTabs(); renderPanels(); bind(); applyVisibility(); update(); loadSaveFolder();
 markSaved(); autosaveReady = true; offerDraft();
