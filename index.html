@@ -481,8 +481,8 @@ const SAVE_FOLDER = { path: 'R:\\IPDrv\\FEE ESTIMATES - SB445', name: 'FEE ESTIM
   jsonSub: 'Open a Previous Fee Estimate' };
 
 /* Administrator note shown in the footer (screen only). Update TOOL_REVISED and TOOL_REVISED_TIME whenever this file is revised. */
-const TOOL_REVISED = 'October 2, 2026';
-const TOOL_REVISED_TIME = '12:34 p.m.';
+const TOOL_REVISED = 'October 5, 2026';
+const TOOL_REVISED_TIME = '4:40 p.m.';
 const TOOL_ADMIN = 'bryan.webb@carync.gov';
 
 /* Calculation contingency added to fee estimates (percent of the itemized fees). Staff can change it per estimate.
@@ -1157,6 +1157,8 @@ const PRESETS = [
     ['plan.rereview', { qty: '5' }], ['sdf.nonres', { rows: [{}] }], ['tdf', { rows: [{}] }] ] },
   { k: 'com-tenant', n: 'Commercial: change of tenant', items: [
     'bldg.com.tenant', ['bldg.com.trademin', { qty: '1' }], 'si.nondenuded' ] },
+  { k: 'com-trade', n: 'Commercial: trade permit', items: [
+    'bldg.com.plumb', 'bldg.com.mech', 'bldg.com.elec' ] },
   { k: 'com-acc', n: 'Commercial: accessory structure', items: [
     'bldg.com.accessory', ['bldg.com.trademin', { qty: '1' }], ['plan.rereview', { qty: '2' }] ] },
   { k: 'com-wall', n: 'Commercial: retaining wall', items: [
@@ -1176,6 +1178,8 @@ const PRESETS = [
   { k: 'res-adu', n: 'Residential: accessory dwelling unit', items: [
     'bldg.res.new', 'bldg.res.plumb', 'bldg.res.mech', 'bldg.res.elec', 'p.accuse', 'env.sferosion', 'adm.hrf',
     ['plan.rereview', { qty: '2' }] ] },
+  { k: 'res-daycare', n: 'Residential: home day care', items: [
+    'bldg.res.alt', 'p.accuse', ['plan.rereview', { qty: '2' }] ] },
   { k: 'res-wall', n: 'Residential: retaining wall', items: [
     'bldg.res.wall', ['si.sf', { qty: '1' }], ['plan.rereview', { qty: '2' }] ] },
   { k: 'res-solar', n: 'Residential: solar panels', items: [ 'bldg.res.solar', ['plan.rereview', { qty: '2' }] ] },
